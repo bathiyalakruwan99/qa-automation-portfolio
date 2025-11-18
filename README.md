@@ -35,7 +35,7 @@ Web-based tool that simulates up to 1000 GPS devices simultaneously. Eliminates 
 
 [View code →](gps-testing-suite/)
 
-![GPS Simulator](gps-testing-suite/screenshots/simulator.png)
+<img src="gps-testing-suite/screenshots/simulator.png" alt="GPS Simulator" width="800"/>
 
 ---
 
@@ -48,7 +48,7 @@ Next.js app that solves the Traveling Salesman Problem for validating route opti
 
 [View code →](route-optimizer/) | *Deploy to Vercel for live demo*
 
-![Route Optimizer](route-optimizer/screenshots/route%20optimizer.png)
+<img src="route-optimizer/screenshots/route%20optimizer.png" alt="Route Optimizer" width="800"/>
 
 ---
 
@@ -63,7 +63,7 @@ Python tool that validates and auto-corrects Excel files before TMS upload. Redu
 
 [View code →](bulkfile-generator/excel-corrector/)
 
-![Excel Corrector](bulkfile-generator/excel-corrector/screenshots/main-gui.png)
+<img src="bulkfile-generator/excel-corrector/screenshots/main-gui.png" alt="Excel Corrector" width="800"/>
 
 ---
 
