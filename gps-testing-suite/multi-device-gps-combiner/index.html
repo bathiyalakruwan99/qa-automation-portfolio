@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Device GPS Combiner Tool</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠 Multi-Device GPS Combiner Tool</h1>
+            <p>Upload or paste multiple GPS datasets, assign device IDs, and export as combined JSON</p>
+        </header>
+
+        <main>
+            <!-- Controls -->
+            <div class="controls">
+                <button id="add-device-btn" data-testid="add-device-btn" class="btn btn-primary">
+                    ➕ Add Device
+                </button>
+                <button id="generate-json-btn" data-testid="generate-json-btn" class="btn btn-success">
+                    🚀 Generate Combined JSON
+                </button>
+            </div>
+
+            <!-- Device Inputs Container -->
+            <div id="devices-container" data-testid="devices-container" class="devices-container">
+                <!-- Device blocks will be dynamically added here -->
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" data-testid="results-section" class="results-section" style="display: none;">
+                <h3>📋 Combined JSON Output</h3>
+                <div class="result-controls">
+                    <div class="output-format-group">
+                        <label for="output-format">Output Format:</label>
+                        <select id="output-format" data-testid="output-format" class="format-dropdown">
+                            <option value="full">Full (with speed, if available)</option>
+                            <option value="basic">Basic (without speed)</option>
+                        </select>
+                    </div>
+                    <button id="copy-json-btn" data-testid="copy-json-btn" class="btn btn-secondary">
+                        📋 Copy to Clipboard
+                    </button>
+                    <button id="download-json-btn" data-testid="download-json-btn" class="btn btn-secondary">
+                        💾 Download JSON
+                    </button>
+                </div>
+                <textarea id="json-output" data-testid="json-output" class="json-output" readonly></textarea>
+            </div>
+
+            <!-- Validation Messages -->
+            <div id="validation-messages" data-testid="validation-messages" class="validation-messages"></div>
+        </main>
+    </div>
+
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html> 

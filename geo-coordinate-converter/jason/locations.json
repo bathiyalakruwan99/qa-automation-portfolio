@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Sathosa-Negombo",
+    "locationReferenceId": "Sathosa-Negombo",
+    "latitude": 7.206885700000001,
+    "longitude": 79.8504614
+  },
+  {
+    "name": "Sathosa-Dikwella",
+    "locationReferenceId": "Sathosa-Dikwella",
+    "latitude": 5.9643875,
+    "longitude": 80.6941406
+  },
+  {
+    "name": "Sathosa-Ambalanthota",
+    "locationReferenceId": "Sathosa-Ambalanthota",
+    "latitude": 6.1226875,
+    "longitude": 81.0293594
+  },
+  {
+    "name": "Sathosa-Matara 02",
+    "locationReferenceId": "Sathosa-Matara 02",
+    "latitude": 5.9485125,
+    "longitude": 80.5365156
+  },
+  {
+    "name": "Sathosa-Walasmulla",
+    "locationReferenceId": "Sathosa-Walasmulla",
+    "latitude": 6.153237499999999,
+    "longitude": 80.6977656
+  },
+  {
+    "name": "Sathosa-Hambantota",
+    "locationReferenceId": "Sathosa-Hambantota",
+    "latitude": 6.1264625,
+    "longitude": 81.12589059999999
+  },
+  {
+    "name": "Sathosa-Tangalle-2",
+    "locationReferenceId": "Sathosa-Tangalle-2",
+    "latitude": 6.0317625,
+    "longitude": 80.79601559999999
+  },
+  {
+    "name": "Sathosa-Hungama",
+    "locationReferenceId": "Sathosa-Hungama",
+    "latitude": 6.1100125,
+    "longitude": 80.9321094
+  },
+  {
+    "name": "Sathosa-Ahangama",
+    "locationReferenceId": "Sathosa-Ahangama",
+    "latitude": 5.973379799999999,
+    "longitude": 80.3615095
+  },
+  {
+    "name": "Cash Customer",
+    "locationReferenceId": "CASH-0001",
+    "latitude": 6.385599,
+    "longitude": 80.641183
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "name": "Sathosa-Ratnapura-WH",
+    "locationReferenceId": "Sathosa-Ratnapura-WH",
+    "latitude": 6.6824125,
+    "longitude": 80.4099531
+  },
+  {
+    "name": "Sathosa-Awissawella",
+    "locationReferenceId": "Sathosa-Awissawella",
+    "latitude": 6.9524875,
+    "longitude": 80.2131719
+  },
+  {
+    "name": "Sathosa-Balangoda-2",
+    "locationReferenceId": "Sathosa-Balangoda-2",
+    "latitude": 6.6476125,
+    "longitude": 80.7005469
+  },
+  {
+    "name": "Sathosa-Bulathkohupitiya",
+    "locationReferenceId": "Sathosa-Bulathkohupitiya",
+    "latitude": 7.1035375,
+    "longitude": 80.3349844
+  },
+  {
+    "name": "Sathosa-Dehiowita",
+    "locationReferenceId": "Sathosa-Dehiowita",
+    "latitude": 6.9700875,
+    "longitude": 80.2657344
+  },
+  {
+    "name": "Sathosa-Deraniyagala",
+    "locationReferenceId": "Sathosa-Deraniyagala",
+    "latitude": 6.9290356,
+    "longitude": 80.336878
+  },
+  {
+    "name": "Sathosa-Eheliyagoda-3",
+    "locationReferenceId": "Sathosa-Eheliyagoda-3",
+    "latitude": 6.913113490360615,
+    "longitude": 80.27478218078613
+  },
+  {
+    "name": "Sathosa-Gonagaldeniya",
+    "locationReferenceId": "Sathosa-Gonagaldeniya",
+    "latitude": 7.0768625,
+    "longitude": 80.1971094
+  },
+  {
+    "name": "Sathosa-Hambegamuwa",
+    "locationReferenceId": "Sathosa-Hambegamuwa",
+    "latitude": 6.5494625,
+    "longitude": 80.94579689999999
+  },
+  {
+    "name": "Sathosa-Kahawaththa",
+    "locationReferenceId": "Sathosa-Kahawaththa",
+    "latitude": 6.580137499999999,
+    "longitude": 80.5726719
+  },
+  {
+    "name": "Sathosa-Kalawana",
+    "locationReferenceId": "Sathosa-Kalawana",
+    "latitude": 6.533187499999999,
+    "longitude": 80.3977969
+  },
+  {
+    "name": "Sathosa-Kannattota",
+    "locationReferenceId": "Sathosa-Kannattota",
+    "latitude": 7.0833625,
+    "longitude": 80.2722656
+  },
+  {
+    "name": "Sathosa-Karawanella",
+    "locationReferenceId": "Sathosa-Karawanella",
+    "latitude": 7.0258875,
+    "longitude": 80.2609531
+  },
+  {
+    "name": "Sathosa-Kolonna",
+    "locationReferenceId": "Sathosa-Kolonna",
+    "latitude": 6.4018625,
+    "longitude": 80.6899531
+  },
+  {
+    "name": "Sathosa-Kotiyakumbura",
+    "locationReferenceId": "Sathosa-Kotiyakumbura",
+    "latitude": 7.1245125,
+    "longitude": 80.2872344
+  },
+  {
+    "name": "Sathosa-Kuruwita",
+    "locationReferenceId": "Sathosa-Kuruwita",
+    "latitude": 6.824048173091253,
+    "longitude": 80.30762314796448
+  },
+  {
+    "name": "Sathosa-Madampe",
+    "locationReferenceId": "Sathosa-Madampe",
+    "latitude": 6.5338125,
+    "longitude": 80.5932656
+  },
+  {
+    "name": "Sathosa-Opanayaka",
+    "locationReferenceId": "Sathosa-Opanayaka",
+    "latitude": 6.6088875,
+    "longitude": 80.62123439999999
+  },
+  {
+    "name": "Cash Customer",
+    "locationReferenceId": "CASH-0001",
+    "latitude": 6.9990125,
+    "longitude": 80.4088594
+  }
+]

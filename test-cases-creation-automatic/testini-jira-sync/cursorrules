@@ -1,0 +1,280 @@
+# Test Case Management & CSV Import Rules
+
+## 🎯 PRIMARY CONTEXT
+You are working with test case management systems (primarily Testiny) and CSV file imports. Follow these rules for optimal test case creation, formatting, and import compatibility.
+
+## 📋 PREFERRED WORKFLOW
+
+### 1. Markdown First Approach (RECOMMENDED)
+1. **Create comprehensive .md file first** with detailed test cases
+2. **Extract and format to CSV** for Testiny import
+3. **Benefits**: Better readability, easier editing, comprehensive documentation
+4. **Structure**: Professional QA format with full details
+
+### 2. CSV Import Requirements (CRITICAL)
+- **Actual Result**: MAX 255 characters
+- **Description**: MAX 500 characters  
+- **Precondition**: MAX 1000 characters
+- **Steps**: MAX 2000 characters
+- **Expected Result**: MAX 1000 characters
+- **Test Data**: MAX 500 characters
+
+## 🚀 STANDARD WORKFLOW PROCESS
+
+### Phase 1: Markdown Creation
+```
+1. **Create [Feature]_Test_Cases.md file first**
+   - Comprehensive test case documentation
+   - Professional QA structure and formatting
+   - Detailed scenarios with full context
+   - Easy to read and maintain
+
+2. **Include in Markdown:**
+   - Document overview and project context
+   - Acceptance criteria validation
+   - Organized test categories
+   - Detailed test case structures
+   - Critical issues summary
+   - QA recommendations
+```
+
+### Phase 2: CSV Extraction
+```
+1. **Extract test cases from .md to .csv**
+   - Parse markdown content systematically
+   - Apply character limit constraints
+   - Format for Testiny import compatibility
+   - Maintain essential information
+
+2. **Apply CSV Optimizations:**
+   - Shorten Actual Results (priority #1)
+   - Remove line breaks throughout
+   - Fix quote escaping issues
+   - Ensure proper column structure
+```
+
+## 📝 MARKDOWN FILE STRUCTURE
+
+### Document Template
+```markdown
+# **[Feature] - Professional QA Test Cases**
+
+## **Document Overview**
+Professional test cases for **[Feature]** following Testiny QA standards.
+
+**Project**: [Project Name]
+**Module**: [Module Name]
+**Total Test Cases**: [Number] comprehensive scenarios
+**Environment**: [Environment URL]
+**Primary Ticket**: [JIRA Reference]
+
+## **ACCEPTANCE CRITERIA VALIDATION**
+[List key requirements and known issues]
+
+## **[CATEGORY] TEST SCENARIOS**
+
+### **TC-[ID]: [Module][Feature]Verify that User can [Action] successfully**
+
+**Owner**: QA Team
+**Template**: Steps
+**Priority**: [Critical/High/Medium/Low]
+**Status**: Ready for Test
+**Type**: [Functional/UI-UX/etc.]
+
+**Related Bugs**: [JIRA References]
+
+**Precondition**:
+1. [Detailed precondition]
+2. [Additional precondition]
+
+**Test Data**:
+- [Specific test data details]
+
+**Steps**:
+1. [Detailed action step]
+2. [Verification step]
+
+**Expected Result**:
+1. [Expected outcome]
+2. [Verification criteria]
+
+**Actual Result**: 
+[Test execution result with pass/fail status]
+```
+
+## 📋 CSV FORMATTING RULES
+
+### Character Limits (CRITICAL - Testiny Import)
+- **Actual Result**: MAX 255 characters
+- **Description**: MAX 500 characters  
+- **Precondition**: MAX 1000 characters
+- **Steps**: MAX 2000 characters
+- **Expected Result**: MAX 1000 characters
+- **Test Data**: MAX 500 characters
+
+### CSV Structure Requirements
+1. **Always include Module column** as first column for organization
+2. **Remove internal line breaks** - use semicolon (;) separation instead
+3. **Avoid nested quotes** within CSV fields
+4. **Remove special characters** (emojis, excessive symbols)
+5. **Use simple text formatting** for universal compatibility
+
+### Field Formatting Standards
+```csv
+Module,Title,Description,Precondition,Steps,Expected Result,Priority,Owner,Status,Type,Bug,Test Data,Folder,Actual Result
+```
+
+## 🧪 TEST CASE WRITING STANDARDS
+
+### Title Format
+- `[Module][Feature]Verify that User can [Action] successfully`
+- Examples: `[Job Summary][Widget Display]Verify that User can view Job Summary widget as permanent component on dashboard successfully`
+
+### Precondition Format
+- Numbered list with semicolon separation
+- Format: `1. condition; 2. condition; 3. condition; 4. condition`
+- Keep concise but complete
+
+### Steps Format  
+- Sequential numbered steps with semicolon separation
+- Format: `1. action; 2. action; 3. action; 4. verification`
+- Maximum 8 steps recommended
+
+### Expected Result Format
+- Clear numbered success criteria
+- Format: `1. criteria; 2. criteria; 3. criteria; 4. criteria; 5. criteria`
+- Focus on measurable outcomes
+
+### Actual Result Optimization
+**When over 255 characters, apply these shortcuts:**
+- `CRITICAL FAILURE` instead of `CRITICAL FUNCTIONALITY FAILURE`
+- Remove redundant words: `does not` → `doesn't`
+- Use abbreviations: `Control Tower` → `CT`
+- Combine similar issues: `Multiple issues: X; Y; Z format`
+- Remove examples if space needed
+- Keep JIRA ticket references
+
+## 🚨 COMMON FIXES
+
+### Character Limit Violations
+```
+// Before (over 255)
+"MAJOR UI ISSUES FOUND: Completed Tab - Column spacing misaligned font inconsistencies; Delivery in Progress Tab - Progress bar height/color inconsistent; Notified Tab - Driver and vehicle columns wrap/overflow"
+
+// After (under 255)  
+"MAJOR UI ISSUES: Column spacing misaligned; Progress bars inconsistent; Text wrapping in Notified tab; Date format issues"
+```
+
+### Line Break Issues
+```
+// Before (problematic)
+"1. User has credentials
+2. User logged in
+3. Dashboard accessible"
+
+// After (CSV compatible)
+"1. User has credentials; 2. User logged in; 3. Dashboard accessible"
+```
+
+### Quote Escaping
+```
+// Before (problematic)
+"Click "Submit" button and verify "Success" message"
+
+// After (CSV safe)
+"Click Submit button and verify Success message appears"
+```
+
+## 🏗️ PROFESSIONAL QA STANDARDS
+
+### Test Case Structure (Based on Senior QA Best Practices)
+- **Owner**: Always specify (e.g., "QA Team")
+- **Template**: Use "Steps" for functional tests
+- **Priority**: Critical/High/Medium/Low based on business impact
+- **Status**: "Ready for Test" for new cases
+- **Type**: Functional/UI-UX/Data Validation/Navigation/Accessibility
+
+### Bug Reference Format
+- Single bug: `PB-2307`
+- Multiple bugs: `PB-2304, PB-2305`
+- Leave empty if no related bugs
+
+### Test Data Format
+- Environment details: `Login: username; Password: password; Environment: URL`
+- Expected values: `Expected format: DD MMM YYYY; Timeout: 5 seconds`
+- Test scenarios: `Jobs with percentages: 8%, 14%, 33%, 55%, 100%`
+
+## 🔄 WHEN WORKING WITH TEST CASE FILES
+
+### Markdown Creation Process
+1. **Analyze requirements** (JIRA tickets, acceptance criteria)
+2. **Create comprehensive .md file** with detailed test scenarios
+3. **Organize by categories** (Core functionality, Edge cases, etc.)
+4. **Use professional QA structure** throughout
+5. **Include critical issues summary** and recommendations
+
+### CSV Extraction Process
+1. **Read the complete .md file** to understand all test cases
+2. **Extract each test case systematically** 
+3. **Apply character limits** during extraction
+4. **Format for CSV compatibility** (semicolons, quote handling)
+5. **Validate import readiness** before delivery
+
+### Quality Validation
+- All entries under character limits ✓
+- No internal line breaks ✓  
+- Proper CSV escaping ✓
+- Professional terminology ✓
+- Complete required fields ✓
+
+## 📝 QUICK REFERENCE
+
+### Status Values
+- Ready for Test
+- In Progress  
+- Completed
+- Blocked
+
+### Priority Values
+- Critical (system breaking)
+- High (major functionality)
+- Medium (important features)
+- Low (nice to have)
+
+### Type Values
+- Functional
+- UI/UX
+- Data Validation
+- Navigation
+- Accessibility
+- Performance
+- Security
+
+## 🎯 OPTIMIZATION SHORTCUTS
+
+### Text Compression Techniques
+- `functionality` → `function`
+- `completely` → remove
+- `does not work` → `non-functional`
+- `inconsistent` → `inconsistent` (keep as is)
+- `Multiple jobs showing different` → `Multiple jobs have different`
+
+### Essential Information Priority
+1. **Pass/Fail status** (CRITICAL/FAILED/VERIFIED)
+2. **Core issue description** (what's broken)
+3. **JIRA reference** (if space allows)
+4. **Impact scope** (which tabs/features affected)
+
+## 🚀 AUTOMATION HINTS
+
+When asked to work with test case files:
+1. **Create .md file first** for comprehensive documentation
+2. **Then extract to .csv** for import compatibility
+3. **Always check character limits** during CSV creation
+4. **Apply all formatting rules automatically**  
+5. **Preserve essential failure information**
+6. **Maintain professional QA standards**
+7. **Optimize for import compatibility**
+
+---
+**Remember**: The goal is comprehensive test documentation in markdown format first, then clean, importable CSV files that maintain professional QA standards while staying within system constraints. 

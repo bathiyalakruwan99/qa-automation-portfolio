@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Path Builder - Actual Road Routes</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GPS Path Builder</h1>
+            <p>Click on the map to add waypoints, then generate actual road routes</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Map Container -->
+            <div id="map" data-testid="map-container"></div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="config-section">
+                    <h3>Configuration</h3>
+                    <div class="input-group">
+                        <label for="api-key">OpenRouteService API Key:</label>
+                        <input 
+                            type="text" 
+                            id="api-key" 
+                            data-testid="api-key-input"
+                            placeholder="Enter your ORS API key"
+                            value=""
+                        />
+                        <small>Get your free API key at <a href="https://openrouteservice.org/dev/" target="_blank">openrouteservice.org</a></small>
+                    </div>
+                    <div class="input-group">
+                        <label for="speed">Speed (km/h):</label>
+                        <input 
+                            type="number" 
+                            id="speed" 
+                            data-testid="speed-input"
+                            value="40" 
+                            min="1" 
+                            max="120"
+                        />
+                    </div>
+                    <div class="input-group">
+                        <label for="interval">Interval (m):</label>
+                        <input 
+                            type="number" 
+                            id="interval" 
+                            data-testid="interval-input"
+                            value="10" 
+                            min="1" 
+                            max="1000"
+                            step="1"
+                        />
+                        <small>Distance between GPS points in meters</small>
+                    </div>
+                </div>
+
+                <div class="actions-section">
+                    <h3>Actions</h3>
+                    <div class="button-group">
+                        <button 
+                            id="generate-route" 
+                            data-testid="generate-route-btn"
+                            class="btn btn-primary"
+                            disabled
+                        >
+                            Generate Route
+                        </button>
+                        <button 
+                            id="clear-map" 
+                            data-testid="clear-map-btn"
+                            class="btn btn-secondary"
+                        >
+                            Clear Map
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Route Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Waypoints:</label>
+                            <span id="waypoint-count" data-testid="waypoint-count">0</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Total Distance:</label>
+                            <span id="total-distance" data-testid="total-distance">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Estimated Time:</label>
+                            <span id="estimated-time" data-testid="estimated-time">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>GPS Points:</label>
+                            <span id="gps-points-count" data-testid="gps-points-count">0</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Interval:</label>
+                            <span id="current-interval" data-testid="current-interval">10m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <h3>Export</h3>
+                    <div class="button-group">
+                        <button 
+                            id="download-json" 
+                            data-testid="download-json-btn"
+                            class="btn btn-success"
+                            disabled
+                        >
+                            Download JSON
+                        </button>
+                        <button 
+                            id="copy-json" 
+                            data-testid="copy-json-btn"
+                            class="btn btn-outline"
+                            disabled
+                        >
+                            Copy to Clipboard
+                        </button>
+                    </div>
+                </div>
+
+                <div class="status-section">
+                    <div id="status-message" data-testid="status-message" class="status-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Custom JS Modules -->
+    <script src="js/utils.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/route.js"></script>
+    <script src="js/interpolate.js"></script>
+    <script src="js/export.js"></script>
+    
+    <!-- Main App Script -->
+    <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map
+            MapController.init();
+            
+            // Initialize event listeners
+            initEventListeners();
+            
+            // Load saved API key if available
+            loadSavedConfig();
+        });
+
+        function initEventListeners() {
+            // API Key input
+            document.getElementById('api-key').addEventListener('input', function(e) {
+                localStorage.setItem('ors-api-key', e.target.value);
+                updateUI();
+            });
+
+            // Speed input
+            document.getElementById('speed').addEventListener('input', updateUI);
+
+            // Interval input
+            document.getElementById('interval').addEventListener('input', updateUI);
+
+            // Generate route button
+            document.getElementById('generate-route').addEventListener('click', async function() {
+                const apiKey = document.getElementById('api-key').value.trim();
+                const speed = parseFloat(document.getElementById('speed').value);
+                const interval = parseFloat(document.getElementById('interval').value);
+                
+                if (!apiKey) {
+                    Utils.showStatus('Please enter your OpenRouteService API key', 'error');
+                    return;
+                }
+
+                if (MapController.waypoints.length < 2) {
+                    Utils.showStatus('Please add at least 2 waypoints', 'error');
+                    return;
+                }
+
+                if (isNaN(interval) || interval < 1 || interval > 1000) {
+                    Utils.showStatus('Please enter a valid interval between 1 and 1000 meters', 'error');
+                    return;
+                }
+
+                await RouteController.generateRoute(apiKey, speed, interval);
+            });
+
+            // Clear map button
+            document.getElementById('clear-map').addEventListener('click', function() {
+                MapController.clearMap();
+                updateUI();
+            });
+
+            // Export buttons
+            document.getElementById('download-json').addEventListener('click', function() {
+                ExportController.downloadJSON();
+            });
+
+            document.getElementById('copy-json').addEventListener('click', function() {
+                ExportController.copyToClipboard();
+            });
+        }
+
+        function loadSavedConfig() {
+            const savedApiKey = localStorage.getItem('ors-api-key');
+            if (savedApiKey) {
+                document.getElementById('api-key').value = savedApiKey;
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            const waypointCount = MapController.waypoints.length;
+            const hasApiKey = document.getElementById('api-key').value.trim().length > 0;
+            const hasRoute = window.gpsData && window.gpsData.length > 0;
+            const interval = parseFloat(document.getElementById('interval').value) || 10;
+
+            // Update counters
+            document.getElementById('waypoint-count').textContent = waypointCount;
+            document.getElementById('current-interval').textContent = interval + 'm';
+            
+            // Enable/disable buttons
+            document.getElementById('generate-route').disabled = waypointCount < 2 || !hasApiKey;
+            document.getElementById('download-json').disabled = !hasRoute;
+            document.getElementById('copy-json').disabled = !hasRoute;
+        }
+
+        // Global variable to store generated GPS data
+        window.gpsData = [];
+    </script>
+</body>
+</html> 

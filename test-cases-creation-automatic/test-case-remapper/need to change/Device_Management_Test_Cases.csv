@@ -1,0 +1,43 @@
+Module,Title,Description,Precondition,Steps,Expected Result,Priority,Owner,Status,Type,Bug,Test Data,Folder,Actual Result
+Device Management,[Device Management][Active Devices] Verify device list loads correctly,"Ensure the Active Devices table loads with all device records (IMEI, Model, Type, Status, Last Seen, Vehicle, Operation, Actions).",User is logged in; Device Management → Active Devices page open,"1. Navigate to Device Management → Active Devices.
+2. Verify table columns and values.",Device list loads with correct columns and values for each device.,Critical,QA Team,Ready for Test,Functional,,Devices available in system,Device Management,TBD
+Device Management,[Device Management][Active Devices] Verify device filter by type,Ensure user can filter devices by Portable/Non-Portable/All.,User logged in; Devices available,"1. Navigate to Active Devices.
+2. Select filter Device Type = Non-Portable.
+3. Repeat for Portable and All.",Table updates to show only selected type devices.,High,QA Team,Ready for Test,Functional,,"IMEIs: GT06M, WIALON",Device Management,TBD
+Device Management,[Device Management][Active Devices] Verify Online/Offline filter,Ensure user can filter devices by Online/Offline status.,"User logged in; At least one device online, one offline","1. Navigate to Active Devices.
+2. Select filter Online.
+3. Select filter Offline.",Only devices with selected status display.,High,QA Team,Ready for Test,Functional,,Online Device: 28160384,Device Management,TBD
+Device Management,[Device Management][Edit Device] Verify device edit form,"Ensure Edit GPS Device form displays correct fields (IMEI, Model, Type, Protocol, SIM, Status, Assign Vehicle).",User logged in; Device exists,"1. From Active Devices → Click Edit icon.
+2. Verify fields displayed.",Edit form displays with correct values pre-filled.,Critical,QA Team,Ready for Test,UI/Functional,,IMEI: 24522722,Device Management,TBD
+Device Management,[Device Management][Edit Device] Verify device update,Ensure updates to device fields are saved.,Edit form open,"1. Change Device Model.
+2. Change Device Type.
+3. Click Save.",Changes saved and visible in Active Devices list.,Critical,QA Team,Ready for Test,Functional,,Model = GT06M → GT800,Device Management,TBD
+Device Management,[Device Management][Assign Vehicle] Verify vehicle assignment,Ensure user can assign/change a vehicle for a device.,"Device exists, no vehicle assigned","1. From Active Devices → Click Assign Vehicle.
+2. Select a vehicle.
+3. Save.","Selected vehicle assigned to device, visible in list.",High,QA Team,Ready for Test,Functional,,Vehicle: VEH-350091,Device Management,TBD
+Device Management,[Device Management][Logs] Verify device log history,"Ensure log history shows create, edit, assign, remove actions with timestamp.",Device exists with logs,"1. From Active Devices → Click Log History.
+2. Verify log entries.",Log displays actions with timestamps.,Medium,QA Team,Ready for Test,Functional,,Device 24522722,Device Management,TBD
+Device Management,[Device Management][Removed Devices] Verify removed devices list,Ensure Removed Devices table lists deleted devices with option to re-activate.,At least one removed device exists,"1. Navigate to Device Management → Removed Devices.
+2. Verify list.","Removed devices displayed with IMEI, Model, Vehicle, and Activate action.",High,QA Team,Ready for Test,Functional,,IMEI: 13890652,Device Management,TBD
+Device Management,[Device Management][Removed Devices] Verify device re-activation,Ensure user can re-activate a removed device.,Device removed,"1. From Removed Devices → Click Activate.
+2. Confirm action.",Device moves back to Active Devices list.,Critical,QA Team,Ready for Test,Functional,,IMEI: 13890652,Device Management,TBD
+Device Management,[Device Management][Actions] Verify Edit Device action,Ensure Edit icon opens Edit Device form with pre-filled values.,Active Devices list available,"1. Go to Active Devices.
+2. Click Edit (✏️) icon for any device.","Edit form opens with correct IMEI, Model, Protocol, etc.",Critical,QA Team,Ready for Test,Functional/UI,,IMEI 24522722,Device Management,TBD
+Device Management,[Device Management][Actions] Verify Assign Vehicle action,Ensure Assign Vehicle action allows selecting and saving a vehicle.,Device exists without vehicle assigned,"1. Go to Active Devices.
+2. Click Assign Vehicle (📋) icon.
+3. Select a vehicle.
+4. Save.",Vehicle assigned successfully and visible in Active Devices table.,High,QA Team,Ready for Test,Functional,,Vehicle = VEH-350091,Device Management,TBD
+Device Management,[Device Management][Actions] Verify Change Vehicle assignment,Ensure already assigned vehicle can be changed.,Device already assigned to vehicle,"1. Go to Active Devices.
+2. Click Assign Vehicle (📋).
+3. Select different vehicle.
+4. Save.",Vehicle mapping updated successfully in Active Devices.,High,QA Team,Ready for Test,Functional,,VEH-350094 → VEH-350095,Device Management,TBD
+Device Management,[Device Management][Actions] Verify Log History action,Ensure Log History action shows full history of device.,Device exists with logs,"1. Go to Active Devices.
+2. Click Log History (🔄) icon.",Right-side panel opens showing all log events with timestamp.,Medium,QA Team,Ready for Test,Functional,,Device IMEI: 13890652,Device Management,TBD
+Device Management,[Device Management][Actions] Verify Remove Device action,Ensure Remove action removes a device from Active Devices.,Device exists in Active Devices,"1. Go to Active Devices.
+2. Click Remove (🗑️) icon.
+3. Confirm action.",Device disappears from Active Devices and moves to Removed Devices list.,Critical,QA Team,Ready for Test,Functional,,IMEI: 13890652,Device Management,TBD
+Device Management,[Device Management][Removed Devices] Verify removed device appears in Removed Devices,Ensure removed devices are listed in Removed Devices tab.,Device removed using Remove action,"1. Go to Removed Devices.
+2. Verify removed device is listed.",Removed device visible with Activate action available.,High,QA Team,Ready for Test,Functional,,IMEI: 17995994,Device Management,TBD
+Device Management,[Device Management][Removed Devices] Verify removed device re-activation,Ensure removed devices can be restored to Active Devices.,Device exists in Removed Devices,"1. Go to Removed Devices.
+2. Click Activate.
+3. Confirm.",Device reappears in Active Devices table.,Critical,QA Team,Ready for Test,Functional,,IMEI: 17996282,Device Management,TBD

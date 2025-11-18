@@ -1,0 +1,17 @@
+# Google Maps API Key (Optional)
+# 
+# To test the hybrid approach with accurate Google Maps distances:
+# 1. Get your API key from: https://console.cloud.google.com/google/maps-apis/
+# 2. Enable the "Directions API" for your project
+# 3. Copy your API key below
+# 4. Create a file named ".env.local" in the project root
+# 5. Add the line below to that file
+# 6. Restart the development server: npm run dev
+
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
+
+# Note: Without this API key, the app will still work perfectly with free OSRM routing.
+# The hybrid approach will show the options but will display a warning that the API key is needed.
+
+# Example .env.local file content:
+# NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyBvOkBw2HjJfK3lM9nP8qR7sT6uV5wX4yZ

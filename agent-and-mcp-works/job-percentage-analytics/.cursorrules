@@ -1,0 +1,188 @@
+# Cursor Rules for Job Status Checker Project
+
+## Project Overview
+This is an automation project for checking job status and load details from the LogisticsPlatform system. The project involves web automation, data extraction, and file management.
+
+## File Management Rules
+
+### JOBS.txt
+- **CRITICAL**: After successfully checking a job, REMOVE it from JOBS.txt
+- Use `edit_file` or `search_replace` to remove processed jobs
+- Keep the file clean to avoid duplicate processing
+- Format: One job ID per line
+
+### job_status_report.md
+- **CRITICAL**: If checking the same job again and load IDs are identical, UPDATE existing entry
+- **DO NOT** create duplicate entries for the same load IDs
+- Use proper markdown table formatting
+- Include ALL load IDs for each job
+- Maintain consistent structure across all job entries
+
+## Code Structure Rules
+
+### 1. Job Processing Functions
+```python
+# Always follow this pattern:
+def process_job(job_id):
+    # 1. Search for job
+    # 2. Extract ALL instances of the same job name
+    # 3. Expand each instance to get load details
+    # 4. Record ALL load IDs
+    # 5. Update markdown file
+    # 6. Remove job from JOBS.txt
+```
+
+### 2. Load ID Management
+- **NEVER** create duplicate entries for the same load ID
+- **ALWAYS** check if load ID already exists before adding
+- **MERGE** new information with existing entries
+- Use load ID as the unique identifier for deduplication
+
+### 3. Data Validation
+- Verify job exists before processing
+- Confirm load information is complete
+- Check completion percentages are accurate
+- Validate date formats
+
+## Web Automation Rules
+
+### 1. Login Process
+- Use provided credentials: USER-MANAGER-001 / Password@123
+- Handle login failures gracefully
+- Retry mechanism for failed logins
+
+### 2. Date Range Setting
+- Set date range: 7/26/2025, 01:00:03 to 8/26/2025, 23:59:10
+- Use "Select Date Range" filter option
+- Verify date fields are properly filled
+- **CRITICAL**: Date range only needs to be set once per batch; if already correctly configured, do not re-set for subsequent job checks within the same batch
+- **NEVER click "Clear Search"** button as it resets the date filter to "Today's" instead of maintaining the custom date range
+- **Efficient Job Switching**: Instead of clearing search, directly type new job ID in the "Job Title" field and click "Filter"
+
+### 3. Job Search
+- **DO NOT clear previous searches** - maintain the date range filter
+- **Direct Job Switching**: Type new job ID directly in the "Job Title" field without clicking "Clear Search"
+- Use exact job ID from JOBS.txt
+- Wait for search results to load
+- Handle cases where job is not found
+- **Date Range Persistence**: The custom date range will be maintained across multiple job searches
+
+### 4. Data Extraction
+- Click ALL expand_more buttons for each job
+- Extract information from expanded rows
+- Capture ALL load details, not just the first one
+- Record status, percentage, customer reference, and load ID
+
+### 5. 100% Completion Jobs Handling
+- **Identify**: Jobs with 100% completion but In-Progress status
+- **Action**: These jobs may need status updates in the LogisticsPlatform system
+- **Tracking**: Move these jobs to a separate file (`100_percent_inprogress_jobs.md`) for follow-up
+- **Reason**: Jobs with 100% completion should typically be marked as "Completed"
+
+## Error Handling Rules
+
+### 1. Job Not Found
+- Log as "Not Found" in the report
+- Continue with next job
+- Don't remove from JOBS.txt if not found
+
+### 2. Login Issues
+- Retry with credentials
+- Clear browser cache if needed
+- Report login failures
+
+### 3. Data Extraction Issues
+- Verify page has loaded completely
+- Check if elements are visible
+- Handle missing data gracefully
+
+### 4. Clear Search Issues
+- **If "Clear Search" is accidentally clicked**: The date filter will reset to "Today's"
+- **Recovery Action**: Re-set the date range to 7/26/2025 to 8/26/2025
+- **Prevention**: Always use direct job ID typing instead of clearing search
+- **Impact**: Clicking "Clear Search" requires re-setting the entire date range configuration
+
+## Code Quality Rules
+
+### 1. Documentation
+- Comment all major functions
+- Explain complex logic
+- Document error handling approaches
+
+### 2. Error Logging
+- Log all errors with context
+- Include job ID in error messages
+- Provide clear error descriptions
+
+### 3. Code Organization
+- Separate concerns (web automation, data processing, file management)
+- Use clear function names
+- Maintain consistent code style
+
+## Testing Rules
+
+### 1. Before Production
+- Test with small job lists first
+- Verify file updates work correctly
+- Check markdown formatting
+
+### 2. Data Integrity
+- Verify no duplicate entries
+- Confirm all load IDs are captured
+- Check job removal from JOBS.txt
+
+## Performance Rules
+
+### 1. Efficiency
+- Process jobs sequentially to avoid overwhelming the system
+- Add appropriate delays between operations
+- Handle pagination if results exceed page limits
+- **Date Range Optimization**: Set date range once per batch to avoid repeated configuration
+- **Search Efficiency**: Use direct job ID typing instead of clearing search for faster job switching
+
+### 2. Date Range Management
+- **Set Once**: Configure date range (7/26/2025 to 8/26/2025) only once per batch
+- **Maintain**: Keep the date range active across multiple job searches
+- **Avoid Reset**: Never click "Clear Search" as it requires re-setting the entire date configuration
+- **Batch Processing**: Process multiple jobs within the same date range session for maximum efficiency
+
+### 2. Resource Management
+- Close browser sessions properly
+- Clean up temporary files
+- Monitor memory usage
+
+## Security Rules
+
+### 1. Credential Handling
+- Never hardcode credentials in code
+- Use environment variables when possible
+- Secure credential storage
+
+### 2. Data Privacy
+- Handle job data responsibly
+- Don't log sensitive information
+- Secure file storage
+
+## Compliance Rules
+
+### 1. Data Accuracy
+- Double-check all extracted data
+- Verify load ID uniqueness
+- Confirm status and percentage accuracy
+
+### 2. Audit Trail
+- Maintain logs of all operations
+- Record which jobs were processed
+- Track any errors or issues
+
+## Maintenance Rules
+
+### 1. Regular Updates
+- Update job list regularly
+- Monitor for new job types
+- Adapt to system changes
+
+### 2. Backup Procedures
+- Backup job_status_report.md regularly
+- Keep copies of processed job lists
+- Version control for important changes

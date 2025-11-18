@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Warehouse Alpha",
+    "locationReferenceId": "WH-001",
+    "latitude": 6.9271,
+    "longitude": 79.8612
+  },
+  {
+    "name": "Customer Site Beta",
+    "locationReferenceId": "CUST-002",
+    "latitude": 7.2906,
+    "longitude": 80.6337
+  },
+  {
+    "name": "Distribution Center Gamma",
+    "locationReferenceId": "DC-003",
+    "latitude": 6.0329,
+    "longitude": 80.2170
+  },
+  {
+    "name": "Retail Store Delta",
+    "locationReferenceId": "RETAIL-004",
+    "latitude": 8.3114,
+    "longitude": 80.4037
+  },
+  {
+    "name": "Port Facility Epsilon",
+    "locationReferenceId": "PORT-005",
+    "latitude": 8.5874,
+    "longitude": 81.2152
+  }
+]

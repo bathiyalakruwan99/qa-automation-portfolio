@@ -1,0 +1,32 @@
+[
+  {
+    "location_name": "Central Hub",
+    "ref_id": "HUB-001",
+    "lat_coordinate": 6.9271,
+    "lng_coordinate": 79.8612
+  },
+  {
+    "location_name": "North Station",
+    "ref_id": "NORTH-002",
+    "lat_coordinate": 7.2906,
+    "lng_coordinate": 80.6337
+  },
+  {
+    "location_name": "South Terminal",
+    "ref_id": "SOUTH-003",
+    "lat_coordinate": 6.0329,
+    "lng_coordinate": 80.2170
+  },
+  {
+    "location_name": "East Depot",
+    "ref_id": "EAST-004",
+    "lat_coordinate": 8.3114,
+    "lng_coordinate": 80.4037
+  },
+  {
+    "location_name": "West Port",
+    "ref_id": "WEST-005",
+    "lat_coordinate": 8.5874,
+    "lng_coordinate": 81.2152
+  }
+]

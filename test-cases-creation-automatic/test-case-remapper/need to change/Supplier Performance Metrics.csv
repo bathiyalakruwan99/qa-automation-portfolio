@@ -1,0 +1,66 @@
+parent_folder_name,testcase_id,title,owner,created_at,created_by,modified_at,modified_by,precondition,steps,expected_results,parent_folder_description,priority,status,testcase_type,expectedresult,testdata,actualresult,bug,stepdescription,folderdescription,requirements,attachments
+Dashbord > Supplier Performance Metrics,845,Time Period Filter Sync Across Graphs,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Select 7 Days → check both bar and line chart
+","[1] Both graphs reflect selected time period starting from current time backward
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Switch time tabs,SUPTRIP-001,,
+Dashbord > Supplier Performance Metrics,846,Show Top 5 Suppliers by Trip Volume,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] View default chart
+","[1] Displays top 5 suppliers with highest number of trips
+","SCN-001
+",1,DRAFT,UI,,,TBD,No,Load graph default,SUPTRIP-002,,
+Dashbord > Supplier Performance Metrics,847,Auto-adjust Y Axis Scale Based on Min-Max,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Load chart with varied trip counts
+","[1] Y-axis auto scales between min/max values
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Observe bar chart scaling,SUPTRIP-003,,
+Dashbord > Supplier Performance Metrics,848,Show Customer Logo Above Bar,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Hover and view bar
+","[1] Customer logo shown at the top of each bar
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Look at each bar,SUPTRIP-004,,
+Dashbord > Supplier Performance Metrics,849,Hover to View Trip Count & Highlight Bar,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Hover on bar
+","[1] Show exact trip count tooltip and highlight bar
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Hover over bar,SUPTRIP-005,,
+Dashbord > Supplier Performance Metrics,850,Load Line Chart by Clicking Bar,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Click TransportSupplier1 bar
+","[1] Loads that supplier’s Trip Volume Trend in the line chart
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Click on any bar,SUPTRIP-006,,
+Dashbord > Supplier Performance Metrics,851,Placeholder Text Before Supplier Selected,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Open widget without clicking bar
+","[1] Line chart shows message: “Please select a customer to view the vehicle type wise KMs”
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,View line chart without bar click,SUPTRIP-007,,
+Dashbord > Supplier Performance Metrics,852,Typable Supplier Dropdown Interaction,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Type supplier name in dropdown
+","[1] Line chart loads trips for selected supplier
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Select via input box,SUPTRIP-008,,
+Dashbord > Supplier Performance Metrics,853,Accurate Trip Volume Trend on Line Chart (No Smoothing),qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Open 24H tab → hover on data points
+","[1] Points match raw timestamp data; no smoothing or interpolation
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Compare to actual trip timestamps,SUPTRIP-009,,
+Dashbord > Supplier Performance Metrics,854,Line Chart Hover Tooltip & Grid Line,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Hover on any point
+","[1] Tooltip shows exact date, time, no. of trips with dotted X/Y lines
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Hover on graph,SUPTRIP-010,,
+Dashbord > Supplier Performance Metrics,855,Chart Date Filter Uses Actual Start Time of Load,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Cross-reference chart with trip actual start time
+","[1] Only trips with actual start time in range should appear
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,"Filter by 24H, validate load start",SUPTRIP-011,,
+Dashbord > Supplier Performance Metrics,856,Incorrect Load Count Display in Bar Chart (Known Bug),qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Chart shows 3; only 1 load assigned
+","[1] Should match exact load count assigned
+","SCN-001
+",1,DRAFT,Bug,,,Reproducible,Yes,Compare load count in chart vs trip records,SUPTRIP-012,,
+Dashbord > Supplier Performance Metrics,857,Prevent Premature Load in Trend Chart,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,2025-06-19T05:05:24.589Z,qa-team-user,"Logged in
+","[1] Observe second chart
+","[1] Should remain visibly empty with only the instruction message
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,"Open widget, avoid selection",SUPTRIP-013,,

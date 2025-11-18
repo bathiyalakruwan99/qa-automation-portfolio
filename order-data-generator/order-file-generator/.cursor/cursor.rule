@@ -1,0 +1,21 @@
+style:
+  language: python
+  formatting:
+    - follow PEP8
+  rules:
+    - Never add, remove, rename, or reorder columns; always take columns from the loaded spec sheet.
+    - Use Tkinter (ttk) for UI; keep UX minimal and robust.
+    - All file IO must be explicit; no hard-coded absolute paths.
+    - Prefer pure functions in builder/validators where possible.
+    - Document assumptions in docstrings.
+
+tests:
+  manual:
+    - Load spec with real "Order List Spec - D7 Cash Customer-Kithulgala-OK DEMO.xlsx".
+    - Load location master and map columns.
+    - Generate files for:
+      * Random orders per location
+      * Duplicate Order IDs
+      * Bad time windows
+      * Whitespace/case sensitivity
+

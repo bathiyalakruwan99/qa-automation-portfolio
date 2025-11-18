@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Sathosa-Eheliyagoda-3",
+    "locationReferenceId": "Sathosa-Eheliyagoda-3",
+    "latitude": 6.8412,
+    "longitude": 80.2745
+  },
+  {
+    "name": "Sathosa-Kalawana",
+    "locationReferenceId": "Sathosa-Kalawana",
+    "latitude": 6.5328,
+    "longitude": 80.3989
+  },
+  {
+    "name": "Sathosa-Karawanella",
+    "locationReferenceId": "Sathosa-Karawanella",
+    "latitude": 7.0125,
+    "longitude": 80.2956
+  },
+  {
+    "name": "Sathosa-Balangoda-2",
+    "locationReferenceId": "Sathosa-Balangoda-2",
+    "latitude": 6.6524,
+    "longitude": 80.6989
+  },
+  {
+    "name": "Sathosa-Ratnapura-WH",
+    "locationReferenceId": "Sathosa-Ratnapura-WH",
+    "latitude": 6.6852,
+    "longitude": 80.3956
+  },
+  {
+    "name": "Cash Customer",
+    "locationReferenceId": "CASH-0001",
+    "latitude": 6.9990125,
+    "longitude": 80.4088594
+  }
+]
+

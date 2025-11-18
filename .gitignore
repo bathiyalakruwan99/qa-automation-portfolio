@@ -1,0 +1,154 @@
+# ================================
+# QA/Testing Project .gitignore
+# ================================
+# This file excludes common test artifacts, 
+# sensitive data, and generated files from version control
+
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Environment variables & Secrets
+.env
+.env.local
+.env.*.local
+*.env
+secrets/
+credentials/
+*.pem
+*.key
+*.p12
+*.pfx
+config/local.json
+config/secrets.json
+auth.json
+tokens.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+*.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+junit.xml
+test-results/
+test-report.html
+
+# Test automation artifacts
+screenshots/
+videos/
+traces/
+downloads/
+test-artifacts/
+allure-results/
+allure-report/
+mochawesome-report/
+playwright-report/
+cypress/videos/
+cypress/screenshots/
+.browsers/
+
+# Performance testing
+jmeter.log
+*.jtl
+k6-results/
+
+# API testing
+newman/
+postman_collection_backup/
+*.har
+rest-client.env.json
+
+# Next.js
+.next/
+out/
+.vercel
+
+# Excel temporary files
+~$*.xlsx
+~$*.xls
+
+# OS
+Thumbs.db
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Output directories (keep structure, ignore contents)
+outputs/*
+!outputs/.gitkeep
+reports/*
+!reports/.gitkeep
+Created file/*
+!Created file/.gitkeep
+uploaded order file/*
+!uploaded order file/.gitkeep
+
+# Large test files
+*.xlsx
+*.xls
+!sample*.xlsx
+!sample*.xls
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+!schema.sql
+!migrations/*.sql
+
+# Personal notes & documents
+New Text Document.txt
+*New Text Document*.txt
+test.txt
+*.bak
+*.backup
+
+# Personal documents (CV, Resume) - only in root
+/Purple and White Clean and Professional Resume.pdf
+/bathiya lakruwan.pdf
+/*Resume*.pdf
+/*CV*.pdf
+/*.pdf
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Misc tools (docs moved to root)
+misc-tools/
+

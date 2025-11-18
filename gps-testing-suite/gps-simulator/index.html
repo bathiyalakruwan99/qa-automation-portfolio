@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Simulator - Multi-Device Testing Tool</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🛰️ GPS Simulator - Multi-Device Testing Tool</h1>
+        <div class="header-info">
+            <span>✅ OpenStreetMap | 🚀 Up to 1000 Devices | 🔧 API Testing Only</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <!-- System Status -->
+            <div class="section">
+                <h3>📊 System Status</h3>
+                <div class="status-grid">
+                    <div>Map: <span id="map-status" class="status status-good">✅ Ready</span></div>
+                    <div>Token: <span id="token-status" class="status status-bad">❌ No Token</span></div>
+                    <div>Data: <span id="data-status" class="status status-bad">❌ No Data</span></div>
+                    <div>Simulation: <span id="sim-status" class="status status-bad">❌ Stopped</span></div>
+                </div>
+            </div>
+
+            <!-- Authentication -->
+            <div class="section">
+                <h3>🔐 Authentication</h3>
+                <label>Bearer Token:</label>
+                <textarea id="tokenInput" placeholder="Paste your bearer token here (without 'Bearer ' prefix)..." rows="3"></textarea>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="setToken()">Set Token</button>
+                    <button class="btn btn-secondary" onclick="inspectToken()">Inspect</button>
+                </div>
+                <div class="help-text">
+                    💡 Get token from browser dev tools → Network → Authorization header
+                </div>
+            </div>
+
+            <!-- Environment -->
+            <div class="section">
+                <h3>🌍 Environment</h3>
+                <select id="environmentSelect">
+                    <option value="staging">Staging (staging-api.example-platform.com)</option>
+                    <option value="production">Production (api.example-platform.com)</option>
+                    <option value="custom">Custom URL</option>
+                </select>
+                <input type="text" id="customEndpoint" placeholder="https://custom.api.example.com/endpoint" style="display: none;">
+            </div>
+
+            <!-- Data Upload -->
+            <div class="section">
+                <h3>📁 Device Data</h3>
+                <div class="button-group">
+                    <button class="btn btn-success" onclick="loadSampleData()">📋 Load Sample</button>
+                    <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileUpload(event)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">📂 Upload JSON</button>
+                </div>
+                
+                <label>Or paste JSON data:</label>
+                <textarea id="jsonInput" placeholder="Paste device data JSON here..." rows="4"></textarea>
+                <button class="btn btn-secondary" onclick="parseManualData()">Parse Data</button>
+                
+                <div id="dataInfo" class="info-box" style="display: none;"></div>
+            </div>
+
+            <!-- Device Visualization -->
+            <div class="section" id="visualSection" style="display: none;">
+                <h3>👁️ Map Visualization</h3>
+                <label>Select devices to visualize (1-2 max):</label>
+                <select id="visualDevice1" onchange="updateVisualization()">
+                    <option value="">None</option>
+                </select>
+                <select id="visualDevice2" onchange="updateVisualization()">
+                    <option value="">None</option>
+                </select>
+                <div class="help-text">
+                    💡 Only selected devices will show on the map. Others run silently.
+                </div>
+            </div>
+
+                                    <!-- Simulation Control -->
+                        <div class="section" id="controlSection" style="display: none;">
+                            <h3>🎮 Simulation Control</h3>
+                            <div class="button-group">
+                                <button class="btn btn-success" onclick="startSimulation()" id="startBtn">▶️ Start Simulation</button>
+                                <button class="btn btn-warning" onclick="pauseSimulation()" id="pauseBtn" style="display: none;">⏸️ Pause Simulation</button>
+                                <button class="btn btn-success" onclick="resumeSimulation()" id="resumeBtn" style="display: none;">▶️ Resume Simulation</button>
+                                <button class="btn btn-danger" onclick="stopSimulation()" id="stopBtn" disabled>⏹️ Stop Simulation</button>
+                            </div>
+                            
+                            <label>Startup Stagger (ms):</label>
+                            <input type="number" id="staggerDelay" value="150" min="50" max="1000">
+                            
+                            <label>Playback Speed:</label>
+                            <div class="speed-controls">
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(1)" id="speed1x">1x</button>
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(2)" id="speed2x">2x</button>
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(4)" id="speed4x">4x</button>
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(10)" id="speed10x">10x</button>
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(50)" id="speed50x">50x</button>
+                                <button class="btn btn-speed" onclick="setPlaybackSpeed(100)" id="speed100x">100x</button>
+                            </div>
+                            <div class="help-text">
+                                🏃‍♂️ Playback speed affects coordinate streaming rate (higher = faster simulation)
+                            </div>
+                            
+                            <label>Vehicle Speed Override (km/h):</label>
+                            <input type="number" id="vehicleSpeed" placeholder="Auto (from data)" min="1" max="300">
+                            <div class="help-text">
+                                🚗 Override vehicle speed sent to API (leave empty for coordinate default)
+                            </div>
+                            
+                            <button class="btn btn-warning" onclick="adjustLiveStagger()" id="liveStaggerBtn" disabled>🔄 Apply Live Settings</button>
+                            <div class="help-text">
+                                💡 Apply stagger, speed, and vehicle speed changes to running devices without restart
+                            </div>
+                
+                <div class="simulation-stats" id="simStats" style="display: none;">
+                    <div>Active Devices: <span id="activeCount">0</span></div>
+                    <div>Total API Calls: <span id="apiCallCount">0</span></div>
+                    <div>Errors: <span id="errorCount">0</span></div>
+                </div>
+            </div>
+
+            <!-- Debug Log -->
+            <div class="section">
+                <h3>📋 Debug Log</h3>
+                <div class="button-group">
+                    <button class="btn btn-small" onclick="clearLog()">🗑️ Clear</button>
+                    <button class="btn btn-small" onclick="exportLog()">💾 Export</button>
+                </div>
+                <div id="debugLog" class="debug-log"></div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="map-overlay">
+                <div class="map-controls">
+                    <button class="btn btn-small" onclick="fitMapToBounds()">📏 Fit All</button>
+                    <button class="btn btn-small" onclick="togglePaths()" id="pathToggleBtn">👁️ Show Paths</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Local JavaScript Modules -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/devices.js"></script>
+
+    <script>
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 GPS Simulator Started - Multi-Device Testing Mode');
+            log('✅ OpenStreetMap - No API keys required');
+            
+            // Initialize modules
+            UI.init();
+            API.init();
+            Devices.init();
+            
+            // Check for URL parameters
+            checkUrlParams();
+            
+                                    // Set up environment change handler
+                        document.getElementById('environmentSelect').addEventListener('change', handleEnvironmentChange);
+                        
+                        // Set up vehicle speed input handler
+                        document.getElementById('vehicleSpeed').addEventListener('input', () => {
+                            Devices.setVehicleSpeedOverride();
+                        });
+                        
+                        // Initialize default playback speed (1x)
+                        setTimeout(() => {
+                            setPlaybackSpeed(1);
+                        }, 100);
+        });
+
+        // Handle environment selector changes
+        function handleEnvironmentChange() {
+            const env = document.getElementById('environmentSelect').value;
+            const customInput = document.getElementById('customEndpoint');
+            
+            if (env === 'custom') {
+                customInput.style.display = 'block';
+                customInput.required = true;
+            } else {
+                customInput.style.display = 'none';
+                customInput.required = false;
+            }
+            
+            log(`🌍 Environment changed to: ${env}`);
+        }
+
+        // Check URL parameters for token
+        function checkUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+            
+            if (token) {
+                document.getElementById('tokenInput').value = token;
+                setToken();
+                log('🔗 Token loaded from URL parameter');
+            }
+        }
+
+        // Wrapper functions for UI interactions
+        function setToken() {
+            API.setToken();
+        }
+
+        function inspectToken() {
+            API.inspectToken();
+        }
+
+        function loadSampleData() {
+            Devices.loadSampleData();
+        }
+
+        function handleFileUpload(event) {
+            Devices.handleFileUpload(event);
+        }
+
+        function parseManualData() {
+            Devices.parseManualData();
+        }
+
+        function updateVisualization() {
+            UI.updateVisualization();
+        }
+
+        function startSimulation() {
+            Devices.startSimulation();
+        }
+
+        function pauseSimulation() {
+            Devices.pauseSimulation();
+        }
+
+        function resumeSimulation() {
+            Devices.resumeSimulation();
+        }
+
+                            function stopSimulation() {
+                        Devices.stopSimulation();
+                    }
+
+                    function adjustLiveStagger() {
+                        Devices.adjustLiveStagger();
+                    }
+
+                    function setPlaybackSpeed(multiplier) {
+                        Devices.setPlaybackSpeed(multiplier);
+                    }
+
+                    function clearLog() {
+                        clearDebugLog();
+                    }
+
+        function exportLog() {
+            exportDebugLog();
+        }
+
+        function fitMapToBounds() {
+            UI.fitMapToBounds();
+        }
+
+        function togglePaths() {
+            UI.togglePaths();
+        }
+
+                            // Make key functions globally accessible for external calls
+                    window.GPSSimulator = {
+                        simulateCoordinates: Devices.simulateCoordinates,
+                        sendGPS: API.sendGPS,
+                        setToken: API.setToken,
+                        loadDeviceData: Devices.loadDeviceData,
+                        startSimulation: Devices.startSimulation,
+                        pauseSimulation: Devices.pauseSimulation,
+                        resumeSimulation: Devices.resumeSimulation,
+                        stopSimulation: Devices.stopSimulation,
+                        adjustLiveStagger: Devices.adjustLiveStagger,
+                        setPlaybackSpeed: Devices.setPlaybackSpeed,
+                        setVehicleSpeedOverride: Devices.setVehicleSpeedOverride,
+                        getStatus: () => ({
+                            activeDevices: Devices.getActiveCount(),
+                            totalApiCalls: API.getCallCount(),
+                            errors: API.getErrorCount(),
+                            playbackSpeed: Devices.playbackSpeed,
+                            vehicleSpeedOverride: Devices.vehicleSpeedOverride,
+                            isRunning: Devices.isSimulationRunning,
+                            isPaused: Devices.isSimulationPaused
+                        })
+                    };
+    </script>
+</body>
+</html> 

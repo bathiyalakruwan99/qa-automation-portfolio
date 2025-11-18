@@ -1,0 +1,122 @@
+================================================================================
+                    ORDER FILE GENERATOR - START HERE
+================================================================================
+
+Welcome! This tool generates test order files for TMS (Transport Management
+System) testing. Follow these simple steps to get started:
+
+================================================================================
+                            QUICK START (5 Minutes)
+================================================================================
+
+STEP 1: INSTALL (First Time Only)
+----------------------------------
+Windows Users:
+  → Double-click "install.bat"
+  → Wait for installation to complete (2-3 minutes)
+  → Press any key when done
+
+Manual Install:
+  → Open command prompt in this folder
+  → Run: python -m venv .venv
+  → Run: .venv\Scripts\activate
+  → Run: pip install -r requirements.txt
+
+STEP 2: RUN THE APPLICATION
+----------------------------
+Windows Users:
+  → Double-click "run.bat"
+
+Manual Run:
+  → Open command prompt
+  → Run: python src/app.py
+
+STEP 3: USE THE TOOL
+--------------------
+  1. Click [Browse...] to load your Order Spec file
+     (Sample: data\specs\Order List Spec - D7 Cash Customer-Kithulgala-OK DEMO.xlsx)
+  
+  2. Click [Browse...] to load your Location Master file
+     (Sample: data\locations\Centrics 3PL (7).xlsx)
+  
+  3. Verify column mappings (auto-detected)
+  
+  4. Select pickup location and configure parameters
+  
+  5. Click [Generate Order File]
+  
+  6. Save your file!
+
+================================================================================
+                              DOCUMENTATION
+================================================================================
+
+New Users:
+  → Read "QUICKSTART.md" for detailed setup instructions
+  → Read "DEMO_WALKTHROUGH.md" for step-by-step demo
+
+All Users:
+  → Read "USAGE_GUIDE.md" for complete feature documentation
+  → Read "INDEX.md" for documentation map
+
+Developers:
+  → Read "PROJECT_SUMMARY.md" for technical details
+  → Read "README.md" for project overview
+
+================================================================================
+                            VERIFY INSTALLATION
+================================================================================
+
+To check if everything is set up correctly:
+  → Open command prompt
+  → Run: python test_setup.py
+  → Should see all tests PASS
+
+================================================================================
+                            NEED HELP?
+================================================================================
+
+Installation Problems:
+  → Check QUICKSTART.md → Troubleshooting section
+  → Make sure Python 3.10+ is installed
+  → Run: python --version
+
+Usage Questions:
+  → Read USAGE_GUIDE.md
+  → Check INDEX.md for topic-specific help
+  → Look at DEMO_WALKTHROUGH.md for examples
+
+================================================================================
+                            QUICK REFERENCE
+================================================================================
+
+Sample Files Included:
+  ✓ Order Spec: data\specs\Order List Spec - D7 Cash Customer-Kithulgala-OK DEMO.xlsx
+  ✓ Location Master: data\locations\Centrics 3PL (7).xlsx
+
+Output Location:
+  → Default: D:\ordermanger optimizer check\order file creation\Created file
+  → Or choose custom location when saving
+
+Features:
+  ✓ Preserves exact spec schema
+  ✓ Auto-detects column mappings
+  ✓ Generates realistic random data
+  ✓ Includes test scenarios
+  ✓ Saves to Excel format
+
+================================================================================
+
+                    🎉 READY TO START? DOUBLE-CLICK "run.bat" 🎉
+
+================================================================================
+
+For more information, read the documentation files:
+  - README.md (overview)
+  - QUICKSTART.md (quick start)
+  - INDEX.md (documentation map)
+  - USAGE_GUIDE.md (complete manual)
+  - DEMO_WALKTHROUGH.md (step-by-step demo)
+
+================================================================================
+

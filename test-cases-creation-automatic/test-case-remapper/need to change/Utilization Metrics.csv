@@ -1,0 +1,51 @@
+parent_folder_name,testcase_id,title,owner,created_at,created_by,modified_at,modified_by,precondition,steps,expected_results,parent_folder_description,priority,status,testcase_type,expectedresult,testdata,actualresult,bug,stepdescription,folderdescription,requirements,attachments
+Dashbord > Utilization Metrics,870,Display CBM and Weight KPIs as One Combined Component,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Open the dashboard and locate the utilisation metrics component
+","[1] Both KPIs (CBM, Weight) should appear side by side in one visual container
+","SCN-001
+",1,DRAFT,UI,,,TBD,No,Load widget,VU-001,,
+Dashbord > Utilization Metrics,871,Calculate Average CBM Utilisation Correctly,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Compare displayed value with Σ(Job CBM Utilisation / Total CBM Capacity)
+","[1] CBM KPI shows the correct average value
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Check CBM calculation logic,VU-002,,
+Dashbord > Utilization Metrics,872,Calculate Average Weight Utilisation Correctly,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Compare displayed value with Σ(Job Weight Utilisation / Total Weight Capacity)
+","[1] Weight KPI shows the correct average value
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Check Weight calculation logic,VU-003,,
+Dashbord > Utilization Metrics,873,Display Positive Comparison in Green,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Switch to 7 Days, compare with previous
+","[1] % comparison is positive and green
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Select period with improvement,VU-004,,
+Dashbord > Utilization Metrics,874,Display Negative Comparison in Red,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Switch to 7 Days, compare with previous
+","[1] % comparison is negative and red
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,Select period with drop,VU-005,,
+Dashbord > Utilization Metrics,875,Date Picker and Preset Filters Update Data,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Apply 24H, 30D, custom range
+","[1] KPI and graph data update based on selected time
+","SCN-001
+",1,DRAFT,FUNCTIONAL,,,TBD,No,Change time filter,VU-006,,
+Dashbord > Utilization Metrics,876,Custom Period Comparison Logic,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Compare values with equivalent prior duration
+","[1] % change reflects custom duration vs prior and is color-coded properly
+","SCN-001
+",2,DRAFT,FUNCTIONAL,,,TBD,No,Select custom range,VU-007,,
+Dashbord > Utilization Metrics,877,Render Line Chart for Both Metrics Over Time,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Load the widget and observe graph
+","[1] Graph should display trends for both CBM and Weight lines with distinct colors
+","SCN-001
+",2,DRAFT,UI,,,TBD,No,View trend chart,VU-008,,
+Dashbord > Utilization Metrics,878,X-Axis Should Represent Dates Proportionately,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Look at x-axis and hover
+","[1] Dates should match selected period range with proportional intervals
+","SCN-001
+",3,DRAFT,FUNCTIONAL,,,TBD,No,Validate date labels,VU-009,,
+Dashbord > Utilization Metrics,879,Tooltip on Graph Should Show Date and Value,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,2025-06-19T05:28:00.880Z,qa-team-user,"Logged in
+","[1] Move cursor across graph
+","[1] Tooltip appears with correct date and metric value
+","SCN-001
+",3,DRAFT,UI,,,TBD,No,Hover on graph point,VU-010,,

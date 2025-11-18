@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Vehicle Simulator - Production Ready</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .tool-navigation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .nav-header {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .nav-btn .nav-icon {
+            font-size: 14px;
+        }
+        .main-content {
+            margin: 0 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            height: 90vh;
+        }
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .map-container {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .debug-area {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        .status {
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-good { background: #d4edda; color: #155724; }
+        .status-bad { background: #f8d7da; color: #721c24; }
+        .status-warn { background: #fff3cd; color: #856404; }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 4px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tool-navigation">
+        <div class="nav-header">🛠️ GPS Testing Toolkit - Quick Navigation</div>
+        <div class="nav-buttons">
+            <a href="../dashboard.html" class="nav-btn">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="../gps-simulator/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">📡</span> Live Simulator
+            </a>
+            <a href="../gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">🛣️</span> Path Builder
+            </a>
+            <a href="../GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">📊</span> Visualizer
+            </a>
+            <a href="../multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">🔄</span> Combiner
+            </a>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1>GPS Vehicle Simulator</h1>
+        
+        <div class="container">
+        <div class="sidebar">
+            <h3>Debug Output</h3>
+            <div class="debug-area" id="debug"></div>
+            
+            <h3>Status</h3>
+            <div class="status status-bad" id="token-status">❌ No Token</div>
+            <div class="status status-bad" id="map-status">❌ Map Not Loaded</div>
+            <div class="status status-bad" id="api-status">❌ No GPS Data Sent (0)</div>
+            <div class="status status-warn" id="env-status">🌍 Environment: Staging</div>
+            
+            <h3>Authentication</h3>
+            <label style="font-weight: bold; display: block; margin-bottom: 4px;">Paste Your Bearer Token:</label>
+            <textarea id="realTokenInput" placeholder="Paste your bearer token here (without the 'Bearer ' prefix)..." 
+                     style="width: 100%; height: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 11px; resize: vertical;"></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button class="btn btn-primary" onclick="setRealToken()" style="flex: 1;">Use This Token</button>
+                <button class="btn" onclick="inspectToken()" style="background: #6c757d; color: white; flex: 0 0 auto;">Inspect</button>
+            </div>
+            
+            <div style="background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 4px; padding: 8px; margin-top: 8px; font-size: 11px;">
+                <strong>🔑 Getting Your Token:</strong><br>
+                1. <strong>Log into your example platform system</strong><br>
+                2. <strong>Open browser dev tools (F12)</strong><br>
+                3. <strong>Go to Network tab, make any API request</strong><br>
+                4. <strong>Find a request with "Authorization: Bearer ..."</strong><br>
+                5. <strong>Copy just the token part (after "Bearer ")</strong><br><br>
+                
+                <strong>Common Issues:</strong><br>
+                • "JWT signature does not match" = Wrong/old token<br>
+                • "Non-ASCII characters" = Copy/paste error<br>
+                • Make sure token is for <strong>staging-api.example-platform.com</strong>
+            </div>
+
+            <h3>Controls</h3>
+            <button class="btn btn-success" onclick="testAPI()">Manual API Call</button>
+            <button class="btn" onclick="testNetworkOnly()" style="background: #6f42c1; color: white;">Test Network Only</button>
+            <button class="btn" onclick="testProductionSpecific()" style="background: #dc3545; color: white;">🏭 Force Test Production</button>
+            <button class="btn btn-primary" onclick="forceInitMap()" style="background: #17a2b8;">Force Initialize Map</button>
+            <button class="btn btn-warning" onclick="clearAll()">Clear Everything</button>
+            
+            <div style="background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px;">
+                <strong>🎯 How to Use:</strong><br>
+                1. <strong>Paste your bearer token</strong> in the text area above<br>
+                2. <strong>Click "Use This Token"</strong> to set it (or "Inspect" to analyze first)<br>  
+                3. <strong>Click anywhere on the map</strong> to move vehicle & send GPS data automatically<br>
+                4. <strong>Or use manual controls</strong> - "Manual API Call" / "Test Network Only"<br>
+                5. <strong>Watch debug output</strong> for detailed API responses & troubleshooting
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 8px; margin: 8px 0; font-size: 12px;">
+                <strong>🔧 Troubleshooting:</strong><br>
+                • <strong>"JWT signature does not match"</strong> = Wrong/old token, get fresh token<br>
+                • <strong>"Non-ASCII characters"</strong> = Copy/paste error, use "Inspect" to check<br>
+                • <strong>"Token expired"</strong> = Get a new token from your authentication system<br>
+                • <strong>Use "Inspect" button</strong> to analyze token before using it
+            </div>
+            
+            <h3>Settings</h3>
+            <label>Device ID:</label>
+            <input type="text" id="deviceId" value="350612076505187">
+            
+            <label>Speed (km/h):</label>
+            <input type="number" id="speed" value="45" min="0" max="120">
+            
+            <label>Environment:</label>
+            <select id="environment">
+                <option value="staging">Staging</option>
+                <option value="production">Production</option>
+                <option value="development">Development</option>
+            </select>
+            
+            <label>Test Position:</label>
+            <input type="text" id="testLat" value="6.993909" placeholder="Latitude">
+            <input type="text" id="testLng" value="79.92087" placeholder="Longitude">
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+          key: "AIzaSyDEUxjHWz_A17uBChZqvZwu36xImHyWMaE",
+          v: "weekly",
+        });
+    </script>
+
+    <script>
+        // Global variables
+        let currentToken = null;
+        let map = null;
+        let marker = null;
+        let gpsDataSentCount = 0;
+
+        // Debug logging
+        function log(message) {
+            const time = new Date().toLocaleTimeString();
+            const debug = document.getElementById('debug');
+            debug.innerHTML += `[${time}] ${message}\n`;
+            debug.scrollTop = debug.scrollHeight;
+            console.log(message);
+        }
+
+
+
+        // Validate token format and characters
+        function validateToken(token) {
+            const issues = [];
+            
+            // Check if token is empty
+            if (!token || token.trim().length === 0) {
+                issues.push("Token is empty");
+                return { valid: false, issues };
+            }
+            
+            // Check for non-ASCII characters (will cause header errors)
+            const nonAsciiRegex = /[^\x00-\x7F]/;
+            if (nonAsciiRegex.test(token)) {
+                issues.push("Contains non-ASCII characters (will cause fetch errors)");
+            }
+            
+            // Check basic JWT format
+            const parts = token.split('.');
+            if (parts.length !== 3) {
+                issues.push("Not a valid JWT format (should have 3 parts separated by dots)");
+            }
+            
+            // Check if starts with expected JWT header
+            if (!token.startsWith('eyJ')) {
+                issues.push("Doesn't look like a JWT (should start with 'eyJ')");
+            }
+            
+            // Check for common whitespace/formatting issues
+            if (token !== token.trim()) {
+                issues.push("Has leading/trailing whitespace");
+            }
+            
+            // Check for line breaks
+            if (token.includes('\n') || token.includes('\r')) {
+                issues.push("Contains line breaks");
+            }
+            
+            return {
+                valid: issues.length === 0,
+                issues: issues
+            };
+        }
+
+        // Set real bearer token
+        function setRealToken() {
+            try {
+                const tokenInput = document.getElementById('realTokenInput');
+                let token = tokenInput.value.trim();
+                
+                if (!token) {
+                    log("❌ Please paste your bearer token first");
+                    return;
+                }
+                
+                // Remove "Bearer " prefix if accidentally included
+                if (token.toLowerCase().startsWith('bearer ')) {
+                    token = token.substring(7).trim();
+                    log("🔧 Removed 'Bearer ' prefix from token");
+                }
+                
+                // Validate token
+                const validation = validateToken(token);
+                log(`🔍 Token Validation Results:`);
+                
+                if (!validation.valid) {
+                    log(`❌ Token validation failed:`);
+                    validation.issues.forEach(issue => {
+                        log(`   ├─ ${issue}`);
+                    });
+                    
+                    // Try to fix common issues
+                    const originalToken = token;
+                    
+                    // Remove line breaks and excessive whitespace
+                    token = token.replace(/[\r\n\s]/g, '');
+                    
+                    if (token !== originalToken) {
+                        log(`🔧 Cleaned up token (removed whitespace/line breaks)`);
+                        log(`📏 Original length: ${originalToken.length}, Cleaned: ${token.length}`);
+                    }
+                    
+                    // Re-validate after cleanup
+                    const revalidation = validateToken(token);
+                    if (!revalidation.valid) {
+                        log(`❌ Token still invalid after cleanup:`);
+                        revalidation.issues.forEach(issue => {
+                            log(`   ├─ ${issue}`);
+                        });
+                        
+                        document.getElementById('token-status').innerHTML = '❌ Invalid Token Format';
+                        document.getElementById('token-status').className = 'status status-bad';
+                        return;
+                    } else {
+                        log(`✅ Token is now valid after cleanup!`);
+                    }
+                } else {
+                    log(`✅ Token passed all validation checks`);
+                }
+                
+                currentToken = token;
+                
+                // Try to parse expiry from JWT
+                let expiryInfo = "Unknown";
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    if (payload.exp) {
+                        const expiry = new Date(payload.exp * 1000);
+                        expiryInfo = expiry.toLocaleString();
+                        log(`📅 Token expires: ${expiryInfo}`);
+                        
+                        // Check if token is already expired
+                        if (expiry < new Date()) {
+                            log("⚠️ WARNING: This token appears to be expired!");
+                            document.getElementById('token-status').innerHTML = '⚠️ Real Token (EXPIRED)';
+                            document.getElementById('token-status').className = 'status status-bad';
+                            return;
+                        }
+                    }
+                } catch (parseError) {
+                    log("⚠️ Could not parse token expiry, but will try to use it anyway");
+                }
+                
+                log(`✅ Bearer token set and ready!`);
+                log(`🚀 Token length: ${token.length} characters`);
+                
+                document.getElementById('token-status').innerHTML = '✅ Token Valid';
+                document.getElementById('token-status').className = 'status status-good';
+                
+                // Clear the input for security
+                tokenInput.value = '';
+                
+            } catch (error) {
+                log(`❌ Failed to set real token: ${error.message}`);
+                document.getElementById('token-status').innerHTML = '❌ Token Error';
+                document.getElementById('token-status').className = 'status status-bad';
+            }
+        }
+
+        // Inspect token without setting it
+        function inspectToken() {
+            const tokenInput = document.getElementById('realTokenInput');
+            let token = tokenInput.value.trim();
+            
+            if (!token) {
+                log("❌ No token to inspect - paste a token first");
+                return;
+            }
+            
+            log("🔍 TOKEN INSPECTION REPORT:");
+            log("═".repeat(50));
+            
+            // Check for Bearer prefix
+            if (token.toLowerCase().startsWith('bearer ')) {
+                log("🔧 Found 'Bearer ' prefix - will be removed automatically");
+                token = token.substring(7).trim();
+            }
+            
+            // Basic info
+            log(`📏 Length: ${token.length} characters`);
+            log(`🔤 First 20 chars: "${token.substring(0, 20)}..."`);
+            log(`🔤 Last 20 chars: "...${token.substring(token.length - 20)}"`);
+            
+            // Check for common issues
+            const validation = validateToken(token);
+            log(`✅ Validation: ${validation.valid ? 'PASSED' : 'FAILED'}`);
+            if (!validation.valid) {
+                validation.issues.forEach((issue, i) => {
+                    log(`   ${i + 1}. ${issue}`);
+                });
+            }
+            
+            // Try to decode JWT parts
+            const parts = token.split('.');
+            log(`🧩 JWT Parts: ${parts.length} ${parts.length === 3 ? '(correct)' : '(should be 3)'}`);
+            
+            if (parts.length >= 2) {
+                try {
+                    // Decode header
+                    const header = JSON.parse(atob(parts[0]));
+                    log(`📋 Header: ${JSON.stringify(header)}`);
+                    
+                    // Decode payload
+                    const payload = JSON.parse(atob(parts[1]));
+                    log(`📦 Payload Keys: ${Object.keys(payload).join(', ')}`);
+                    
+                    // Check important fields
+                    if (payload.exp) {
+                        const expiry = new Date(payload.exp * 1000);
+                        const now = new Date();
+                        const timeLeft = expiry.getTime() - now.getTime();
+                        const hoursLeft = Math.round(timeLeft / (1000 * 60 * 60));
+                        
+                        log(`📅 Expires: ${expiry.toLocaleString()}`);
+                        if (timeLeft > 0) {
+                            log(`⏰ Time left: ~${hoursLeft} hours`);
+                        } else {
+                            log(`❌ EXPIRED ${Math.abs(hoursLeft)} hours ago!`);
+                        }
+                    }
+                    
+                    if (payload.iat) {
+                        const issued = new Date(payload.iat * 1000);
+                        log(`🕐 Issued: ${issued.toLocaleString()}`);
+                    }
+                    
+                    if (payload.scopes && Array.isArray(payload.scopes)) {
+                        const hasGpsScope = payload.scopes.some(scope => 
+                            scope.includes('gps') || scope.includes('manager')
+                        );
+                        log(`🔐 Scopes: ${payload.scopes.length} total`);
+                        log(`📡 GPS-related scopes: ${hasGpsScope ? 'YES' : 'NO'}`);
+                        if (hasGpsScope) {
+                            const gpsScopes = payload.scopes.filter(s => 
+                                s.includes('gps') || s.includes('manager')
+                            );
+                            gpsScopes.forEach(scope => {
+                                log(`   • ${scope}`);
+                            });
+                        }
+                    }
+                    
+                } catch (decodeError) {
+                    log(`❌ JWT decode failed: ${decodeError.message}`);
+                }
+            }
+            
+            // Character analysis
+            const hasNonAscii = /[^\x00-\x7F]/.test(token);
+            const hasLineBreaks = /[\r\n]/.test(token);
+            const hasSpaces = token.includes(' ');
+            
+            log(`🔤 Character Analysis:`);
+            log(`   • Non-ASCII chars: ${hasNonAscii ? 'YES (will cause errors!)' : 'No'}`);
+            log(`   • Line breaks: ${hasLineBreaks ? 'YES (will cause errors!)' : 'No'}`);
+            log(`   • Spaces: ${hasSpaces ? 'YES (might cause issues)' : 'No'}`);
+            
+            log("═".repeat(50));
+            
+            if (validation.valid) {
+                log("🎉 Token format looks good! Try using it.");
+            } else {
+                log("🚨 Fix the validation issues above before using this token.");
+            }
+        }
+
+        // Test network connectivity only (simpler test)
+        async function testNetworkOnly() {
+            if (!currentToken) {
+                log("❌ No token available - paste and set a token first");
+                return;
+            }
+
+            try {
+                log("🔍 Testing network connectivity and server response format...");
+                const apiUrl = getApiUrl();
+                log(`🌐 Testing URL: ${apiUrl}`);
+                
+                // Make a simple HEAD or OPTIONS request first
+                try {
+                    log("📡 Trying OPTIONS request to check CORS...");
+                    const optionsResponse = await fetch(apiUrl, {
+                        method: 'OPTIONS',
+                        mode: 'cors'
+                    });
+                    log(`✅ OPTIONS Response: ${optionsResponse.status} ${optionsResponse.statusText}`);
+                } catch (optionsError) {
+                    log(`⚠️ OPTIONS request failed: ${optionsError.message}`);
+                }
+                
+                // Now try a minimal GPS data request
+                const minimalData = {
+                    deviceId: "TEST-DEVICE",
+                    latitude: 6.0,
+                    longitude: 80.0,
+                    speed: 0,
+                    reportedAt: new Date().toISOString()
+                };
+                
+                log(`📡 Sending minimal test data: ${JSON.stringify(minimalData)}`);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify(minimalData)
+                });
+                
+                const responseText = await response.text();
+                
+                log(`📊 NETWORK TEST RESULTS:`);
+                log(`├─ Status: ${response.status} ${response.statusText}`);
+                log(`├─ Response Length: ${responseText.length} chars`);
+                log(`├─ Content-Type: ${response.headers.get('content-type') || 'not set'}`);
+                log(`├─ CORS: ${response.headers.get('access-control-allow-origin') || 'not set'}`);
+                log(`└─ Body: "${responseText}"`);
+                
+                if (response.ok) {
+                    log("✅ Network test successful - API is responding!");
+                } else {
+                    log(`❌ Network test failed with ${response.status}`);
+                }
+                
+            } catch (error) {
+                log(`❌ Network test failed: ${error.message}`);
+                log(`🔧 This could be a CORS issue, network problem, or server down`);
+            }
+        }
+
+        // Force test production environment specifically
+        async function testProductionSpecific() {
+            if (!currentToken) {
+                log("❌ No token available - paste and set a token first");
+                return;
+            }
+            
+            log("🏭 FORCING TEST OF PRODUCTION ENVIRONMENT (ignoring dropdown selection)");
+            log("═".repeat(60));
+            
+            try {
+                const lat = parseFloat(document.getElementById('testLat').value) || 6.993909;
+                const lng = parseFloat(document.getElementById('testLng').value) || 79.92087;
+                const deviceId = document.getElementById('deviceId').value;
+                const speed = parseInt(document.getElementById('speed').value) || 45;
+                
+                const gpsData = {
+                    deviceId: deviceId,
+                    latitude: lat,
+                    longitude: lng,
+                    speed: speed,
+                    reportedAt: new Date().toISOString()
+                };
+                
+                const productionUrl = 'https://api.example-platform.com/api/telematics/gps-data/v1';
+                
+                log(`📡 PRODUCTION TEST DATA: ${JSON.stringify(gpsData)}`);
+                log(`🎯 PRODUCTION API URL: ${productionUrl}`);
+                log(`🔑 Token length: ${currentToken.length} chars`);
+                
+                const response = await fetch(productionUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify(gpsData)
+                });
+                
+                const responseText = await response.text();
+                
+                log(`🏭 PRODUCTION RESPONSE:`);
+                log(`├─ Status: ${response.status} ${response.statusText}`);
+                log(`├─ Response Length: ${responseText.length} chars`);
+                log(`├─ Content-Type: ${response.headers.get('content-type') || 'not set'}`);
+                log(`├─ CORS Headers: ${response.headers.get('access-control-allow-origin') || 'not set'}`);
+                log(`└─ Body: "${responseText}"`);
+                
+                if (response.ok) {
+                    log("✅ PRODUCTION TEST SUCCESSFUL!");
+                    log("💡 If production works here but not via dropdown, there's a UI issue");
+                } else if (response.status === 401) {
+                    log("❌ PRODUCTION AUTHENTICATION FAILED");
+                    log("💡 Your token may not have production permissions");
+                } else if (response.status === 0 || response.status === 404) {
+                    log("❌ PRODUCTION ENDPOINT NOT REACHABLE");
+                    log("💡 Network/CORS issue or wrong production URL");
+                } else {
+                    log(`❌ PRODUCTION FAILED: HTTP ${response.status}`);
+                }
+                
+            } catch (error) {
+                log(`❌ PRODUCTION TEST FAILED: ${error.message}`);
+                if (error.message.includes('CORS')) {
+                    log("💡 This is likely a CORS policy issue with production");
+                } else if (error.message.includes('fetch')) {
+                    log("💡 Network connectivity issue to production endpoint");
+                }
+            }
+            
+            log("═".repeat(60));
+        }
+
+        // Test API call
+        async function testAPI() {
+            if (!currentToken) {
+                log("❌ No token available - generate one first");
+                return;
+            }
+
+            try {
+                const lat = parseFloat(document.getElementById('testLat').value) || 6.993909;
+                const lng = parseFloat(document.getElementById('testLng').value) || 79.92087;
+                const deviceId = document.getElementById('deviceId').value;
+                const speed = parseInt(document.getElementById('speed').value) || 45;
+                
+                const gpsData = {
+                    deviceId: deviceId,
+                    latitude: lat,
+                    longitude: lng,
+                    speed: speed,
+                    reportedAt: new Date().toISOString()
+                };
+                
+                gpsDataSentCount++;
+                log(`📡 Sending GPS data #${gpsDataSentCount}: ${JSON.stringify(gpsData)}`);
+                
+                const apiUrl = getApiUrl();
+                log(`📤 API URL: ${apiUrl}`);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify(gpsData)
+                });
+                
+                // Get response as text first to see what we actually received
+                const responseText = await response.text();
+                log(`📤 Response Status: ${response.status} ${response.statusText}`);
+                log(`📄 Raw Response: "${responseText}"`);
+                log(`📏 Response Length: ${responseText.length} characters`);
+                
+                // Log important headers for debugging
+                const contentType = response.headers.get('content-type');
+                const corsHeaders = response.headers.get('access-control-allow-origin');
+                log(`📋 Content-Type: ${contentType || 'not set'}`);
+                log(`📋 CORS Headers: ${corsHeaders || 'not set'}`);
+                
+                if (response.ok) {
+                    // Try to parse as JSON if we got a response
+                    let result = null;
+                    if (responseText.trim()) {
+                        try {
+                            result = JSON.parse(responseText);
+                            log(`📥 Parsed JSON Response: ${JSON.stringify(result)}`);
+                        } catch (jsonError) {
+                            log(`⚠️ Response is not JSON: ${jsonError.message}`);
+                            result = { message: responseText };
+                        }
+                    } else {
+                        log(`✅ Empty response body (success with no content)`);
+                        result = { message: "Success - empty response" };
+                    }
+                    
+                    log(`✅ GPS data #${gpsDataSentCount} sent successfully!`);
+                    document.getElementById('api-status').innerHTML = `✅ ${gpsDataSentCount} GPS Updates Sent Successfully!`;
+                    document.getElementById('api-status').className = 'status status-good';
+                    
+                    // Update map marker if available and not already positioned
+                    if (marker) {
+                        const currentPos = marker.getPosition();
+                        if (!currentPos || Math.abs(currentPos.lat() - lat) > 0.0001 || Math.abs(currentPos.lng() - lng) > 0.0001) {
+                            marker.setPosition({lat: lat, lng: lng});
+                            log(`📍 Map marker synced to: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+                        }
+                    }
+                    
+                } else if (response.status === 401) {
+                    // Authentication failed with real token
+                    log(`❌ GPS data #${gpsDataSentCount} - Authentication failed (401)`);
+                    log(`🔧 Your bearer token may be expired or invalid`);
+                    log(`💡 Try getting a fresh token from your authentication system`);
+                    log(`🔍 Use the "Inspect" button to analyze your token`);
+                    document.getElementById('api-status').innerHTML = `❌ Auth Failed - Check Token`;
+                    document.getElementById('api-status').className = 'status status-bad';
+                    
+                } else {
+                    // We already have responseText from above
+                    log(`❌ GPS data #${gpsDataSentCount} failed: HTTP ${response.status}`);
+                    log(`📄 Error Response Body: "${responseText}"`);
+                    
+                    // Try to parse error response as JSON for better error messages
+                    let errorMessage = responseText || response.statusText;
+                    try {
+                        const errorJson = JSON.parse(responseText);
+                        if (errorJson.message) {
+                            errorMessage = errorJson.message;
+                        }
+                        log(`📥 Parsed Error JSON: ${JSON.stringify(errorJson)}`);
+                    } catch (e) {
+                        log(`⚠️ Error response is not JSON, using raw text`);
+                    }
+                    
+                    throw new Error(`HTTP ${response.status}: ${errorMessage}`);
+                }
+                
+            } catch (error) {
+                log(`❌ GPS data #${gpsDataSentCount} failed: ${error.message}`);
+                document.getElementById('api-status').innerHTML = `❌ ${gpsDataSentCount} GPS Attempts (${gpsDataSentCount - 1} Failed)`;
+                document.getElementById('api-status').className = 'status status-bad';
+            }
+        }
+
+        // Get API URL based on environment
+        function getApiUrl() {
+            const env = document.getElementById('environment').value;
+            log(`🌍 Environment selected: "${env}"`);
+            
+            let url;
+            switch (env) {
+                case 'development':
+                    url = 'http://localhost:8080/api/telematics/gps-data/v1';
+                    break;
+                case 'staging':
+                    url = 'https://staging-api.example-platform.com/api/telematics/gps-data/v1';
+                    break;
+                case 'production':
+                    url = 'https://api.example-platform.com/api/telematics/gps-data/v1';
+                    break;
+                default:
+                    log(`⚠️ Unknown environment "${env}", defaulting to staging`);
+                    url = 'https://staging-api.example-platform.com/api/telematics/gps-data/v1';
+            }
+            
+            log(`🎯 Using API URL: ${url}`);
+            return url;
+        }
+
+        // Force map initialization
+        function forceInitMap() {
+            log("🔧 Force initializing map...");
+            mapInitAttempts = 0; // Reset attempt counter
+            
+            if (typeof google !== 'undefined' && google.maps) {
+                log("✅ Google Maps API detected, starting initialization...");
+                initMap();
+            } else {
+                log("❌ Google Maps API not loaded yet");
+                log("⏳ Checking Google Maps API status...");
+                
+                // Check if the script tag exists
+                const scriptTags = document.querySelectorAll('script[src*="maps.googleapis.com"]');
+                log(`📄 Found ${scriptTags.length} Google Maps script tags`);
+                
+                log("🔄 Will keep checking for Google Maps API...");
+                checkGoogleMapsWithRetry();
+            }
+        }
+
+        // Check for Google Maps with retry
+        function checkGoogleMapsWithRetry() {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            const checkInterval = setInterval(() => {
+                attempts++;
+                log(`🔍 Checking for Google Maps API... (${attempts}/${maxAttempts})`);
+                
+                if (typeof google !== 'undefined' && google.maps) {
+                    log("✅ Google Maps API now available!");
+                    clearInterval(checkInterval);
+                    initMap();
+                } else if (attempts >= maxAttempts) {
+                    log("❌ Google Maps API failed to load after maximum attempts");
+                    log("💡 Try refreshing the page or check your internet connection");
+                    clearInterval(checkInterval);
+                }
+            }, 2000);
+        }
+
+        // Clear everything
+        function clearAll() {
+            currentToken = null;
+            gpsDataSentCount = 0;
+            document.getElementById('debug').innerHTML = '';
+            document.getElementById('realTokenInput').value = '';
+            document.getElementById('token-status').innerHTML = '❌ No Token';
+            document.getElementById('token-status').className = 'status status-bad';
+            document.getElementById('api-status').innerHTML = '❌ No GPS Data Sent (0)';
+            document.getElementById('api-status').className = 'status status-bad';
+            document.getElementById('map-status').innerHTML = '❌ Map Not Loaded';
+            document.getElementById('map-status').className = 'status status-bad';
+            
+            // Reset environment to staging (default)
+            document.getElementById('environment').value = 'staging';
+            updateEnvironmentStatus();
+            
+            log("🗑️ Everything cleared - paste your bearer token to start");
+        }
+
+        // Simple map initialization with retry
+        let mapInitAttempts = 0;
+        async function initMap() {
+            mapInitAttempts++;
+            try {
+                log(`🗺️ Map initialization attempt ${mapInitAttempts}/5...`);
+                
+                if (!window.google) {
+                    throw new Error("Google object not available");
+                }
+                
+                if (!google.maps) {
+                    throw new Error("Google Maps not available");
+                }
+                
+                if (!google.maps.importLibrary) {
+                    throw new Error("Google Maps importLibrary not available");
+                }
+                
+                log("📚 Importing Google Maps library...");
+                const { Map } = await google.maps.importLibrary("maps");
+                log("✅ Maps library imported successfully");
+                
+                const mapElement = document.getElementById("map");
+                if (!mapElement) {
+                    throw new Error("Map element not found");
+                }
+                
+                log("🏗️ Creating map instance...");
+                map = new Map(mapElement, {
+                    center: { lat: 6.993909, lng: 79.92087 },
+                    zoom: 8,
+                    mapTypeId: 'roadmap'
+                });
+                log("✅ Map instance created");
+                
+                log("📍 Creating vehicle marker...");
+                marker = new google.maps.Marker({
+                    position: { lat: 6.993909, lng: 79.92087 },
+                    map: map,
+                    title: "GPS Vehicle - Click map or drag me!",
+                    draggable: true,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 15,
+                        fillColor: '#ff0000',
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3
+                    },
+                    animation: google.maps.Animation.DROP
+                });
+                log("✅ Vehicle marker created and ready!");
+                
+                log("🖱️ Adding click listeners...");
+                map.addListener("click", (event) => {
+                    const pos = event.latLng.toJSON();
+                    log(`🖱️ Map clicked: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`);
+                    
+                    // Update input fields
+                    document.getElementById('testLat').value = pos.lat.toFixed(6);
+                    document.getElementById('testLng').value = pos.lng.toFixed(6);
+                    
+                    // Move marker visually with animation
+                    if (marker) {
+                        marker.setPosition(pos);
+                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                        setTimeout(() => { 
+                            marker.setAnimation(null); 
+                        }, 1400); // Stop bouncing after animation
+                        log(`📍 Vehicle marker moved to: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`);
+                    }
+                    
+                    // Automatically send GPS data on map click
+                    if (currentToken) {
+                        log(`🚀 Auto-sending GPS data for clicked position...`);
+                        testAPI(); // This will use the coordinates we just updated
+                    } else {
+                        log(`⚠️ No token available - generate a token first to send GPS data`);
+                        log(`💡 Click "Generate Token" then try clicking the map again`);
+                    }
+                });
+                
+                marker.addListener("dragend", (event) => {
+                    const pos = event.latLng.toJSON();
+                    log(`📍 Marker dragged to: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`);
+                    
+                    // Update input fields
+                    document.getElementById('testLat').value = pos.lat.toFixed(6);
+                    document.getElementById('testLng').value = pos.lng.toFixed(6);
+                    
+                    // Automatically send GPS data on marker drag
+                    if (currentToken) {
+                        log(`🚀 Auto-sending GPS data for dragged position...`);
+                        testAPI(); // This will use the coordinates we just updated
+                    } else {
+                        log(`⚠️ No token available - generate a token first to send GPS data`);
+                    }
+                });
+                
+                log("✅ Event listeners added");
+                log("🎉 Map initialization completed successfully!");
+                document.getElementById('map-status').innerHTML = '✅ Map Loaded & Interactive';
+                document.getElementById('map-status').className = 'status status-good';
+                
+            } catch (error) {
+                log(`❌ Map initialization failed: ${error.message}`);
+                document.getElementById('map-status').innerHTML = `❌ Map Failed (Attempt ${mapInitAttempts}/5)`;
+                document.getElementById('map-status').className = 'status status-bad';
+                
+                // Retry up to 5 times
+                if (mapInitAttempts < 5) {
+                    log(`⏳ Retrying in 3 seconds...`);
+                    setTimeout(initMap, 3000);
+                } else {
+                    log("❌ Max attempts reached. Map initialization failed permanently.");
+                    document.getElementById('map-status').innerHTML = '❌ Map Failed - Refresh Page';
+                }
+            }
+        }
+
+        // Google Maps callback
+        window.initMap = initMap;
+
+        // Update environment status
+        function updateEnvironmentStatus() {
+            const env = document.getElementById('environment').value;
+            const envStatus = document.getElementById('env-status');
+            const envDisplayName = env.charAt(0).toUpperCase() + env.slice(1);
+            
+            let statusClass = 'status status-warn';
+            let statusText = `🌍 Environment: ${envDisplayName}`;
+            
+            if (env === 'production') {
+                statusClass = 'status status-good';
+                statusText = `🏭 Production Environment`;
+            } else if (env === 'staging') {
+                statusClass = 'status status-warn';
+                statusText = `🧪 Staging Environment`;
+            } else if (env === 'development') {
+                statusClass = 'status status-bad';
+                statusText = `💻 Development Environment`;
+            }
+            
+            envStatus.className = statusClass;
+            envStatus.innerHTML = statusText;
+            log(`🌍 Environment changed to: ${envDisplayName}`);
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            log("🚀 GPS Vehicle Simulator - Ready for Real API Calls");
+            log("💡 Paste your bearer token to start sending GPS data");
+            log("🗺️ Checking for Google Maps API...");
+            
+            // Set up environment change handler
+            const envSelect = document.getElementById('environment');
+            envSelect.addEventListener('change', updateEnvironmentStatus);
+            updateEnvironmentStatus(); // Initialize the status
+            
+            // Try immediate initialization
+            setTimeout(() => {
+                if (typeof google !== 'undefined' && google.maps) {
+                    log("✅ Google Maps API already available!");
+                    initMap();
+                } else {
+                    log("⏳ Google Maps API not ready yet, will auto-retry...");
+                    checkGoogleMapsWithRetry();
+                }
+            }, 1000);
+        });
+    </script>
+    </div> <!-- End main-content -->
+</body>
+</html> 

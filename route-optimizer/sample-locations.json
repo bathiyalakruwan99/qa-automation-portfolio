@@ -1,0 +1,32 @@
+[
+  {
+    "location_name": "Colombo Main Office",
+    "ref_id": "COL001",
+    "lat": 6.9271,
+    "lng": 79.8612
+  },
+  {
+    "location_name": "Kandy Branch Office",
+    "ref_id": "KAN002",
+    "lat": 7.2906,
+    "lng": 80.6337
+  },
+  {
+    "location_name": "Galle Regional Hub",
+    "ref_id": "GAL003",
+    "lat": 6.0329,
+    "lng": 80.2170
+  },
+  {
+    "location_name": "Anuradhapura Distribution",
+    "ref_id": "ANU004",
+    "lat": 8.3114,
+    "lng": 80.4037
+  },
+  {
+    "location_name": "Trincomalee Port Facility",
+    "ref_id": "TRI005",
+    "lat": 8.5874,
+    "lng": 81.2152
+  }
+]

@@ -1,0 +1,255 @@
+Requirement ID,Requirement Description,Test Case ID,Test Case Description,Test Type,Priority,Status,Coverage,Notes
+PB-3176,Prerequisites - Empty loads must be created,TC-3176-001,Verify empty loads can be created before importing orders,Functional,Critical,Not Started,Not Covered,Prerequisite for all other tests
+PB-3176,Import Orders Drawer - Select Orders option,TC-3176-002,Verify Select Orders option navigates to Order Manager,Functional,High,Not Started,Not Covered,User story requirement
+PB-3176,Import Orders Drawer - Select Orders option,TC-3176-003,Verify orders can be selected from Order Manager and transferred to job file,Functional,High,Not Started,Not Covered,End-to-end flow
+PB-3176,Import Orders Drawer - Import Orders from file,TC-3176-004,Verify order file upload functionality with valid file,Functional,High,Not Started,Not Covered,Core functionality
+PB-3176,Import Orders Drawer - Import Orders from file,TC-3176-005,Verify uploaded orders are registered in Order Manager automatically,Functional,High,Not Started,Not Covered,Data sync requirement
+PB-3176,Import Orders Drawer - File validation,TC-3176-006,Verify existing validation rules are applied to uploaded file,Validation,High,Not Started,Not Covered,Same as current validations
+PB-3176,Duplicate Order Detection,TC-3176-007,Verify warning popup when uploading orders that already exist in Order Manager,Functional,High,Not Started,Not Covered,Error prevention
+PB-3176,Duplicate Order Detection,TC-3176-008,Verify duplicate orders are omitted from upload,Functional,High,Not Started,Not Covered,Edge case handling
+PB-3176,Duplicate Order Detection,TC-3176-009,Verify warning message displays correct order IDs,UI,Medium,Not Started,Not Covered,User feedback
+PB-3176,Clear Orders Button - Confirmation popup,TC-3176-010,Verify confirmation popup appears when Clear Orders is clicked,Functional,High,Not Started,Not Covered,Destructive action confirmation
+PB-3176,Clear Orders Button - Yes option,TC-3176-011,Verify Yes option removes orders from both job and Order Manager,Functional,Critical,Not Started,Not Covered,Destructive action - data integrity
+PB-3176,Clear Orders Button - No option,TC-3176-012,Verify No option removes orders from job only and keeps in Order Manager,Functional,Critical,Not Started,Not Covered,Partial removal logic
+PB-3176,Clear Orders Button - Cancel option,TC-3176-013,Verify popup has proper Yes/No buttons and close functionality,UI,Medium,Not Started,Not Covered,User experience
+PB-3176,Move Orders Button - Enable/Disable state,TC-3176-014,Verify Move Orders button is disabled by default,Functional,Medium,Not Started,Not Covered,Initial state
+PB-3176,Move Orders Button - Multi-select,TC-3176-015,Verify Move Orders button enables when one or more orders are selected,Functional,High,Not Started,Not Covered,User interaction
+PB-3176,Move Orders Button - Load selection window,TC-3176-016,Verify clicking Move Orders opens window with existing Load IDs,Functional,High,Not Started,Not Covered,UI flow
+PB-3176,Move Orders Button - Transfer orders,TC-3176-017,Verify selecting a load transfers orders to that load,Functional,Critical,Not Started,Not Covered,Core functionality
+PB-3176,Move Orders Button - Multiple orders transfer,TC-3176-018,Verify multiple selected orders can be moved together,Functional,High,Not Started,Not Covered,Batch operation
+PB-3176,Location Sequencing - Auto-grouping by location,TC-3176-019,Verify orders are automatically grouped by location after move,Functional,Critical,Not Started,Not Covered,Business logic requirement
+PB-3176,Location Sequencing - Order selection sequence,TC-3176-020,Verify load sequence follows the order of order selection,Functional,High,Not Started,Not Covered,Sequence preservation
+PB-3176,Location Sequencing - Existing location handling,TC-3176-021,Verify order with existing location in load goes to relevant location group,Functional,High,Not Started,Not Covered,Smart grouping logic
+PB-3176,Load Management Screen - Expandable activities,TC-3176-022,Verify activity cards can be expanded in load management screen,Functional,Medium,Not Started,Not Covered,UI interaction
+PB-3176,Load Management Screen - Order IDs display,TC-3176-023,Verify expanded activity shows order IDs as removable chips,Functional,High,Not Started,Not Covered,Data visualization
+PB-3176,Load Management Screen - Remove order chip,TC-3176-024,Verify clicking remove icon on order chip removes it from activity,Functional,High,Not Started,Not Covered,Order removal
+PB-3176,Load Management Screen - Return to Import Orders,TC-3176-025,Verify removed order returns to Import Orders section,Functional,Critical,Not Started,Not Covered,Data flow requirement
+PB-3176,Update Loads Drawer - Open drawer,TC-3176-026,Verify Update Loads button opens drawer with load IDs,Functional,High,Not Started,Not Covered,UI flow
+PB-3176,Update Loads Drawer - Expandable loads,TC-3176-027,Verify load IDs in drawer are expandable,Functional,Medium,Not Started,Not Covered,Nested navigation
+PB-3176,Update Loads Drawer - Display order IDs,TC-3176-028,Verify expanded load shows order IDs within the load,Functional,High,Not Started,Not Covered,Data display
+PB-3176,Update Loads Drawer - Select orders,TC-3176-029,Verify orders can be selected within expanded load,Functional,High,Not Started,Not Covered,Selection functionality
+PB-3176,Update Loads Drawer - Move button,TC-3176-030,Verify Move button appears and is enabled when orders are selected,Functional,Medium,Not Started,Not Covered,Conditional UI
+PB-3176,Update Loads Drawer - Move orders between loads,TC-3176-031,Verify clicking Move opens window with existing Load IDs,Functional,High,Not Started,Not Covered,Transfer flow
+PB-3176,Update Loads Drawer - Execute move,TC-3176-032,Verify selecting target load moves orders successfully,Functional,Critical,Not Started,Not Covered,Core functionality
+PB-3176,Update Loads Drawer - Display Load ID,TC-3176-033,Verify drawer displays Load ID for each load,Functional,Medium,Not Started,Not Covered,Data requirement
+PB-3176,Update Loads Drawer - Display Vehicle Type,TC-3176-034,Verify drawer displays Vehicle Type for each load,Functional,Medium,Not Started,Not Covered,Data requirement
+PB-3176,Update Loads Drawer - Display CBM,TC-3176-035,Verify drawer displays CBM for each load,Functional,Medium,Not Started,Not Covered,Data requirement
+PB-3176,Update Loads Drawer - Display Weight,TC-3176-036,Verify drawer displays Weight for each load,Functional,Medium,Not Started,Not Covered,Data requirement
+PB-3176,Route Optimization Counter - Display in UI,TC-3176-037,Verify optimization count is displayed in UI,Functional,High,Not Started,Not Covered,User feedback requirement
+PB-3176,Route Optimization Counter - Increment on optimization,TC-3176-038,Verify counter increments when optimization is performed,Functional,High,Not Started,Not Covered,Counter logic
+PB-3176,Route Optimization Counter - Initial state,TC-3176-039,Verify optimization counter starts at 0 for new job,Functional,Medium,Not Started,Not Covered,Initial state
+PB-3176,Route Optimizer Logic - Lowest mileage,TC-3176-040,Verify route optimizer selects route with lowest mileage,Functional,Critical,Not Started,Not Covered,Core optimization logic
+PB-3176,Route Optimizer Logic - Exclude location accessibility,TC-3176-041,Verify optimizer does not consider location accessibility in initial stage,Functional,Critical,Not Started,Not Covered,Business rule
+PB-3176,Route Optimizer Logic - Exclude operating hours,TC-3176-042,Verify optimizer does not consider operating hours in initial stage,Functional,Critical,Not Started,Not Covered,Business rule
+PB-3176,Route Optimizer Logic - KM based only,TC-3176-043,Verify optimizer considers only route with lowest KMs,Functional,Critical,Not Started,Not Covered,Primary optimization criteria
+PB-3176,Add Activities Without Orders,TC-3176-044,Verify new activities can be added without orders (current functionality),Regression,High,Not Started,Not Covered,Existing feature preservation
+PB-3176,Global Optimize Button - Display,TC-3176-045,Verify Optimise button is displayed in job file,UI,Medium,Not Started,Not Covered,UI requirement
+PB-3176,Global Optimize Button - Confirmation popup,TC-3176-046,Verify clicking Optimise shows warning popup before optimization,Functional,High,Not Started,Not Covered,User confirmation
+PB-3176,Global Optimize Button - Confirmation message,TC-3176-047,Verify popup displays 'Are you sure you want to optimise these loads?',UI,Medium,Not Started,Not Covered,Message validation
+PB-3176,Global Optimize Button - Confirmation buttons,TC-3176-048,Verify popup has Yes and No buttons,UI,Medium,Not Started,Not Covered,User options
+PB-3176,Global Optimize Button - Yes action,TC-3176-049,Verify clicking Yes optimizes all loads in job file,Functional,Critical,Not Started,Not Covered,Batch optimization
+PB-3176,Global Optimize Button - No action,TC-3176-050,Verify clicking No cancels optimization and closes popup,Functional,Medium,Not Started,Not Covered,Cancel flow
+PB-3176,Per-Load Optimize Button - Display,TC-3176-051,Verify each load has individual Optimise button,UI,Medium,Not Started,Not Covered,UI requirement
+PB-3176,Per-Load Optimize Button - Functionality,TC-3176-052,Verify clicking per-load Optimise button optimizes that specific load only,Functional,Critical,Not Started,Not Covered,Isolated optimization
+PB-3176,Per-Load Optimize Button - No global impact,TC-3176-053,Verify per-load optimization does not affect other loads,Functional,High,Not Started,Not Covered,Isolation test
+PB-3176,Button Icon Replacements - Edit Load Data,TC-3176-054,Verify Edit Load Data button is replaced with icon,UI,Low,Not Started,Not Covered,UI modernization
+PB-3176,Button Icon Replacements - Duplicate,TC-3176-055,Verify Duplicate button is replaced with icon,UI,Low,Not Started,Not Covered,UI modernization
+PB-3176,Button Icon Replacements - Delete,TC-3176-056,Verify Delete button is replaced with icon,UI,Low,Not Started,Not Covered,UI modernization
+PB-3176,New Button - Optimise,TC-3176-057,Verify new Optimise button is added to each load,UI,Medium,Not Started,Not Covered,New feature
+PB-3176,New Button - Optimise tooltip,TC-3176-058,Verify Optimise button shows tooltip 'Optimise' on hover,UI,Low,Not Started,Not Covered,Tooltip validation
+PB-3176,New Button - Optimise functionality,TC-3176-059,Verify Optimise button optimizes the specific load,Functional,High,Not Started,Not Covered,Button action
+PB-3176,New Button - Update Load,TC-3176-060,Verify new Update Load button is added to each load,UI,Medium,Not Started,Not Covered,New feature
+PB-3176,New Button - Update Load functionality,TC-3176-061,Verify Update Load button opens update orders screen,Functional,High,Not Started,Not Covered,Button action
+PB-3176,New Button - Update Load tooltip,TC-3176-062,Verify Update Load button shows tooltip 'Update Load' on hover,UI,Low,Not Started,Not Covered,Tooltip validation
+PB-3176,New Button - Import Orders,TC-3176-063,Verify new Import Orders button is added to each load,UI,Medium,Not Started,Not Covered,New feature
+PB-3176,New Button - Import Orders functionality,TC-3176-064,Verify Import Orders button opens import drawer,Functional,High,Not Started,Not Covered,Button action
+PB-3176,New Button - Import Orders tooltip,TC-3176-065,Verify Import Orders button shows tooltip 'Import Orders' on hover,UI,Low,Not Started,Not Covered,Tooltip validation
+PB-3176,Fill Load Data Button,TC-3176-066,Verify Fill Load Data maintains current functionality,Regression,High,Not Started,Not Covered,No regression
+PB-3176,Duplicate Load - Locations only,TC-3176-067,Verify duplicate load copies locations only,Functional,Critical,Not Started,Not Covered,Business requirement
+PB-3176,Duplicate Load - Exclude orders,TC-3176-068,Verify duplicate load excludes orders from the trip,Functional,Critical,Not Started,Not Covered,Data exclusion requirement
+PB-3176,Duplicate Load - Verify structure,TC-3176-069,Verify duplicated load has same location structure as original,Functional,High,Not Started,Not Covered,Data integrity
+PB-3176,Delete Load - Warning popup,TC-3176-070,Verify clicking Delete shows warning popup,Functional,High,Not Started,Not Covered,Destructive action confirmation
+PB-3176,Delete Load - Warning message,TC-3176-071,Verify popup displays 'Are you sure you want to delete this load?',UI,Medium,Not Started,Not Covered,Message validation
+PB-3176,Delete Load - Confirmation buttons,TC-3176-072,Verify popup has Yes and No buttons,UI,Medium,Not Started,Not Covered,User options
+PB-3176,Delete Load - Yes action,TC-3176-073,Verify clicking Yes deletes the load,Functional,Critical,Not Started,Not Covered,Destructive action
+PB-3176,Delete Load - No action,TC-3176-074,Verify clicking No cancels deletion and closes popup,Functional,Medium,Not Started,Not Covered,Cancel flow
+PB-3176,Delete Load - Orders return to Import section,TC-3176-075,Verify deleted load's orders return to Import Orders section,Functional,High,Not Started,Not Covered,Data flow
+PB-3176,Edge Case - Single order deletion warning,TC-3176-076,Verify warning popup when deleting only order in unloading activity,Functional,High,Not Started,Not Covered,Edge case requirement
+PB-3176,Edge Case - Deletion warning message,TC-3176-077,Verify popup displays 'Do you want to delete the activity along with the order',UI,Medium,Not Started,Not Covered,Message validation
+PB-3176,Edge Case - Deletion warning buttons,TC-3176-078,Verify popup has Yes and No buttons (2 buttons only),UI,Medium,Not Started,Not Covered,User options
+PB-3176,Edge Case - Deletion Yes option,TC-3176-079,Verify Yes button deletes both activity card and order,Functional,Critical,Not Started,Not Covered,Complete deletion
+PB-3176,Edge Case - Deletion Yes tooltip,TC-3176-080,Verify hovering Yes shows 'This option will delete both the activity and the order',UI,Low,Not Started,Not Covered,Tooltip validation
+PB-3176,Edge Case - Deletion No option,TC-3176-081,Verify No button cancels the deletion action and keeps both activity and order,Functional,Critical,Not Started,Not Covered,Cancel flow
+PB-3176,Edge Case - Deletion No tooltip,TC-3176-082,Verify hovering No shows 'This option will keep both the activity and the order',UI,Low,Not Started,Not Covered,Tooltip validation
+PB-3176,Integration - Order Manager sync,TC-3176-085,Verify Order Manager stays in sync with job file orders,Integration,Critical,Not Started,Not Covered,Data consistency
+PB-3176,Integration - Figma design compliance,TC-3176-086,Verify UI matches Figma design specifications,UI,High,Not Started,Not Covered,Design validation
+PB-3176,Performance - Large file upload,TC-3176-087,Verify system handles large order files efficiently (500 orders),Performance,Medium,Not Started,Not Covered,Performance requirement
+PB-3176,Performance - Extra large file upload,TC-3176-088,Verify system handles extra large order files (1000 orders),Performance,Medium,Not Started,Not Covered,Scalability requirement
+PB-3176,Performance - Multiple loads optimization,TC-3176-089,Verify optimization performance with 20+ loads,Performance,Medium,Not Started,Not Covered,Performance requirement
+PB-3176,Accessibility - Screen reader support,TC-3176-091,Verify screen reader announces actions and tooltips,Accessibility,Low,Not Started,Not Covered,Accessibility requirement
+PB-3176,Error Handling - Invalid file format,TC-3176-092,Verify error message when invalid order file is uploaded,Error Handling,High,Not Started,Not Covered,Validation
+PB-3176,Error Handling - Network failure during upload,TC-3176-093,Verify system handles network errors gracefully,Error Handling,Medium,Not Started,Not Covered,Resilience
+PB-3176,Error Handling - Optimization failure,TC-3176-094,Verify error handling when optimization fails,Error Handling,Medium,Not Started,Not Covered,Graceful degradation
+PB-3176,Order Display Limit per Load,TC-3176-097,Verify orders in load display up to 10 orders then show scroll bar for additional orders,Functional,Medium,Not Started,Not Covered,Display limitation requirement
+PB-3176,File Import Performance,TC-3176-098,Verify file import completes within 5 seconds or less,Performance,High,Not Started,Not Covered,Performance requirement from comment
+PB-3176,Optimization Performance,TC-3176-099,Verify optimization completes within 2-3 minutes or less,Performance,High,Not Started,Not Covered,Performance requirement from comment
+PB-3176,Multiple Loading Locations Validation,TC-3176-100,Verify orders with multiple loading locations are rejected during upload/import validation,Validation,Critical,Not Started,Not Covered,Business rule from comment
+PB-3176,Pickup Delivery Time Calculation,TC-3176-101,Verify pickup time of first location is taken from order and remaining times calculated per current behavior,Functional,Critical,Not Started,Not Covered,Business logic requirement
+PB-3176,Re-upload Prevention,TC-3176-102,Verify re-upload is not possible when orders already exist in job,Functional,Critical,Not Started,Not Covered,Data integrity requirement
+PB-3176,Starting Location Selection,TC-3176-103,Verify pickup location is used as starting location for optimization,Functional,High,Not Started,Not Covered,Business rule clarification
+PB-3176,Order File Format Validation,TC-3176-104,Verify order file format remains unchanged with CBM SKU kg fields as mandatory,Validation,Medium,Not Started,Not Covered,File format requirement
+PB-3176,Import Orders Modal Design Compliance,TC-3176-105,Verify Import Orders modal matches Figma design specifications,UI,High,Not Started,Not Covered,Figma design compliance
+PB-3176,Button Component Design Validation,TC-3176-106,Verify all button components match Figma design system,UI,High,Not Started,Not Covered,Design system compliance
+PB-3176,Optimization Confirmation Dialog,TC-3176-107,Verify optimization confirmation dialog matches Figma design,UI,Medium,Not Started,Not Covered,Modal design compliance
+PB-3176,Order List Component Design,TC-3176-108,Verify Order List component matches Figma collapsed/expanded states,UI,Medium,Not Started,Not Covered,Component design compliance
+PB-3176,Icon Components Design Validation,TC-3176-109,Verify all icon components match Figma design specifications,UI,Medium,Not Started,Not Covered,Icon design compliance
+PB-3176,Optimization Counter Display Design,TC-3176-110,Verify optimization counter display matches Figma design,UI,Low,Not Started,Not Covered,Display component design
+PB-3176,Load Action Buttons Design,TC-3176-111,Verify load action buttons match Figma design specifications,UI,Medium,Not Started,Not Covered,Action button design compliance
+PB-3176,Modal State Transitions,TC-3176-112,Verify modal state transitions match Figma design flow,UI,Medium,Not Started,Not Covered,State transition design
+PB-3176,Post-Optimization Manual Location Shuffling,TC-3176-113,Verify manual location shuffling after optimization triggers re-optimization and correct route rearrangement,Functional,Critical,Not Started,Not Covered,Post-optimization workflow
+PB-3176,Post-Optimization New Location Insertion,TC-3176-114,Verify new location insertion in middle of existing locations triggers re-optimization with proper positioning,Functional,Critical,Not Started,Not Covered,Post-optimization workflow
+PB-3176,Post-Optimization Add Order Within Load,TC-3176-115,Verify adding new order + location within load after optimization triggers re-optimization and correct repositioning,Functional,Critical,Not Started,Not Covered,Post-optimization workflow
+PB-3176,Post-Optimization Add Order From Main,TC-3176-116,Verify adding new order + location from main order list after optimization triggers re-optimization and correct repositioning,Functional,Critical,Not Started,Not Covered,Post-optimization workflow
+PB-3176,Post-Optimization Location Deletion,TC-3176-117,Verify location deletion after optimization triggers re-optimization and correct route rearrangement without deleted location,Functional,Critical,Not Started,Not Covered,Post-optimization workflow
+PB-3176,Duplicate Order ID Handling - First Duplicate,TC-3176-118,Verify when user uploads order ID that already exists in Order Manager, system creates new order with updated ID format (ID001 → ID001(1)),Functional,Critical,Not Started,Not Covered,Duplicate order ID handling
+PB-3176,Duplicate Order ID Handling - Multiple Duplicates,TC-3176-119,Verify when user uploads same duplicate order ID multiple times, system creates sequential updated IDs (ID001(1) → ID001(2) → ID001(3)),Functional,Critical,Not Started,Not Covered,Duplicate order ID handling
+PB-3176,Duplicate Order ID Handling - Warning Message,TC-3176-120,Verify system displays appropriate warning message when duplicate order IDs are detected during upload,UI,High,Not Started,Not Covered,User feedback for duplicate handling
+PB-3176,Multiple Loading Locations Validation - Single Location,TC-3176-121,Verify orders with single pickup location are accepted and can be added to job file,Validation,Critical,Not Started,Not Covered,Business rule validation
+PB-3176,Multiple Loading Locations Validation - Multiple Locations Rejection,TC-3176-122,Verify orders with different pickup locations are rejected during upload as optimizer does not support multiple loading locations,Validation,Critical,Not Started,Not Covered,Business rule validation
+PB-3176,Multiple Loading Locations Validation - Error Message,TC-3176-123,Verify appropriate error message is displayed when orders with multiple loading locations are rejected,UI,High,Not Started,Not Covered,User feedback for validation failure
+PB-3176,Drop Location Display - Loading Activity,TC-3176-124,Verify drop location is displayed in loading activity cards when orders are assigned to activities,UI,High,Not Started,Not Covered,Display logic for loading activities
+PB-3176,Drop Location Display - Unloading Activity,TC-3176-125,Verify only order ID is displayed in unloading activity cards without drop location information,UI,High,Not Started,Not Covered,Display logic for unloading activities
+PB-3176,Drop Location Display - Activity Card Structure,TC-3176-126,Verify activity cards show appropriate information based on activity type (loading vs unloading),Functional,Medium,Not Started,Not Covered,Activity card display differentiation
+PB-3176,Select All Functionality,TC-3176-127,Verify Select All checkbox allows selecting/deselecting all orders in the current view,Functional,High,Not Started,Not Covered,Order selection functionality
+PB-3176,Search By Dropdown Options,TC-3176-128,Verify Search By dropdown provides options for Order ID, Consignee, Pickup Location, and Drop-off Location,UI,High,Not Started,Not Covered,Search filter options
+PB-3176,Search By Order ID Functionality,TC-3176-129,Verify searching by Order ID returns matching orders with correct Order ID,Functional,High,Not Started,Not Covered,Order ID search functionality
+PB-3176,Search By Consignee Functionality,TC-3176-130,Verify searching by Consignee returns matching orders with correct consignee information,Functional,High,Not Started,Not Covered,Consignee search functionality
+PB-3176,Search By Pickup Location Functionality,TC-3176-131,Verify searching by Pickup Location returns matching orders with correct pickup locations,Functional,High,Not Started,Not Covered,Pickup location search functionality
+PB-3176,Search By Drop-off Location Functionality,TC-3176-132,Verify searching by Drop-off Location returns matching orders with correct drop-off locations,Functional,High,Not Started,Not Covered,Drop-off location search functionality
+PB-3176,Date Range Picker Display,TC-3176-133,Verify date range picker displays current date range and allows date selection,UI,Medium,Not Started,Not Covered,Date range interface
+PB-3176,Date Range Functionality,TC-3176-134,Verify date range filter filters orders based on planned delivery date and time,Functional,Critical,Not Started,Not Covered,Date range filtering logic
+PB-3176,Date Range Calendar Integration,TC-3176-135,Verify calendar icon opens date picker for date range selection,UI,Medium,Not Started,Not Covered,Date picker integration
+PB-3176,Optimization Cargo Loading - First Location Billing Start,TC-3176-136,Verify after optimization cargo loading comes to first location and billing start is set to first location,Functional,Critical,Not Started,Not Covered,Optimization cargo loading billing logic
+PB-3176,Optimization Cargo Loading - Last Location Billing End,TC-3176-137,Verify after optimization billing end comes to last location,Functional,Critical,Not Started,Not Covered,Optimization cargo loading billing logic
+PB-3176,Container Management - L2 Required Arrival > L1 Required Leave,TC-3176-138,Block when L2 Required Arrival > L1 Required Leave (explicit locations),Validation,Critical,Not Started,Not Covered,Time constraint validation
+PB-3176,Container Management - Positioning Time Outside Window,TC-3176-139,Block when Positioning time is outside Expected Arrival/Leave window,Validation,High,Not Started,Not Covered,Positioning time validation
+PB-3176,Container Management - L2 Required Arrival < L1 Required Leave,TC-3176-140,Block when L2 Required Arrival < L1 Required Leave (explicit lower-than case),Validation,Critical,Not Started,Not Covered,Time constraint validation
+PB-3176,Container Management - Enforce Strict Boundary Requirements,TC-3176-141,Verify user can enforce strict boundary requirements successfully,Validation,High,Not Started,Not Covered,Boundary enforcement
+PB-3176,Container Management - Wrong Date/Time Handling,TC-3176-142,Verify user can handle wrong date/time handling for picker vs typing,Validation,Medium,Not Started,Not Covered,Input method validation
+PB-3176,Container Management - Auto-Propagation Persistence,TC-3176-143,Verify user can save after auto-propagation and reload to verify persisted values,Functional,High,Not Started,Not Covered,Data persistence
+PB-3176,Container Management - Sequential Edits Cascade,TC-3176-144,Verify user can perform sequential edits and verify cascaded recalculations,Functional,High,Not Started,Not Covered,Cascade validation
+PB-3176,Container Management - Prevent Invalid Earlier Times,TC-3176-145,Verify user can prevent L3 timings from forcing invalid earlier times in L2/L1,Validation,Critical,Not Started,Not Covered,Downstream validation
+PB-3176,Container Management - Auto-Propagate L1 Leave Change,TC-3176-146,Verify user can auto-propagate after L1 Leave change,Functional,High,Not Started,Not Covered,Auto-propagation
+PB-3176,Container Management - Block L1 Leave > L2 Arrival,TC-3176-147,Verify user can block and show correct message when L1 Leave > L2 Arrival,Validation,Critical,Not Started,Not Covered,Time validation
+PB-3176,Container Management - Set L2 Arrival Within Valid Window,TC-3176-148,Verify user can set L2 Arrival within valid window successfully,Validation,High,Not Started,Not Covered,Valid window setting
+PB-3176,Container Management - Error L2 Arrival > L2 Leave,TC-3176-149,Verify user can get error when L2 Arrival > L2 Leave and save blocked,Validation,Critical,Not Started,Not Covered,Arrival vs Leave validation
+PB-3176,Container Management - Error L2 Arrival < L1 Leave,TC-3176-150,Verify user can get error when L2 Arrival < L1 Leave and save blocked,Validation,Critical,Not Started,Not Covered,Arrival vs Leave validation
+PB-3176,Container Management - Save Positioning Time Within Window,TC-3176-151,Verify user can save positioning time within valid window successfully,Validation,High,Not Started,Not Covered,Positioning validation
+PB-3176,Container Management - Block Positioning Time Outside Window,TC-3176-152,Verify user can block positioning time outside valid window,Validation,Critical,Not Started,Not Covered,Positioning boundary validation
+PB-3176,Container Management - Picker vs Typing Invalid Behavior,TC-3176-153,Verify user can handle picker vs typing invalid behavior correctly,Validation,Medium,Not Started,Not Covered,Input method differences
+PB-3176,Container Management - Auto-Update Times Adding Tasks,TC-3176-154,Verify user can auto-update times when adding tasks,Functional,High,Not Started,Not Covered,Task-based auto-updates
+PB-3176,Container Management - Handle Tasks Push Conflict,TC-3176-155,Verify user can handle tasks push conflict that cannot be auto-resolved,Validation,Critical,Not Started,Not Covered,Conflict resolution
+PB-3176,Container Management - Avoid Wrong Context Banner,TC-3176-156,Verify user can avoid wrong-context banner when rules satisfied,Validation,Medium,Not Started,Not Covered,Context validation
+PB-3176,Container Management - Save Only When Key Dates Valid,TC-3176-157,Verify user can save/confirm only when all Key Dates valid,Validation,Critical,Not Started,Not Covered,Save validation
+PB-3176,Container Management - Block Save When Key Dates Invalid,TC-3176-158,Verify user can block save/confirm when any Key Dates invalid/empty,Validation,Critical,Not Started,Not Covered,Save blocking
+PB-3176,Container Management - Cascade When Increasing L2 Arrival,TC-3176-159,Verify user can cascade correctly when increasing L2 Arrival,Functional,High,Not Started,Not Covered,Cascade propagation
+PB-3176,Container Management - Consistent Message Text,TC-3176-160,Verify user can see consistent message text across validation rules,Validation,Medium,Not Started,Not Covered,Message consistency
+PB-3176,Container Management - Calendar Invalid Revert Manual Clear,TC-3176-161,Verify user can handle calendar invalid revert and manual invalid clear correctly,Validation,Medium,Not Started,Not Covered,Input method handling
+PB-3176,Container Management - Retain Positioning Time After Corrections,TC-3176-162,Verify user can retain and validate positioning time after corrections,Validation,High,Not Started,Not Covered,Correction retention
+PB-3176,Container Management - Avoid False Leave Error,TC-3176-163,Verify user can avoid false Leave error when task edits are valid,Validation,Medium,Not Started,Not Covered,False error prevention
+PB-3176,Container Management - Block Save When Key Dates Cleared,TC-3176-164,Verify user can block save when Key Dates are cleared by validation,Validation,Critical,Not Started,Not Covered,Field clearing validation
+PB-3176,Container Management - Multi-Location Chain Propagation,TC-3176-165,Verify user can propagate multi-location chain L2→L3→L4 correctly,Functional,High,Not Started,Not Covered,Multi-location propagation
+PB-3176,Container Management - Edit L2 Arrival Without Invalid Banner,TC-3176-166,Verify user can edit L2 Arrival without showing Invalid positioning time banner,Validation,Medium,Not Started,Not Covered,Banner context validation
+PB-3176,Container Management - Auto-Update Downstream Times L2 Arrival,TC-3176-167,Verify user can auto-update downstream times when L2 Arrival increases,Functional,High,Not Started,Not Covered,Downstream auto-updates
+PB-3176,Container Management - Picker Invalid Revert Without Clearing,TC-3176-168,Verify user can handle picker invalid revert without clearing field,Validation,Medium,Not Started,Not Covered,Field state preservation
+PB-3176,Container Management - Edit Tasks Without Leave Errors,TC-3176-169,Verify user can edit tasks without triggering leave-time errors when times remain valid,Validation,Medium,Not Started,Not Covered,Task edit validation
+PB-3176,Container Management - Auto-Update Downstream Task Duration,TC-3176-170,Verify user can auto-update downstream times when task duration increases without false errors,Functional,High,Not Started,Not Covered,Task duration propagation
+PB-3176,Container Management - Trigger Errors Only On True Violations,TC-3176-171,Verify user can trigger errors only on true validation violations correctly,Validation,Critical,Not Started,Not Covered,Violation accuracy
+PB-3176,Distribution File Upload - File Format Validation,TC-3176-172,Verify distribution file upload accepts valid file formats,Validation,High,Not Started,Not Covered,Distribution file validation
+PB-3176,Distribution File Upload - File Size Validation,TC-3176-173,Verify distribution file upload handles file size limits correctly,Validation,Medium,Not Started,Not Covered,File size validation
+PB-3176,Distribution File Upload - Data Integrity Check,TC-3176-174,Verify distribution file upload validates data integrity,Validation,Critical,Not Started,Not Covered,Data integrity validation
+PB-3176,Distribution File Upload - Error Handling,TC-3176-175,Verify distribution file upload handles errors gracefully,Error Handling,High,Not Started,Not Covered,Error handling
+PB-3176,Distribution File Upload - Success Confirmation,TC-3176-176,Verify distribution file upload shows success confirmation,Functional,Medium,Not Started,Not Covered,Success feedback
+PB-3176,Distribution Optimization - Route Calculation,TC-3176-177,Verify distribution optimization calculates optimal routes,Functional,Critical,Not Started,Not Covered,Route optimization
+PB-3176,Distribution Optimization - Performance Requirements,TC-3176-178,Verify distribution optimization meets performance requirements,Performance,High,Not Started,Not Covered,Performance validation
+PB-3176,Distribution Optimization - Cost Calculation,TC-3176-179,Verify distribution optimization calculates accurate costs,Functional,High,Not Started,Not Covered,Cost calculation
+PB-3176,Distribution Optimization - Constraint Handling,TC-3176-180,Verify distribution optimization handles constraints correctly,Functional,High,Not Started,Not Covered,Constraint validation
+PB-3176,Distribution Optimization - Result Validation,TC-3176-181,Verify distribution optimization results are valid and accurate,Validation,Critical,Not Started,Not Covered,Result validation
+PB-3176,Distribution File Upload - Progress Tracking,TC-3176-182,Verify distribution file upload shows progress tracking,Functional,Medium,Not Started,Not Covered,Progress tracking
+PB-3176,Distribution File Upload - Batch Processing,TC-3176-183,Verify distribution file upload handles batch processing,Functional,High,Not Started,Not Covered,Batch processing
+PB-3176,Distribution Optimization - Real-time Updates,TC-3176-184,Verify distribution optimization provides real-time updates,Functional,Medium,Not Started,Not Covered,Real-time updates
+PB-3176,Distribution Optimization - Export Results,TC-3176-185,Verify distribution optimization allows result export,Functional,Medium,Not Started,Not Covered,Result export
+PB-3176,Distribution Management - Integration Testing,TC-3176-186,Verify distribution management integrates with existing systems,Integration,High,Not Started,Not Covered,System integration
+PB-3176,Billing Flags - First Location Billing Start Default,TC-3176-187,Verify when user changes billing flags and re-optimizes route, first location is set as billing start by default,Functional,Critical,Not Started,Not Covered,Billing start location logic
+PB-3176,Billing Flags - Last Location Billing End Default,TC-3176-188,Verify when user changes billing flags and re-optimizes route, last location is set as billing end by default,Functional,Critical,Not Started,Not Covered,Billing end location logic
+PB-3176,Billing Flags - Route Re-optimization Behavior,TC-3176-189,Verify billing flags reset correctly when route is re-optimized after user modifications,Functional,High,Not Started,Not Covered,Billing flags re-optimization
+PB-3176,Activity Card Display - Container Management Loading Activity,TC-3176-190,Verify drop location is displayed in loading activity cards in Container Management,UI,High,Not Started,Not Covered,Container Management display logic
+PB-3176,Activity Card Display - Container Management Unloading Activity,TC-3176-191,Verify only order ID is displayed in unloading activity cards in Container Management,UI,High,Not Started,Not Covered,Container Management display logic
+PB-3176,Activity Card Display - Control Tower Loading Activity,TC-3176-192,Verify drop location is displayed in loading activity cards in Control Tower,UI,High,Not Started,Not Covered,Control Tower display logic
+PB-3176,Activity Card Display - Control Tower Unloading Activity,TC-3176-193,Verify only order ID is displayed in unloading activity cards in Control Tower,UI,High,Not Started,Not Covered,Control Tower display logic
+PB-3176,Activity Card Display - Cross-System Consistency,TC-3176-194,Verify activity card display logic is consistent across Container Management and Control Tower,UI,High,Not Started,Not Covered,Cross-system display consistency
+PB-3176,Return Activity - Single Activity Limit,TC-3176-195,Verify only one Return activity can be added per load,Validation,Critical,Not Started,Not Covered,Business rule validation
+PB-3176,Return Activity - Single Activity Validation Message,TC-3176-196,Verify appropriate error message when attempting to add second Return activity,UI,High,Not Started,Not Covered,User feedback for validation
+PB-3176,Return Activity - Position Before End Job,TC-3176-197,Verify Return activity must be last activity before End Job activity,Validation,Critical,Not Started,Not Covered,Position validation
+PB-3176,Return Activity - No Activities After Return,TC-3176-198,Verify user cannot add activities after Return activity,Validation,Critical,Not Started,Not Covered,Position restriction enforcement
+PB-3176,Return Activity - Hidden When Not Applicable,TC-3176-199,Verify Return activity is hidden from activity list when not applicable (when activities exist after current position),UI,High,Not Started,Not Covered,Conditional display logic
+PB-3176,Return Activity - No Impact on Invoicing,TC-3176-200,Verify Return activity does not affect current invoicing logic,Functional,Critical,Not Started,Not Covered,Business logic preservation
+PB-3176,Return Activity - Excluded from Optimization,TC-3176-201,Verify Return activity is excluded from route optimization,Functional,Critical,Not Started,Not Covered,Optimization logic
+PB-3176,Return Activity - First Activity Excluded When Return Exists,TC-3176-202,Verify first activity is excluded from optimization when Return activity exists in load,Functional,Critical,Not Started,Not Covered,Optimization logic with Return
+PB-3176,Return Activity - Optional Creation,TC-3176-203,Verify loads can be created without Return activity,Functional,High,Not Started,Not Covered,Optional activity validation
+PB-3176,Return Activity - Deletion Allowed,TC-3176-204,Verify Return activity can be deleted from load,Functional,Critical,Not Started,Not Covered,Activity deletion workflow
+PB-3176,Return Activity - Editing Allowed,TC-3176-205,Verify Return activity can be edited after creation,Functional,Critical,Not Started,Not Covered,Activity editing workflow
+PB-3176,Return Activity - Minimum Work Orders Without Billing End,TC-3176-206,Verify minimum work orders for Return activity without billing end toggle: Enter Location and Exit Location,Functional,Critical,Not Started,Not Covered,Work order configuration
+PB-3176,Return Activity - Default Work Orders Without Billing End,TC-3176-207,Verify default work orders for Return activity without billing end toggle: Enter Location Handover Supporting Documents and Exit Location,Functional,Critical,Not Started,Not Covered,Work order configuration
+PB-3176,Return Activity - Minimum Work Orders With Billing End,TC-3176-208,Verify minimum work orders for Return activity with billing end toggle: Enter Location End the Trip and Exit Location,Functional,Critical,Not Started,Not Covered,Work order configuration with billing end
+PB-3176,Return Activity - Default Work Orders With Billing End,TC-3176-209,Verify default work orders for Return activity with billing end toggle: Enter Location Handover Supporting Documents End the Trip and Exit Location,Functional,Critical,Not Started,Not Covered,Work order configuration with billing end
+PB-3176,Return Activity - No Control Tower Access,TC-3176-210,Verify Return activity cannot be accessed or modified from Control Tower,Functional,High,Not Started,Not Covered,Access restriction validation
+PB-3176,Return Activity - No Container Management Access,TC-3176-211,Verify Return activity cannot be accessed or modified from Container Management,Functional,High,Not Started,Not Covered,Access restriction validation
+PB-3176,Return Activity - No Additional Tasks,TC-3176-212,Verify no additional tasks can be added to Return activity,Validation,High,Not Started,Not Covered,Task restriction enforcement
+PB-3176,Return Activity - Position Locked Before End Job,TC-3176-213,Verify Return activity position is locked and must remain before End Job activity,Validation,Critical,Not Started,Not Covered,Position locking validation
+PB-3176,Return Activity - Location Geofence Check,TC-3176-214,Verify Return activity location requires geofence validation,Validation,Critical,Not Started,Not Covered,Geofence validation requirement
+PB-3176,Return Activity - GPS Testing Location In,TC-3176-215,Verify GPS testing for Return activity Enter Location (Location In),Integration,High,Not Started,Not Covered,GPS integration testing
+PB-3176,Return Activity - GPS Testing Location Out,TC-3176-216,Verify GPS testing for Return activity Exit Location (Location Out),Integration,High,Not Started,Not Covered,GPS integration testing
+PB-3176,Return Activity - Location Accuracy Verification,TC-3176-217,Verify Return activity location coordinates meet accuracy requirements,Validation,High,Not Started,Not Covered,Location accuracy validation
+PB-3176,Return Activity - Work Order Toggle State Preservation,TC-3176-218,Verify billing end toggle state is preserved when editing Return activity,Functional,Medium,Not Started,Not Covered,State management validation
+PB-3176,Return Activity - Work Order Validation,TC-3176-219,Verify work orders are validated based on billing end toggle state,Validation,High,Not Started,Not Covered,Work order validation logic
+PB-3176,Return Activity - Activity List Visibility Logic,TC-3176-220,Verify Return activity visibility logic in activity dropdown based on load structure,UI,Medium,Not Started,Not Covered,Dynamic visibility logic
+PB-3176,Return Activity - Multiple Activity Validation,TC-3176-221,Verify appropriate validation when load has multiple activities and Return is attempted to be added in wrong position,Validation,High,Not Started,Not Covered,Position validation with multiple activities
+PB-3176,Return Activity - Mobile App Visibility Last Position,TC-3176-222,Verify Return activity is visible in mobile app only when it is the last activity before End Job,UI,Critical,Not Started,Not Covered,Mobile app conditional visibility
+PB-3176,Return Activity - Mobile App Hidden When Later Activities Exist,TC-3176-223,Verify Return activity does not appear in activity list if any later activity exists after current position,UI,High,Not Started,Not Covered,Mobile app activity list filtering
+PB-3176,Return Activity - Mobile App Creation Permission,TC-3176-224,Verify user can create Return activity from mobile app if permission allowed and not from Control Tower or Container Management,Functional,Critical,Not Started,Not Covered,Mobile app creation permission
+PB-3176,Return Activity - Mobile App Label Icons Theme,TC-3176-225,Verify Return activity label icons and color theme align with other activities in mobile app,UI,Medium,Not Started,Not Covered,Mobile app design consistency
+PB-3176,Return Activity - Edit Before Started,TC-3176-226,Verify user can edit Return activity before it is started in mobile app,Functional,Critical,Not Started,Not Covered,Edit permission timing
+PB-3176,Return Activity - Delete Before Completion,TC-3176-227,Verify user can delete Return activity before completion based on standard rules,Functional,Critical,Not Started,Not Covered,Delete permission timing
+PB-3176,Return Activity - No Edit Delete After Completion,TC-3176-228,Verify no edit or delete options appear once Return activity is completed,Functional,Critical,Not Started,Not Covered,Completed activity restrictions
+PB-3176,Return Activity - Audit Log Tracking,TC-3176-229,Verify audit log or mobile activity history records user timestamp and action for create edit delete of Return activity,Integration,High,Not Started,Not Covered,Audit trail logging
+PB-3176,Return Activity - Billing End Toggle State Persistence,TC-3176-230,Verify billing end toggle state is saved correctly and persists after reload,Functional,Critical,Not Started,Not Covered,Toggle state management
+PB-3176,Return Activity - Work Order Sequence Execution,TC-3176-231,Verify work orders execute in correct sequence for Return activity,Functional,Critical,Not Started,Not Covered,Work order sequence validation
+PB-3176,Return Activity - Work Order Auto Completion,TC-3176-232,Verify system auto-completes or enables next work order only after previous one completes,Functional,Critical,Not Started,Not Covered,Work order progression logic
+PB-3176,Return Activity - End Trip Conditional Appearance,TC-3176-233,Verify End Trip work order only appears when Billing End toggle is ON,Functional,Critical,Not Started,Not Covered,Conditional work order display
+PB-3176,Return Activity - No Route Recalculation,TC-3176-234,Verify Return activity is ignored by optimizer and distance time sequence is not recalculated,Functional,Critical,Not Started,Not Covered,Optimizer exclusion verification
+PB-3176,Return Activity - No Impact on Existing Route,TC-3176-235,Verify adding Return activity does not alter existing load route or job summary on mobile,Functional,Critical,Not Started,Not Covered,Route preservation validation
+PB-3176,Return Activity - Geofence Boundary Validation,TC-3176-236,Verify geofence boundary shape and radius match expected area in system for Return location,Validation,High,Not Started,Not Covered,Geofence boundary verification
+PB-3176,Return Activity - GPS Within Range Enter Location,TC-3176-237,Verify GPS coordinates within geofence range trigger Enter Location work order,Integration,Critical,Not Started,Not Covered,GPS entry detection
+PB-3176,Return Activity - GPS Exit Event Trigger,TC-3176-238,Verify GPS exit event triggers Exit Location work order completion,Integration,Critical,Not Started,Not Covered,GPS exit detection
+PB-3176,Return Activity - GPS Signal Loss Recovery,TC-3176-239,Verify system recovers and logs missed events correctly when GPS signal is lost temporarily,Integration,High,Not Started,Not Covered,GPS signal recovery handling
+PB-3176,Return Activity - GPS Inbound Event Auto Update,TC-3176-240,Verify inbound GPS event auto-updates Enter Location work order status,Integration,Critical,Not Started,Not Covered,GPS event work order integration
+PB-3176,Return Activity - GPS Outbound Event Auto Complete,TC-3176-241,Verify outbound GPS event auto-completes Exit Location work order,Integration,Critical,Not Started,Not Covered,GPS event work order completion
+PB-3176,Return Activity - GPS Event Data Logging,TC-3176-242,Verify timestamp latitude longitude and location ID are saved correctly in logs for GPS events,Integration,Critical,Not Started,Not Covered,GPS event data capture
+PB-3176,Return Activity - GPS Event History Display,TC-3176-243,Verify GPS in out events for Return activity appear under job GPS history or event log,Integration,High,Not Started,Not Covered,GPS event history tracking
+PB-3176,Return Activity - No Invoicing Impact After Completion,TC-3176-244,Verify no impact to invoicing logic after completing Return activity,Functional,Critical,Not Started,Not Covered,Invoicing logic preservation verification
+PB-3176,Return Activity - No New Invoice Lines With Billing End,TC-3176-245,Verify Return activity with Billing End ON does not generate new invoice lines,Functional,Critical,Not Started,Not Covered,Invoice generation validation
+PB-3176,Return Activity - Optimizer Summary View Unaffected,TC-3176-246,Verify optimizer and summary views are unaffected by Return activity,Functional,High,Not Started,Not Covered,Summary view validation
+PB-3176,Return Activity - Backward Compatibility,TC-3176-247,Verify backward compatibility that older jobs without Return activity run normally,Functional,Critical,Not Started,Not Covered,Backward compatibility testing
+PB-3176,Move Orders - Order Removal from Original Load,TC-3176-248,Verify orders are removed from original load after successful move to target load,Functional,Critical,Not Started,Not Covered,Move orders data flow validation
+PB-3176,Move Orders - Move Confirmation Tooltip,TC-3176-249,Verify hover tooltip appears for move confirmation with appropriate message,UI,Medium,Not Started,Not Covered,Move orders UX validation
+PB-3176,Move Orders - Invalid Load Selection Handling,TC-3176-250,Verify system handles selection of invalid or non-existent load IDs with appropriate error message,Validation,High,Not Started,Not Covered,Move orders error handling
+PB-3176,Move Orders - Duplicate Load Selection Prevention,TC-3176-251,Verify system prevents moving orders to the same load they are currently in,Validation,Medium,Not Started,Not Covered,Move orders validation
+PB-3176,Update Loads - Data Persistence After Reload,TC-3176-252,Verify load updates persist correctly after page reload or session refresh,Functional,Critical,Not Started,Not Covered,Data persistence validation
+PB-3176,Update Loads - Move Failure Handling,TC-3176-253,Verify appropriate error message when order move fails due to capacity or validation issues,Error Handling,High,Not Started,Not Covered,Update loads error handling
+PB-3176,Button Icons - Tooltip Accuracy Validation,TC-3176-254,Verify all button icon tooltips display accurate descriptive text matching button function,UI,Medium,Not Started,Not Covered,Tooltip accuracy validation
+PB-3176,Button Icons - Icon Visibility and Clarity,TC-3176-255,Verify all icon replacements are clearly visible and distinguishable from each other,UI,Medium,Not Started,Not Covered,Icon design validation
+PB-3176,Duplicate Load - Location Structure Validation,TC-3176-256,Verify duplicated load preserves exact location order and structure without orders,Functional,High,Not Started,Not Covered,Duplicate load structure validation
+PB-3176,Import Orders - Clear Orders Yes Confirmation Message,TC-3176-257,Verify confirmation popup message accuracy for Clear Orders Yes option,UI,Medium,Not Started,Not Covered,Clear orders UI validation
+PB-3176,Import Orders - Clear Orders No Confirmation Message,TC-3176-258,Verify confirmation popup message accuracy for Clear Orders No option,UI,Medium,Not Started,Not Covered,Clear orders UI validation
+PB-3176,Optimization Counter - Persistence After Page Reload,TC-3176-259,Verify optimization counter value persists after page reload or browser refresh,Functional,High,Not Started,Not Covered,Counter persistence validation

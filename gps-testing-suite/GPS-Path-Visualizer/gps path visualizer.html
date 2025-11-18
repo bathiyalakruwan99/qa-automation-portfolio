@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Coordinate Path Visualizer - OpenStreetMap</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .tool-navigation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .nav-header {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .nav-btn .nav-icon {
+            font-size: 14px;
+        }
+        .main-content {
+            margin: 0 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            height: 90vh;
+        }
+        .sidebar {
+            width: 380px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        .map-container {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            background: #007bff;
+            color: white;
+        }
+        .btn:hover { background: #0056b3; }
+        .btn:disabled { background: #6c757d; cursor: not-allowed; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #1e7e34; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; }
+        .btn-small {
+            width: auto;
+            padding: 6px 12px;
+            margin: 4px 2px;
+            font-size: 12px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .status-good { background: #d4edda; color: #155724; }
+        .status-bad { background: #f8d7da; color: #721c24; }
+        .status-warn { background: #fff3cd; color: #856404; }
+        .debug {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            height: 80px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+        .control-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .control-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 8px 0;
+        }
+        .progress-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        .coordinate-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 8px;
+            margin: 8px 0;
+            font-family: monospace;
+            font-size: 11px;
+        }
+        .info-banner {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tool-navigation">
+        <div class="nav-header">🛠️ GPS Testing Toolkit - Quick Navigation</div>
+        <div class="nav-buttons">
+            <a href="../dashboard.html" class="nav-btn">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <a href="../GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">🚗</span> Vehicle Simulator
+            </a>
+            <a href="../gps-simulator/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">📡</span> Live Simulator
+            </a>
+            <a href="../gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">🛣️</span> Path Builder
+            </a>
+            <a href="../multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                <span class="nav-icon">🔄</span> Combiner
+            </a>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1>🗺️ GPS Path Visualizer - OpenStreetMap (Always Works!)</h1>
+        
+        <div class="container">
+        <div class="sidebar">
+            <!-- Info Banner -->
+            <div class="info-banner">
+                <strong>✅ No API Keys Required!</strong><br>
+                This version uses OpenStreetMap and works without any Google Maps API keys.
+                Perfect for when Google Maps has issues!
+            </div>
+            
+            <!-- Status -->
+            <div class="form-group">
+                <label>📊 System Status:</label>
+                <div>Map: <span id="map-status" class="status status-good">✅ OpenStreetMap Ready</span></div>
+                <div>Data: <span id="data-status" class="status status-bad">❌ No Data</span></div>
+                <div>Path: <span id="path-status" class="status status-bad">❌ No Path</span></div>
+            </div>
+            
+            <!-- Load Data -->
+            <div class="form-group">
+                <label>📁 Load Coordinate Data:</label>
+                <div class="control-buttons">
+                    <button class="btn btn-success" onclick="loadFormattedData()" style="flex: 1;">📊 Load Extracted Data</button>
+                    <button class="btn" onclick="loadSampleData()" style="background: #17a2b8; flex: 1;">📋 Sample</button>
+                </div>
+                
+                <div style="margin-top: 8px;">
+                    <textarea id="manualDataInput" placeholder="Or paste JSON coordinate data here..."></textarea>
+                    <button class="btn" onclick="loadManualData()" style="background: #6c757d; margin-top: 4px;">Parse Manual Data</button>
+                </div>
+            </div>
+            
+            <!-- Route Information -->
+            <div class="form-group" id="routeInfoSection" style="display: none;">
+                <label>📊 Route Information:</label>
+                <div id="routeStats" class="progress-info"></div>
+            </div>
+            
+            <!-- Navigation Controls -->
+            <div class="control-panel" id="navigationControls" style="display: none;">
+                <label>🎯 Path Navigation:</label>
+                
+                <!-- Current Position Info -->
+                <div id="currentPositionInfo" class="coordinate-info"></div>
+                
+                <!-- Navigation Buttons -->
+                <div class="control-buttons">
+                    <button class="btn btn-small" onclick="goToFirst()" id="firstBtn">⏮️ First</button>
+                    <button class="btn btn-small" onclick="goToPrevious()" id="prevBtn">⏪ Prev</button>
+                    <button class="btn btn-small" onclick="goToNext()" id="nextBtn">⏩ Next</button>
+                    <button class="btn btn-small" onclick="goToLast()" id="lastBtn">⏭️ Last</button>
+                </div>
+                
+                <!-- Auto Play Controls -->
+                <div class="control-buttons">
+                    <button class="btn btn-success btn-small" onclick="startAutoPlay()" id="playBtn">▶️ Play</button>
+                    <button class="btn btn-danger btn-small" onclick="stopAutoPlay()" id="stopBtn" disabled>⏹️ Stop</button>
+                    <button class="btn btn-warning btn-small" onclick="resetToStart()" id="resetBtn">🔄 Reset</button>
+                </div>
+                
+                <!-- Speed Control -->
+                <div style="margin: 8px 0;">
+                    <label style="font-size: 12px;">Speed: <span id="speedDisplay">1.0x</span></label>
+                    <input type="range" id="speedSlider" min="0.1" max="5" step="0.1" value="1" 
+                           onchange="updatePlaySpeed(this.value)" style="width: 100%;">
+                </div>
+                
+                <!-- Progress -->
+                <div class="progress-info">
+                    <strong>Progress:</strong> <span id="currentIndex">0</span> of <span id="totalPoints">0</span> points<br>
+                    <strong>Distance:</strong> <span id="distanceInfo">0 km</span><br>
+                    <strong>Duration:</strong> <span id="durationInfo">0 sec</span>
+                </div>
+                
+                <!-- Jump to Position -->
+                <div style="margin-top: 8px;">
+                    <label style="font-size: 12px;">Jump to Position:</label>
+                    <div style="display: flex; gap: 4px; align-items: center;">
+                        <input type="number" id="jumpInput" min="1" placeholder="Point #" 
+                               style="width: 80px; padding: 4px; font-size: 12px;">
+                        <button class="btn btn-small" onclick="jumpToPosition()" style="width: auto;">Go</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Controls -->
+            <div class="form-group">
+                <label>🗺️ Map Controls:</label>
+                <div class="control-buttons">
+                    <button class="btn" onclick="fitMapToBounds()" style="background: #17a2b8;">📏 Fit All Points</button>
+                    <button class="btn" onclick="toggleFullPath()" id="pathToggleBtn" style="background: #6f42c1;">👁️ Show Full Path</button>
+                </div>
+                <div class="control-buttons">
+                    <button class="btn btn-danger" onclick="clearAll()">🗑️ Clear All</button>
+                </div>
+            </div>
+            
+            <!-- Debug Log -->
+            <div class="form-group">
+                <label>📋 Debug Log:</label>
+                <div id="debug" class="debug"></div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Global variables
+        let map = null;
+        let coordinateData = [];
+        let currentIndex = 0;
+        let pathPolyline = null;
+        let allMarkers = [];
+        let currentMarker = null;
+        let autoPlayInterval = null;
+        let playSpeed = 1.0;
+        let showFullPath = false;
+
+        // Sample data for testing
+        const sampleData = [
+            {lat: 6.9810533, lng: 81.0536566, duration: 7000, name: "Location 1"},
+            {lat: 6.9808416, lng: 81.0537516, duration: 4000, name: "Location 2"},
+            {lat: 6.9807166, lng: 81.0537716, duration: 3000, name: "Location 3"},
+            {lat: 6.9806483, lng: 81.053755, duration: 11000, name: "Location 4"},
+            {lat: 6.9805633, lng: 81.0537316, duration: 9000, name: "Location 5"}
+        ];
+
+        // Debug logging
+        function log(message) {
+            const time = new Date().toLocaleTimeString();
+            const debug = document.getElementById('debug');
+            debug.innerHTML += `[${time}] ${message}\n`;
+            debug.scrollTop = debug.scrollHeight;
+            console.log(message);
+        }
+
+        // Initialize Leaflet Map
+        function initMap() {
+            try {
+                log("🗺️ Initializing OpenStreetMap with Leaflet...");
+                
+                // Create the map
+                map = L.map('map', {
+                    center: coordinateData.length > 0 ? 
+                        [coordinateData[0].lat, coordinateData[0].lng] :
+                        [6.9271, 79.8612],
+                    zoom: 13
+                });
+                
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                
+                log("✅ OpenStreetMap initialized successfully!");
+                document.getElementById('map-status').innerHTML = '✅ Map Ready';
+                document.getElementById('map-status').className = 'status status-good';
+                
+                // Draw path if data is available
+                if (coordinateData.length > 0) {
+                    drawPathOnMap();
+                    updateCurrentPosition();
+                }
+                
+            } catch (error) {
+                log(`❌ Map initialization failed: ${error.message}`);
+                document.getElementById('map-status').innerHTML = '❌ Map Failed';
+                document.getElementById('map-status').className = 'status status-bad';
+            }
+        }
+
+        // Load the extracted coordinate data
+        async function loadFormattedData() {
+            try {
+                log("📊 Loading extracted coordinate data...");
+                
+                const response = await fetch('./coordinates-formatted.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                log(`✅ Loaded ${data.length} coordinates from extracted data`);
+                processCoordinateData(data);
+                
+            } catch (error) {
+                log(`❌ Failed to load extracted data: ${error.message}`);
+                log(`💡 Make sure 'coordinates-formatted.json' file exists`);
+                log(`🔄 Loading sample data as fallback...`);
+                processCoordinateData(sampleData);
+            }
+        }
+
+        // Load sample data
+        function loadSampleData() {
+            log("📋 Loading sample coordinate data...");
+            processCoordinateData(sampleData);
+        }
+
+        // Load manual data
+        function loadManualData() {
+            const input = document.getElementById('manualDataInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                log("❌ Please paste coordinate data first");
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(text);
+                if (!Array.isArray(data)) {
+                    throw new Error("Data must be an array");
+                }
+                
+                log(`📊 Parsed ${data.length} coordinates from manual input`);
+                processCoordinateData(data);
+                
+            } catch (error) {
+                log(`❌ Invalid JSON data: ${error.message}`);
+            }
+        }
+
+        // Process coordinate data
+        function processCoordinateData(data) {
+            try {
+                coordinateData = data.map((item, index) => ({
+                    lat: parseFloat(item.lat || item.latitude),
+                    lng: parseFloat(item.lng || item.lon || item.longitude),
+                    duration: parseInt(item.duration) || 3000,
+                    name: item.name || `Location ${index + 1}`
+                }));
+                
+                if (coordinateData.length === 0) {
+                    throw new Error("No valid coordinates found");
+                }
+                
+                log(`✅ Processed ${coordinateData.length} valid coordinates`);
+                
+                document.getElementById('data-status').innerHTML = '✅ Data Loaded';
+                document.getElementById('data-status').className = 'status status-good';
+                
+                updateRouteInfo();
+                showNavigationControls();
+                
+                if (map) {
+                    drawPathOnMap();
+                } else {
+                    initMap();
+                }
+                
+                currentIndex = 0;
+                updateCurrentPosition();
+                
+            } catch (error) {
+                log(`❌ Error processing coordinate data: ${error.message}`);
+            }
+        }
+
+        // Update route information
+        function updateRouteInfo() {
+            const routeStats = document.getElementById('routeStats');
+            const totalDuration = coordinateData.reduce((sum, point) => sum + point.duration, 0);
+            const totalDistance = calculateTotalDistance();
+            
+            routeStats.innerHTML = `
+                <strong>📊 Route Statistics:</strong><br>
+                • Total Points: ${coordinateData.length}<br>
+                • Total Duration: ${(totalDuration/1000/60).toFixed(1)} minutes<br>
+                • Estimated Distance: ${totalDistance.toFixed(2)} km<br>
+                • Avg Speed: ${totalDistance > 0 ? (totalDistance / (totalDuration/1000/3600)).toFixed(1) : '0'} km/h
+            `;
+            
+            document.getElementById('routeInfoSection').style.display = 'block';
+            document.getElementById('totalPoints').textContent = coordinateData.length;
+        }
+
+        // Calculate total distance
+        function calculateTotalDistance() {
+            let total = 0;
+            for (let i = 1; i < coordinateData.length; i++) {
+                total += getDistanceFromLatLonInKm(
+                    coordinateData[i-1].lat, coordinateData[i-1].lng,
+                    coordinateData[i].lat, coordinateData[i].lng
+                );
+            }
+            return total;
+        }
+
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = deg2rad(lat2-lat1);
+            const dLon = deg2rad(lon2-lon1);
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI/180);
+        }
+
+        // Show navigation controls
+        function showNavigationControls() {
+            document.getElementById('navigationControls').style.display = 'block';
+        }
+
+        // Update current position
+        function updateCurrentPosition() {
+            if (coordinateData.length === 0) return;
+            
+            const current = coordinateData[currentIndex];
+            const info = document.getElementById('currentPositionInfo');
+            
+            info.innerHTML = `
+Point ${currentIndex + 1}: ${current.name}
+Lat: ${current.lat.toFixed(6)}
+Lng: ${current.lng.toFixed(6)}
+Duration: ${(current.duration/1000).toFixed(1)}s
+            `;
+            
+            document.getElementById('currentIndex').textContent = currentIndex + 1;
+            updateButtonStates();
+            updateProgressInfo();
+            
+            // Update map marker
+            if (map) {
+                updateMapMarker();
+            }
+        }
+
+        // Update map marker
+        function updateMapMarker() {
+            const current = coordinateData[currentIndex];
+            
+            // Update current position marker
+            if (currentMarker) {
+                currentMarker.setLatLng([current.lat, current.lng]);
+            }
+            
+            // Center map on current position
+            map.setView([current.lat, current.lng], map.getZoom());
+        }
+
+        // Draw path on map using Leaflet
+        function drawPathOnMap() {
+            if (!map || coordinateData.length === 0) return;
+            
+            log("🗺️ Drawing GPS path on OpenStreetMap...");
+            
+            // Clear existing elements
+            clearMapElements();
+            
+            // Create path coordinates
+            const pathCoords = coordinateData.map(point => [point.lat, point.lng]);
+            
+            // Create full path polyline
+            pathPolyline = L.polyline(pathCoords, {
+                color: showFullPath ? 'red' : 'transparent',
+                weight: 3,
+                opacity: showFullPath ? 0.8 : 0
+            }).addTo(map);
+            
+            // Create small markers for all points
+            coordinateData.forEach((point, index) => {
+                const marker = L.circleMarker([point.lat, point.lng], {
+                    radius: 4,
+                    fillColor: '#0066CC',
+                    fillOpacity: 0.6,
+                    color: '#ffffff',
+                    weight: 1
+                })
+                .bindPopup(`${index + 1}: ${point.name}`)
+                .addTo(map);
+                
+                allMarkers.push(marker);
+            });
+            
+            // Create current position marker (large and prominent)
+            const currentPos = coordinateData[currentIndex];
+            currentMarker = L.circleMarker([currentPos.lat, currentPos.lng], {
+                radius: 12,
+                fillColor: '#FF4444',
+                fillOpacity: 1,
+                color: '#ffffff',
+                weight: 3
+            })
+            .bindPopup(`Current: ${currentPos.name}`)
+            .addTo(map);
+            
+            log(`✅ Path drawn: ${coordinateData.length} points plotted on OpenStreetMap`);
+            
+            // Fit map to show all points
+            fitMapToBounds();
+            
+            document.getElementById('path-status').innerHTML = '✅ Path Visible';
+            document.getElementById('path-status').className = 'status status-good';
+        }
+
+        // Clear map elements
+        function clearMapElements() {
+            if (pathPolyline) {
+                map.removeLayer(pathPolyline);
+                pathPolyline = null;
+            }
+            
+            allMarkers.forEach(marker => map.removeLayer(marker));
+            allMarkers = [];
+            
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+                currentMarker = null;
+            }
+        }
+
+        // Fit map to show all points
+        function fitMapToBounds() {
+            if (!map || coordinateData.length === 0) return;
+            
+            const group = new L.featureGroup(allMarkers);
+            if (currentMarker) {
+                group.addLayer(currentMarker);
+            }
+            
+            map.fitBounds(group.getBounds().pad(0.1));
+            
+            log("📏 Map fitted to show all coordinate points");
+        }
+
+        // Toggle full path visibility
+        function toggleFullPath() {
+            showFullPath = !showFullPath;
+            
+            if (pathPolyline) {
+                pathPolyline.setStyle({
+                    color: showFullPath ? 'red' : 'transparent',
+                    opacity: showFullPath ? 0.8 : 0
+                });
+            }
+            
+            const toggleBtn = document.getElementById('pathToggleBtn');
+            toggleBtn.textContent = showFullPath ? '👁️ Hide Full Path' : '👁️ Show Full Path';
+            
+            log(`👁️ Full path ${showFullPath ? 'shown' : 'hidden'}`);
+        }
+
+        // Update progress info
+        function updateProgressInfo() {
+            if (currentIndex > 0) {
+                const distanceSoFar = calculateDistanceToIndex(currentIndex);
+                const durationSoFar = coordinateData.slice(0, currentIndex + 1)
+                    .reduce((sum, point) => sum + point.duration, 0);
+                
+                document.getElementById('distanceInfo').textContent = `${distanceSoFar.toFixed(2)} km`;
+                document.getElementById('durationInfo').textContent = `${(durationSoFar/1000/60).toFixed(1)} min`;
+            } else {
+                document.getElementById('distanceInfo').textContent = '0 km';
+                document.getElementById('durationInfo').textContent = '0 sec';
+            }
+        }
+
+        function calculateDistanceToIndex(index) {
+            let total = 0;
+            for (let i = 1; i <= index; i++) {
+                total += getDistanceFromLatLonInKm(
+                    coordinateData[i-1].lat, coordinateData[i-1].lng,
+                    coordinateData[i].lat, coordinateData[i].lng
+                );
+            }
+            return total;
+        }
+
+        // Navigation functions
+        function goToFirst() {
+            currentIndex = 0;
+            updateCurrentPosition();
+            log("⏮️ Moved to first position");
+        }
+
+        function goToPrevious() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCurrentPosition();
+                log(`⏪ Moved to position ${currentIndex + 1}`);
+            }
+        }
+
+        function goToNext() {
+            if (currentIndex < coordinateData.length - 1) {
+                currentIndex++;
+                updateCurrentPosition();
+                log(`⏩ Moved to position ${currentIndex + 1}`);
+            }
+        }
+
+        function goToLast() {
+            currentIndex = coordinateData.length - 1;
+            updateCurrentPosition();
+            log("⏭️ Moved to last position");
+        }
+
+        function updateButtonStates() {
+            document.getElementById('firstBtn').disabled = currentIndex === 0;
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex >= coordinateData.length - 1;
+            document.getElementById('lastBtn').disabled = currentIndex >= coordinateData.length - 1;
+        }
+
+        // Jump to specific position
+        function jumpToPosition() {
+            const input = document.getElementById('jumpInput');
+            const position = parseInt(input.value) - 1;
+            
+            if (isNaN(position) || position < 0 || position >= coordinateData.length) {
+                log(`❌ Invalid position. Enter a number between 1 and ${coordinateData.length}`);
+                return;
+            }
+            
+            currentIndex = position;
+            updateCurrentPosition();
+            log(`🎯 Jumped to position ${currentIndex + 1}`);
+        }
+
+        // Auto play functions
+        function startAutoPlay() {
+            if (autoPlayInterval) return;
+            
+            document.getElementById('playBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            
+            log(`▶️ Starting auto play at ${playSpeed}x speed`);
+            
+            autoPlayInterval = setInterval(() => {
+                if (currentIndex < coordinateData.length - 1) {
+                    goToNext();
+                } else {
+                    log("🏁 Auto play completed");
+                    stopAutoPlay();
+                }
+            }, 1000 / playSpeed);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+            
+            document.getElementById('playBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            
+            log("⏹️ Auto play stopped");
+        }
+
+        function resetToStart() {
+            stopAutoPlay();
+            goToFirst();
+            log("🔄 Reset to start position");
+        }
+
+        function updatePlaySpeed(speed) {
+            playSpeed = parseFloat(speed);
+            document.getElementById('speedDisplay').textContent = `${speed}x`;
+            
+            if (autoPlayInterval) {
+                stopAutoPlay();
+                startAutoPlay();
+            }
+        }
+
+        // Clear all data
+        function clearAll() {
+            stopAutoPlay();
+            coordinateData = [];
+            currentIndex = 0;
+            showFullPath = false;
+            
+            clearMapElements();
+            
+            document.getElementById('manualDataInput').value = '';
+            document.getElementById('debug').innerHTML = '';
+            
+            document.getElementById('data-status').innerHTML = '❌ No Data';
+            document.getElementById('data-status').className = 'status status-bad';
+            document.getElementById('path-status').innerHTML = '❌ No Path';
+            document.getElementById('path-status').className = 'status status-bad';
+            
+            document.getElementById('routeInfoSection').style.display = 'none';
+            document.getElementById('navigationControls').style.display = 'none';
+            
+            log("🗑️ All data cleared");
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            log("🚀 GPS Path Visualizer - OpenStreetMap Version Started");
+            log("✅ No Google Maps API keys needed - using OpenStreetMap!");
+            
+            // Initialize map immediately
+            initMap();
+            
+            // Auto-load data
+            setTimeout(() => {
+                loadFormattedData();
+            }, 1000);
+        });
+    </script>
+    </div> <!-- End main-content -->
+</body>
+</html> 

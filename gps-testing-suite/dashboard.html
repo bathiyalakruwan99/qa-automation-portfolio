@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Testing Toolkit Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .tool-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: auto;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tool-tag.generator { background: #48bb78; }
+        .tool-tag.visualizer { background: #ed8936; }
+        .tool-tag.simulator { background: #667eea; }
+        .tool-tag.combiner { background: #9f7aea; }
+
+        .tool-description {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tool-use-case {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .tool-use-case strong {
+            color: #2d3748;
+        }
+
+        .tech-stack {
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack h4 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-badge {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+                 .tool-actions {
+             display: flex;
+             gap: 1rem;
+             flex-wrap: wrap;
+         }
+
+         .quick-nav {
+             margin-top: 1.5rem;
+             padding-top: 1rem;
+             border-top: 1px solid #e2e8f0;
+         }
+
+         .quick-nav h4 {
+             color: #4a5568;
+             margin-bottom: 0.75rem;
+             font-size: 0.85rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+
+         .nav-buttons {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 0.5rem;
+         }
+
+         .nav-btn {
+             padding: 0.4rem 0.8rem;
+             background: #f7fafc;
+             border: 1px solid #e2e8f0;
+             border-radius: 6px;
+             color: #4a5568;
+             text-decoration: none;
+             font-size: 0.75rem;
+             font-weight: 500;
+             transition: all 0.2s ease;
+             display: flex;
+             align-items: center;
+             gap: 0.25rem;
+         }
+
+         .nav-btn:hover {
+             background: #667eea;
+             color: white;
+             border-color: #667eea;
+             transform: translateY(-1px);
+         }
+
+         .nav-btn .nav-icon {
+             font-size: 0.9rem;
+         }
+
+         /* README Expansion Styles */
+         .readme-section {
+             margin-top: 1.5rem;
+             border-top: 1px solid #e2e8f0;
+             padding-top: 1rem;
+         }
+
+         .readme-content {
+             max-height: 0;
+             overflow: hidden;
+             transition: max-height 0.3s ease-out;
+             background: #f8fafc;
+             border-radius: 8px;
+             margin-top: 1rem;
+         }
+
+         .readme-content.expanded {
+             max-height: 600px;
+             overflow-y: auto;
+         }
+
+         .readme-inner {
+             padding: 1.5rem;
+             font-size: 0.9rem;
+             line-height: 1.6;
+         }
+
+         .readme-inner h1 {
+             color: #2d3748;
+             font-size: 1.3rem;
+             margin-bottom: 0.5rem;
+             border-bottom: 2px solid #667eea;
+             padding-bottom: 0.5rem;
+         }
+
+         .readme-inner h2 {
+             color: #4a5568;
+             font-size: 1.1rem;
+             margin: 1.5rem 0 0.75rem 0;
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+         }
+
+         .readme-inner h3 {
+             color: #718096;
+             font-size: 1rem;
+             margin: 1rem 0 0.5rem 0;
+         }
+
+         .readme-inner p {
+             margin-bottom: 1rem;
+             color: #4a5568;
+         }
+
+         .readme-inner ul {
+             margin: 0.5rem 0 1rem 1.5rem;
+         }
+
+         .readme-inner li {
+             margin-bottom: 0.25rem;
+             color: #4a5568;
+         }
+
+         .readme-inner code {
+             background: #e2e8f0;
+             padding: 0.2rem 0.4rem;
+             border-radius: 3px;
+             font-family: 'Courier New', monospace;
+             font-size: 0.85rem;
+         }
+
+         .readme-inner pre {
+             background: #2d3748;
+             color: #e2e8f0;
+             padding: 1rem;
+             border-radius: 6px;
+             overflow-x: auto;
+             margin: 1rem 0;
+         }
+
+         .readme-inner strong {
+             color: #2d3748;
+             font-weight: 600;
+         }
+
+         .btn-readme {
+             background: transparent;
+             color: #667eea;
+             border: 2px solid #667eea;
+             position: relative;
+             overflow: hidden;
+         }
+
+         .btn-readme.expanded {
+             background: #667eea;
+             color: white;
+         }
+
+         .btn-readme .expand-icon {
+             transition: transform 0.3s ease;
+         }
+
+         .btn-readme.expanded .expand-icon {
+             transform: rotate(180deg);
+         }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tool-actions {
+                flex-direction: column;
+            }
+            
+            .stats {
+                gap: 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🛠️ GPS Testing Toolkit</h1>
+            <p>QA Automation Tools</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Tools</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Devices Supported</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">GPS Points</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tools-grid">
+            <!-- GPS Vehicle Simulator -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🚗</span>
+                    <h2 class="tool-title">GPS Vehicle Simulator</h2>
+                    <span class="tool-tag generator">Generator</span>
+                </div>
+                <p class="tool-description">
+                    Manually generate static or test GPS paths for mock testing and path preparation scenarios.
+                </p>
+                <div class="tool-use-case">
+                    <strong>Use Case:</strong> Create custom GPS paths for testing specific routing scenarios, edge cases, and data validation workflows.
+                </div>
+                <div class="tech-stack">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Vanilla JS</span>
+                        <span class="tech-badge">Leaflet</span>
+                        <span class="tech-badge">HTML5</span>
+                    </div>
+                </div>
+                                 <div class="tool-actions">
+                     <a href="./GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="btn btn-primary">
+                         🚀 Launch Tool
+                     </a>
+                     <button class="btn btn-readme" data-tool="vehicle-simulator">
+                         📖 View ReadMe <span class="expand-icon">▼</span>
+                     </button>
+                 </div>
+                 <div class="readme-section">
+                     <div class="readme-content" id="vehicle-simulator-readme">
+                         <div class="readme-inner" id="vehicle-simulator-content">
+                             <!-- README content will be loaded here -->
+                         </div>
+                     </div>
+                 </div>
+                 <div class="quick-nav">
+                     <h4>Quick Navigation</h4>
+                     <div class="nav-buttons">
+                         <a href="./gps-simulator/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📡</span> Live Simulator
+                         </a>
+                         <a href="./gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🛣️</span> Path Builder
+                         </a>
+                         <a href="./GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📊</span> Visualizer
+                         </a>
+                         <a href="./multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🔄</span> Combiner
+                         </a>
+                     </div>
+                 </div>
+             </div>
+
+            <!-- Live GPS Simulator -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">📡</span>
+                    <h2 class="tool-title">Live GPS Simulator</h2>
+                    <span class="tool-tag simulator">Simulator</span>
+                </div>
+                <p class="tool-description">
+                    Simulate real-time GPS streams from multiple devices with visual or silent modes, supporting 50-1000 devices simultaneously.
+                </p>
+                <div class="tool-use-case">
+                    <strong>Use Case:</strong> Load testing backend APIs, simulating fleet management scenarios, and testing real-time GPS data processing systems.
+                </div>
+                <div class="tech-stack">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-badges">
+                        <span class="tech-badge">HTML</span>
+                        <span class="tech-badge">Leaflet</span>
+                        <span class="tech-badge">Streaming APIs</span>
+                        <span class="tech-badge">Token Support</span>
+                    </div>
+                </div>
+                                 <div class="tool-actions">
+                     <a href="./gps-simulator/index.html" target="_blank" class="btn btn-primary">
+                         🚀 Launch Tool
+                     </a>
+                     <button class="btn btn-readme" data-tool="live-simulator">
+                         📖 View ReadMe <span class="expand-icon">▼</span>
+                     </button>
+                 </div>
+                 <div class="readme-section">
+                     <div class="readme-content" id="live-simulator-readme">
+                         <div class="readme-inner" id="live-simulator-content">
+                             <!-- README content will be loaded here -->
+                         </div>
+                     </div>
+                 </div>
+                 <div class="quick-nav">
+                     <h4>Quick Navigation</h4>
+                     <div class="nav-buttons">
+                         <a href="./GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🚗</span> Vehicle Simulator
+                         </a>
+                         <a href="./gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🛣️</span> Path Builder
+                         </a>
+                         <a href="./GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📊</span> Visualizer
+                         </a>
+                         <a href="./multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🔄</span> Combiner
+                         </a>
+                     </div>
+                 </div>
+             </div>
+
+            <!-- GPS Path Builder (Actual Path) -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🛣️</span>
+                    <h2 class="tool-title">GPS Path Builder (Actual Path)</h2>
+                    <span class="tool-tag generator">Generator</span>
+                </div>
+                <p class="tool-description">
+                    Build routes using road-aware pathing via OpenRouteService API with automatic interpolation every 10 meters.
+                </p>
+                <div class="tool-use-case">
+                    <strong>Use Case:</strong> Generate realistic GPS paths that follow actual roads for testing navigation systems and route optimization algorithms.
+                </div>
+                <div class="tech-stack">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Leaflet</span>
+                        <span class="tech-badge">OpenRouteService API</span>
+                        <span class="tech-badge">Interpolation</span>
+                        <span class="tech-badge">GeoJSON</span>
+                    </div>
+                </div>
+                                 <div class="tool-actions">
+                     <a href="./gps-path-builder-actual-path/index.html" target="_blank" class="btn btn-primary">
+                         🚀 Launch Tool
+                     </a>
+                     <button class="btn btn-readme" data-tool="path-builder">
+                         📖 View ReadMe <span class="expand-icon">▼</span>
+                     </button>
+                 </div>
+                 <div class="readme-section">
+                     <div class="readme-content" id="path-builder-readme">
+                         <div class="readme-inner" id="path-builder-content">
+                             <!-- README content will be loaded here -->
+                         </div>
+                     </div>
+                 </div>
+                 <div class="quick-nav">
+                     <h4>Quick Navigation</h4>
+                     <div class="nav-buttons">
+                         <a href="./GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🚗</span> Vehicle Simulator
+                         </a>
+                         <a href="./gps-simulator/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📡</span> Live Simulator
+                         </a>
+                         <a href="./GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📊</span> Visualizer
+                         </a>
+                         <a href="./multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🔄</span> Combiner
+                         </a>
+                     </div>
+                 </div>
+             </div>
+
+            <!-- GPS Path Visualizer -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">📊</span>
+                    <h2 class="tool-title">GPS Path Visualizer</h2>
+                    <span class="tool-tag visualizer">Visualizer</span>
+                </div>
+                <p class="tool-description">
+                    Upload and preview GPS paths visually for debugging and post-simulation validation with interactive map display.
+                </p>
+                <div class="tool-use-case">
+                    <strong>Use Case:</strong> Debug GPS data issues, validate simulated paths, and visually inspect coordinate sequences before deployment.
+                </div>
+                <div class="tech-stack">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Leaflet</span>
+                        <span class="tech-badge">JSON Parsing</span>
+                        <span class="tech-badge">File Upload</span>
+                        <span class="tech-badge">Interactive Maps</span>
+                    </div>
+                </div>
+                                 <div class="tool-actions">
+                     <a href="./GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="btn btn-primary">
+                         🚀 Launch Tool
+                     </a>
+                     <button class="btn btn-readme" data-tool="path-visualizer">
+                         📖 View ReadMe <span class="expand-icon">▼</span>
+                     </button>
+                 </div>
+                 <div class="readme-section">
+                     <div class="readme-content" id="path-visualizer-readme">
+                         <div class="readme-inner" id="path-visualizer-content">
+                             <!-- README content will be loaded here -->
+                         </div>
+                     </div>
+                 </div>
+                 <div class="quick-nav">
+                     <h4>Quick Navigation</h4>
+                     <div class="nav-buttons">
+                         <a href="./GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🚗</span> Vehicle Simulator
+                         </a>
+                         <a href="./gps-simulator/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📡</span> Live Simulator
+                         </a>
+                         <a href="./gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🛣️</span> Path Builder
+                         </a>
+                         <a href="./multi-device-gps-combiner/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🔄</span> Combiner
+                         </a>
+                     </div>
+                 </div>
+             </div>
+
+            <!-- Multi-Device GPS Combiner -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <span class="tool-icon">🔄</span>
+                    <h2 class="tool-title">Multi-Device GPS Combiner</h2>
+                    <span class="tool-tag combiner">Combiner</span>
+                </div>
+                <p class="tool-description">
+                    Combine multiple per-device JSON files into one simulator-ready file with support for various data structures.
+                </p>
+                <div class="tool-use-case">
+                    <strong>Use Case:</strong> Prepare multi-device simulation data, merge GPS datasets, and format data for bulk testing scenarios.
+                </div>
+                <div class="tech-stack">
+                    <h4>Tech Stack</h4>
+                    <div class="tech-badges">
+                        <span class="tech-badge">HTML</span>
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">Data Formatter</span>
+                        <span class="tech-badge">JSON Processing</span>
+                    </div>
+                </div>
+                                 <div class="tool-actions">
+                     <a href="./multi-device-gps-combiner/index.html" target="_blank" class="btn btn-primary">
+                         🚀 Launch Tool
+                     </a>
+                     <button class="btn btn-readme" data-tool="gps-combiner">
+                         📖 View ReadMe <span class="expand-icon">▼</span>
+                     </button>
+                 </div>
+                 <div class="readme-section">
+                     <div class="readme-content" id="gps-combiner-readme">
+                         <div class="readme-inner" id="gps-combiner-content">
+                             <!-- README content will be loaded here -->
+                         </div>
+                     </div>
+                 </div>
+                 <div class="quick-nav">
+                     <h4>Quick Navigation</h4>
+                     <div class="nav-buttons">
+                         <a href="./GPS-Vehicle-Simulator/devtool gps path maker.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🚗</span> Vehicle Simulator
+                         </a>
+                         <a href="./gps-simulator/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📡</span> Live Simulator
+                         </a>
+                         <a href="./gps-path-builder-actual-path/index.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">🛣️</span> Path Builder
+                         </a>
+                         <a href="./GPS-Path-Visualizer/gps path visualizer.html" target="_blank" class="nav-btn">
+                             <span class="nav-icon">📊</span> Visualizer
+                         </a>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p><strong>🛠️ Created for internal QA testing use.</strong></p>
+            <p>Developed by QA Team</p>
+            <p style="margin-top: 1rem; opacity: 0.8; font-size: 0.9rem;">
+                                 Dashboard Version 1.0 | Last Updated: July 2025
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // README content data
+        const readmeContent = {
+            'vehicle-simulator': `
+                <h1>🚗 GPS Vehicle Simulator</h1>
+                <p>A comprehensive web-based GPS vehicle simulator for testing GPS data transmission to various API endpoints.</p>
+                
+                <h2>🚀 Features</h2>
+                <h3>Core Functionality</h3>
+                <ul>
+                    <li><strong>Interactive Map</strong>: Click anywhere on the map to simulate vehicle movement</li>
+                    <li><strong>Real-time GPS Data</strong>: Send authentic GPS coordinates to your API endpoints</li>
+                    <li><strong>Multi-Environment Support</strong>: Test against development, staging, and production APIs</li>
+                    <li><strong>Token Management</strong>: Secure bearer token handling with validation and inspection</li>
+                    <li><strong>Debug Console</strong>: Real-time logging and API response monitoring</li>
+                </ul>
+                
+                <h3>Advanced Features</h3>
+                <ul>
+                    <li><strong>Token Validation</strong>: Comprehensive JWT token analysis and validation</li>
+                    <li><strong>Drag & Drop</strong>: Drag the vehicle marker to new positions</li>
+                    <li><strong>Auto-transmission</strong>: Automatically send GPS data when moving the vehicle</li>
+                    <li><strong>Network Testing</strong>: Dedicated network connectivity testing tools</li>
+                    <li><strong>CORS Handling</strong>: Built-in CORS support for cross-origin API calls</li>
+                </ul>
+                
+                <h2>📖 Usage</h2>
+                <p><strong>Perfect for:</strong> Manual GPS path creation, testing specific routing scenarios, edge cases, and data validation workflows.</p>
+            `,
+            'live-simulator': `
+                <h1>📡 GPS Simulator - Multi-Device Testing Tool</h1>
+                <p>A modular GPS simulator for testing backend APIs with up to 1000 devices streaming GPS coordinates in parallel.</p>
+                
+                <h2>🎯 Purpose</h2>
+                <p>This tool is designed for <strong>internal API testing only</strong> - simulating GPS coordinate streaming to test backend APIs and behavior with multiple devices.</p>
+                
+                <h2>✨ Features</h2>
+                <h3>Core Functionality</h3>
+                <ul>
+                    <li><strong>🚀 Bulk Device Simulation</strong>: Support for up to 1000 devices running in parallel</li>
+                    <li><strong>🗺️ OpenStreetMap Integration</strong>: No API keys required - uses Leaflet.js</li>
+                    <li><strong>👁️ Visual Tracking</strong>: Display 1-2 selected devices on the map while others run silently</li>
+                    <li><strong>⏰ Staggered Startup</strong>: Configurable delays (100-200ms) between device starts</li>
+                    <li><strong>🔐 Token Authentication</strong>: Bearer token support with validation and inspection</li>
+                    <li><strong>🌍 Environment Selection</strong>: Staging, Production, and Custom endpoint support</li>
+                </ul>
+                
+                <h3>Data Management</h3>
+                <ul>
+                    <li><strong>📁 JSON Upload</strong>: Load device data from files or manual paste</li>
+                    <li><strong>📊 Real-time Statistics</strong>: Track active devices, API calls, and errors</li>
+                    <li><strong>🔧 Modular Architecture</strong>: Clean separation of concerns across modules</li>
+                    <li><strong>💾 Session Persistence</strong>: Auto-save tokens and settings</li>
+                </ul>
+                
+                <p><strong>Perfect for:</strong> Load testing backend APIs, simulating fleet management scenarios, and testing real-time GPS data processing systems.</p>
+            `,
+            'path-builder': `
+                <h1>🛣️ GPS Path Builder - Actual Road Routes</h1>
+                <p>Build realistic GPS paths using road-aware routing via OpenRouteService API with automatic interpolation every 10 meters.</p>
+                
+                <h2>🎯 Key Features</h2>
+                <ul>
+                    <li><strong>🛣️ Road-Aware Pathing</strong>: Uses OpenRouteService API for realistic routes</li>
+                    <li><strong>📐 Auto-Interpolation</strong>: Generates GPS points every 10 meters along the route</li>
+                    <li><strong>🗺️ Interactive Map</strong>: Click to add waypoints, visualize paths in real-time</li>
+                    <li><strong>⚙️ Configurable Settings</strong>: Adjust speed, interpolation distance, and routing profile</li>
+                    <li><strong>📤 Export Ready</strong>: Output GPS data in JSON format for testing</li>
+                </ul>
+                
+                <h2>🔧 Setup Required</h2>
+                <p><strong>OpenRouteService API Key:</strong> Get your free API key at <code>openrouteservice.org</code></p>
+                
+                <h2>📖 How to Use</h2>
+                <ol>
+                    <li>Enter your OpenRouteService API key</li>
+                    <li>Set desired vehicle speed (km/h)</li>
+                    <li>Click on the map to add waypoints</li>
+                    <li>Generate route to see the actual road path</li>
+                    <li>Export the GPS coordinates for testing</li>
+                </ol>
+                
+                <p><strong>Perfect for:</strong> Generate realistic GPS paths that follow actual roads for testing navigation systems and route optimization algorithms.</p>
+            `,
+            'path-visualizer': `
+                <h1>📊 GPS Path Visualizer</h1>
+                <p>Upload and preview GPS paths visually for debugging and post-simulation validation with interactive map display.</p>
+                
+                <h2>🎯 Core Features</h2>
+                <ul>
+                    <li><strong>📁 File Upload</strong>: Drag & drop or select GPS data files (JSON, CSV)</li>
+                    <li><strong>🗺️ OpenStreetMap Visualization</strong>: No API keys required</li>
+                    <li><strong>📊 Path Analysis</strong>: View distance, duration, and coordinate count</li>
+                    <li><strong>🔍 Interactive Controls</strong>: Zoom, pan, and inspect individual GPS points</li>
+                    <li><strong>📈 Real-time Statistics</strong>: Live updates of path metrics</li>
+                </ul>
+                
+                <h2>📋 Supported Data Formats</h2>
+                <ul>
+                    <li><strong>JSON</strong>: Standard GPS coordinate objects</li>
+                    <li><strong>Array Format</strong>: Simple [lat, lng] arrays</li>
+                    <li><strong>Device Data</strong>: Multi-device GPS streams</li>
+                    <li><strong>Custom Formats</strong>: Flexible parsing for various structures</li>
+                </ul>
+                
+                <h2>📖 Usage</h2>
+                <ol>
+                    <li>Upload your GPS data file or paste JSON directly</li>
+                    <li>View the path visualization on the interactive map</li>
+                    <li>Analyze path statistics and metrics</li>
+                    <li>Use navigation controls to inspect specific points</li>
+                    <li>Clear data and load new paths as needed</li>
+                </ol>
+                
+                <p><strong>Perfect for:</strong> Debug GPS data issues, validate simulated paths, and visually inspect coordinate sequences before deployment.</p>
+            `,
+            'gps-combiner': `
+                <h1>🔄 Multi-Device GPS Combiner Tool</h1>
+                <p>Combine multiple per-device JSON files into one simulator-ready file with support for various data structures.</p>
+                
+                <h2>🎯 Purpose</h2>
+                <p>Prepare multi-device simulation data by merging separate GPS datasets into a unified format suitable for bulk testing scenarios.</p>
+                
+                <h2>✨ Features</h2>
+                <ul>
+                    <li><strong>📁 Multi-File Support</strong>: Upload or paste data from multiple devices</li>
+                    <li><strong>🏷️ Device ID Assignment</strong>: Assign unique identifiers to each device</li>
+                    <li><strong>🔧 Format Flexibility</strong>: Supports both <code>gps</code> and <code>coordinates</code> structures</li>
+                    <li><strong>⚡ Speed Preservation</strong>: Maintains speed data when available</li>
+                    <li><strong>📤 Export Options</strong>: Full or basic output formats</li>
+                </ul>
+                
+                <h2>📋 Supported Input Formats</h2>
+                <ul>
+                    <li><strong>GPS Object Format</strong>: <code>{"gps": [...]}</code></li>
+                    <li><strong>Coordinates Format</strong>: <code>{"coordinates": [...]}</code></li>
+                    <li><strong>Direct Array</strong>: Simple coordinate arrays</li>
+                    <li><strong>Mixed Formats</strong>: Automatically detects and converts</li>
+                </ul>
+                
+                <h2>📖 Workflow</h2>
+                <ol>
+                    <li>Add devices using the "➕ Add Device" button</li>
+                    <li>For each device: Set device ID and paste/upload GPS data</li>
+                    <li>Choose output format (Full with speed / Basic without speed)</li>
+                    <li>Generate combined JSON for simulator use</li>
+                    <li>Copy to clipboard or download the result</li>
+                </ol>
+                
+                <p><strong>Perfect for:</strong> Prepare multi-device simulation data, merge GPS datasets, and format data for bulk testing scenarios.</p>
+            `
+        };
+
+                 // Toggle README function
+         function toggleReadme(toolId, buttonElement) {
+             const readmeElement = document.getElementById(toolId + '-readme');
+             const contentElement = document.getElementById(toolId + '-content');
+             const button = buttonElement || event.target.closest('.btn-readme');
+             const expandIcon = button.querySelector('.expand-icon');
+             
+             console.log('Toggling README for:', toolId); // Debug log
+             
+             if (readmeElement.classList.contains('expanded')) {
+                 // Collapse
+                 readmeElement.classList.remove('expanded');
+                 button.classList.remove('expanded');
+                 expandIcon.textContent = '▼';
+                 console.log('Collapsed README for:', toolId);
+             } else {
+                 // Expand
+                 if (!contentElement.innerHTML.trim() || contentElement.innerHTML.includes('README content will be loaded here')) {
+                     // Load content if not already loaded
+                     contentElement.innerHTML = readmeContent[toolId] || '<p>README content not available.</p>';
+                     console.log('Loaded content for:', toolId);
+                 }
+                 readmeElement.classList.add('expanded');
+                 button.classList.add('expanded');
+                 expandIcon.textContent = '▲';
+                 console.log('Expanded README for:', toolId);
+             }
+         }
+
+        // Add smooth scrolling and interaction enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add README button event listeners
+            const readmeButtons = document.querySelectorAll('.btn-readme');
+            readmeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const toolId = this.getAttribute('data-tool');
+                    console.log('Button clicked for tool:', toolId);
+                    toggleReadme(toolId, this);
+                });
+            });
+
+            // Add hover effects for tool cards
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add click tracking for analytics (if needed)
+            const launchButtons = document.querySelectorAll('.btn-primary');
+            launchButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const toolName = this.closest('.tool-card').querySelector('.tool-title').textContent;
+                    console.log(`Launched tool: ${toolName}`);
+                });
+            });
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    // Close all expanded READMEs
+                    const expandedReadmes = document.querySelectorAll('.readme-content.expanded');
+                    expandedReadmes.forEach(readme => {
+                        const toolId = readme.id.replace('-readme', '');
+                        const button = readme.closest('.tool-card').querySelector('.btn-readme');
+                        readme.classList.remove('expanded');
+                        button.classList.remove('expanded');
+                        button.querySelector('.expand-icon').textContent = '▼';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

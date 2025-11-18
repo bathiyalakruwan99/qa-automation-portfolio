@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Test files
+test_ticket_image.png
+*.test
+
+# Excel temporary files
+~$*.xlsx
+~$*.xls
+
+# Discord bot specific
+discord_token.txt
+bot_config_backup.json
+
+# Backup files
+*.backup
+*.bak
+
+# Large data files - Excel files are ignored but folder structure is kept
+*.xlsx
+*.xls
+*.xlsm
+
+# Keep folder structure but ignore Excel files in these directories
+Correct FIle folder/*
+!Correct FIle folder/.gitkeep
+Created new one/*
+!Created new one/.gitkeep
+Error file/*
+!Error file/.gitkeep
+givenFile/*
+!givenFile/.gitkeep
+
+# Screenshots - keep these (don't ignore)
+# screenshots/*.png
+# screenshots/*.jpg
+# screenshots/*.jpeg 

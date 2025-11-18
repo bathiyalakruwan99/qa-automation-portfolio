@@ -1,0 +1,234 @@
+# Cursor Rules for Job Name Matching Process
+
+## Project Overview
+This project involves matching job names from a Google Sheet with companies in the LogisticsPlatform Invoice Management system using MCP browser automation and systematic data extraction.
+
+## File Organization
+- `prompt.md` - Complete process documentation and instructions
+- `job_names_and_companies.md` - Markdown tracking file for job matches
+- `job_names_and_companies.csv` - CSV tracking file for structured data
+- `.cursorrules` - This file with coding guidelines
+
+## Coding Standards
+
+### File Naming
+- Use descriptive, lowercase names with underscores for files
+- Example: `job_names_and_companies.csv`
+
+### Code Structure
+- Always include clear comments explaining the purpose of each section
+- Use consistent indentation (2 spaces for markdown, 4 for code)
+- Group related functionality together
+
+### Error Handling
+- Always handle potential failures gracefully
+- Provide clear error messages
+- Include fallback options when possible
+
+## Workflow Guidelines
+
+### 1. Data Extraction
+- Always verify data source before extraction
+- Document any assumptions about data format
+- Handle missing or malformed data appropriately
+
+### 2. MCP Browser Automation
+- Use MCP Playwright tools for systematic navigation
+- Navigate to Invoice Management → Other Contracts → Ready to Invoice
+- Use search functionality within company dialogs for specific job names
+- Always close dialogs and return to main view after searches
+- Take screenshots when needed for debugging
+- Handle login failures gracefully
+
+### 3. Optimized Search Methodology
+- Group jobs by common prefixes (SW, SWA, CS, etc.) for more efficient searching
+- Search by prefix pattern rather than individual job names
+- For each company, search all relevant job prefixes at once
+- Document all matches found in a company during a single search session
+- Use consistent status indicators (✅, ❌, 🔍)
+- Include timestamps for important changes
+- Maintain clear separation between found and not found items
+- This pattern-based approach is significantly more efficient than searching individual jobs
+
+### 4. Data Documentation
+- Update both MD and CSV files simultaneously
+- Use consistent status indicators (✅, ❌, 🔍)
+- Include timestamps for important changes
+- Maintain clear separation between found and not found items
+- Document data variations and patterns observed
+
+### 5. Process Validation
+- Verify each step before proceeding to the next
+- Cross-reference data between sources
+- Document any discrepancies or unexpected results
+
+## Specific Rules for This Project
+
+### Login Credentials
+- Store credentials securely (not in code)
+- Use environment variables when possible
+- Never commit credentials to version control
+
+### URL Management
+- Keep all URLs in the prompt.md file
+- Use relative URLs when possible
+- Document any URL changes or updates
+
+### Data Matching
+- Use prefix pattern matching for more efficient searching
+- Group similar job names by common prefixes (SW, SWA, CS, etc.)
+- Search each company for all jobs with similar prefixes at once
+- Document all matches found during a single search session
+- Consider case sensitivity in matching
+- Handle variations in naming conventions
+- Document partial matches with explanations
+
+### File Updates
+- Always read existing file content before updating
+- Use search_replace for precise updates
+- Maintain file structure and formatting
+- Backup important data before major changes
+
+## Current Project Status
+
+### Search Results Summary
+- **Total Jobs Processed**: 13
+- **Found**: 6 jobs ✅
+- **Partial Matches**: 2 jobs 🔍
+- **Not Found**: 5 jobs ❌
+
+### Successful Matches Found
+1. **ProductA July 30 2025** → CompanyA Roofing Ltd
+2. **ProductB** → CompanyB Packaging (Pvt) Ltd
+3. **ClientA JULY 25 2025** → CompanyC Cement Ltd - ClientB
+4. **ClientB JULY 25 2025** → CompanyC Cement Ltd - ClientB
+5. **ClientB July 25 2025** → CompanyC Cement Ltd - ClientB
+6. **Vijith LL-2883 ProductB trips CS0930** → CompanyB Packaging (Pvt) Ltd
+
+### Partial Matches
+1. **Vijith LL-2883 ProductB trips CS0936/CS0937** → "Vijith LB-1882 ProductB trips" (data variation)
+2. **ClientB July 29 2025** → "Eco July 30 2025" and "ClientB eco" (similar patterns)
+
+### Not Found Jobs
+1. Dummy Kaushika-Job Traning-24th July
+2. ProductB July 25 2025
+3. 1010288811
+4. SW10042-July-2025
+
+## Quality Assurance
+
+### Before Each Update
+1. Verify current file state
+2. Check for existing entries
+3. Ensure consistent formatting
+4. Validate data accuracy
+
+### After Each Update
+1. Verify file integrity
+2. Check for duplicate entries
+3. Ensure all references are updated
+4. Test file readability
+
+## Troubleshooting Guidelines
+
+### Common Issues:
+1. **Page Loading**: Wait for elements to be visible
+2. **Login Problems**: Verify credentials and try again
+3. **Data Mismatches**: Document and investigate discrepancies
+4. **File Errors**: Check file permissions and format
+5. **Search Failures**: Try different search terms or variations
+
+### Debugging Steps
+1. Take screenshots of current state
+2. Log all actions and responses
+3. Verify data at each step
+4. Document any unexpected behavior
+
+## Performance Considerations
+
+### Browser Automation
+- Use pattern-based searching (by prefix) instead of individual job searches
+- Group similar job names (SW, SWA, CS prefixes) and search them together
+- Search each company for all relevant job patterns at once
+- Minimize unnecessary page loads
+- Use efficient selectors
+- Handle timeouts appropriately
+- Close unused dialogs and tabs
+- Use search functionality for targeted results
+
+### Data Processing
+- Process jobs in logical groups based on prefix patterns
+- Document all matches found during a single search session
+- Use efficient data structures
+- Minimize file I/O operations
+- Cache frequently accessed data
+
+## Security Guidelines
+
+### Credential Management
+- Never hardcode credentials
+- Use secure storage methods
+- Rotate credentials regularly
+- Monitor for unauthorized access
+
+### Data Privacy
+- Handle sensitive data appropriately
+- Follow data retention policies
+- Secure data transmission
+- Log access appropriately
+
+## Documentation Standards
+
+### Code Comments
+- Explain complex logic
+- Document assumptions
+- Include examples where helpful
+- Update comments with code changes
+
+### Process Documentation
+- Keep prompt.md updated
+- Document any process changes
+- Include troubleshooting steps
+- Maintain clear step-by-step instructions
+
+## Version Control
+
+### Commit Messages
+- Use descriptive commit messages
+- Include ticket/issue numbers
+- Reference related changes
+- Explain the purpose of changes
+
+### File Management
+- Don't commit sensitive data
+- Keep files organized
+- Use appropriate file extensions
+- Maintain consistent naming conventions
+
+## Testing Guidelines
+
+### Manual Testing
+- Test each step of the process
+- Verify data accuracy
+- Check file outputs
+- Validate user experience
+
+### Automated Testing
+- Test critical functions
+- Validate data integrity
+- Check error handling
+- Verify file operations
+
+## Maintenance
+
+### Regular Updates
+- Update documentation as needed
+- Review and clean up old data
+- Monitor for process improvements
+- Maintain security best practices
+
+### Process Improvements
+- Document lessons learned
+- Identify optimization opportunities
+- Update procedures as needed
+- Share knowledge with team members 
