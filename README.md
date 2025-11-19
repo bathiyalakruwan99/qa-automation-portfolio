@@ -112,12 +112,14 @@ Working on Transport Management System (TMS) QA:
 ### IFS R&D International (Mar 2023 – Feb 2024)
 **Software Engineering QA Trainee**
 
-Worked on IFS Apps 10 testing:
+Working on R&D team configuration:
+- Worked on IFS Apps 10 testing:
 - System testing across releases (21R2–24R1) in 5+ environments
 - Enhanced Cypress automation with Cucumber BDD
 - Built Page Designer test suite (200+ scenarios)
 - Fixed 30+ legacy Cypress issues
-- Introduced test tagging system for better filtering
+- Contributed to TAR testing with O data methods, streamlining reporting and validation tasks
+- Introduced a test tagging system for better filtering
 
 **Tech:** Cypress, Cucumber (BDD), Kendo UI, OData, Jira
 
@@ -127,13 +129,15 @@ Worked on IFS Apps 10 testing:
 
 **Test Automation:** Playwright, Selenium, Cypress, BDD (Cucumber), POM design
 
-**Languages:** Python, JavaScript, TypeScript, SQL, HTML/CSS
+**Languages:** Python, JavaScript, TypeScript, SQL, HTML/CSS, PHP, SQL
 
-**Frameworks:** Next.js, React, Flask, Pandas, Leaflet.js, Tkinter
+**Frameworks:** Next.js, React, Flask, Pandas, Leaflet.js, Tkinter, POM, TestNG, Cucumber BDD, REST APIs, Kendo UI
 
-**Tools:** Testiny, Jira, Postman, Git/GitHub, VS Code, Cursor AI
+**Tools:** Testiny, Jira, Postman, Git/GitHub, VS Code, Cursor AI, ChatGPT, Cursor, Copilot, MCP
 
 **AI/Emerging:** ChatGPT/Claude integration, Prompt engineering, MCP workflows
+
+ **Creative & Design**: Figma, Canva, AI Image Generation 
 
 ---
 
