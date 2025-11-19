@@ -110,7 +110,7 @@ Working on Transport Management System (TMS) QA:
 ---
 
 ### IFS R&D International (Mar 2023 – Feb 2024)
-**Undergraduate QA Trainee**
+**Software Engineering QA Trainee**
 
 Worked on IFS Apps 10 testing:
 - System testing across releases (21R2–24R1) in 5+ environments
