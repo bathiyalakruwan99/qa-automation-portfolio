@@ -65,8 +65,8 @@ test-results/
 test-report.html
 
 # Test automation artifacts
-screenshots/
-videos/
+# screenshots/    # PORTFOLIO: Allow screenshots for documentation
+# videos/         # PORTFOLIO: Allow demo videos
 traces/
 downloads/
 test-artifacts/
