@@ -76,9 +76,47 @@ Python tool that validates bulk Excel uploads before they hit our TMS database.
 
 ---
 
-### AI Test Case Generator (90% Time Savings)
+### Job Master Data Processor (2+ Hours Saved Daily)
 
-Automated test case generation using MCP integrations, mind mapping, and AI.
+Desktop app for verifying job data from TMS Excel exports. Built to solve a testing bottleneck.
+
+**The testing problem:** Verifying job data exports was taking at least 2+ hours. Manual Excel filtering, calculating expected load counts for validation, and checking GPS/payment/invoice status across hundreds of test cases was killing productivity.
+
+**Real scenario:** "Verify that all FTL-DISTRIBUTION trips with 9-16 stops calculate loads correctly and have GPS data" meant: open Excel, create multiple filters, manually calculate expected loads, compare, document findings. Every. Single. Time.
+
+**My solution:**
+- Desktop app with real-time search across all fields (type job ID → instantly see all related data)
+- Automatically maps 30+ column variations (works with dev/staging/prod exports)
+- Calculates job and load counts with three different methods:
+  - Non FTL-DISTRIBUTION: Counts unique Load IDs
+  - FTL-DISTRIBUTION (Prorated): If stops ≤ 8 = 1 load, else: (stops // 8) + (remaining / 8)
+  - FTL-DISTRIBUTION (8x): ceil(stops / 8)
+  - FTL-DISTRIBUTION (10x): ceil(stops / 10)
+- Shows all three methods side-by-side for easy comparison and validation
+- Bulk job checker: verify GPS/payment/invoice status for 2000+ jobs in 30 seconds
+- Smart filenames: exports include filters used (e.g., `JobMaster_Export_JobID-12345_Status-Failed_20250118.xlsx`)
+
+**QA workflow improvements:**
+- **Test data verification:** 15-20 minutes → 2 minutes (upload export, filter, validate counts)
+- **Bug reporting:** Export complete job data with context embedded in filename. Developer gets exact test data, no back-and-forth.
+- **Edge case testing:** Quick "what if" queries: "Show me jobs with exactly 9 stops" for boundary testing
+- **Test evidence:** Multi-sheet exports (raw data + summary statistics + filters used) for documentation and audit trails
+
+**What I learned:** Building QA tools isn't just about automation - it's about removing repetitive manual work that slows down testing. The three calculation methods were critical because stakeholders needed to compare different approaches before deciding which to implement.
+
+**Tech:** Python, Pandas, Tkinter (background threading for large files)
+
+**What's still hard:** Handling inconsistent column names across different export types. Current column mapping works well but needs updates when business adds new fields.
+
+[Code](jobmaster/)
+
+---
+
+## AI/MCP Workflows (Not Standalone Tools)
+
+### AI Test Case Generation Workflow (90% Time Savings)
+
+Automated test case creation using MCP integrations, mind mapping, and AI. This is a workflow/process, not a standalone tool.
 
 **The problem:** Writing comprehensive test cases for new TMS features was taking 2-4 hours per module. Manual copy-paste from Jira and Figma, then writing 50-100 test cases in Testiny format.
 
@@ -91,13 +129,34 @@ Automated test case generation using MCP integrations, mind mapping, and AI.
 6. Refine AI output for accuracy and edge cases
 7. Convert to CSV → import to Testiny
 
-**Impact:** Reduced test case creation from 2-4 hours to ~30 minutes. That's 90% time savings. QA team now uses this for every new feature.
+**Impact:** Reduced test case creation from 2-4 hours to ~30 minutes. That's 90% time savings. QA team now uses this workflow for every new feature.
 
 **Tech:** Jira MCP, Figma MCP, RTMS mind mapping, ChatGPT/Claude, Python (CSV conversion)
 
 **The catch:** You can't skip the review step. AI generates structure quickly, but I always verify against actual ticket, designs, and development before finalizing.
 
-[Code](test-cases-creation-automatic/)
+**Why it's a workflow:** Uses existing platforms (Jira, Figma, AI tools) with MCP integrations rather than being a standalone application.
+
+[Workflow docs](test-cases-creation-automatic/)
+
+---
+
+### Agent & MCP Works
+
+Collection of AI-powered QA workflows and automation processes.
+
+**What it includes:**
+- Invoice completion audits
+- Job progress checking
+- Platform data collection
+- Invoice validation reports
+- Job percentage analytics
+
+**Tech:** Model Context Protocol (MCP), AI Agents, Prompt Engineering
+
+**Why these are workflows:** They're automated processes using AI and MCP integrations, not standalone tools you install and run.
+
+[Workflow docs](agent-and-mcp-works/)
 
 ---
 
@@ -187,10 +246,12 @@ During my time as a QA trainee at IFS, I worked on:
 
 ## Stats
 
-- **10+ tools built** (8 in this repo, 2+ at previous companies)
-- **500+ GPS devices** simulated simultaneously
+- **8 standalone tools built** (in this repo)
+- **AI/MCP workflows implemented** (test case generation, invoice audits, job analysis)
+- **1000+ GPS devices** simulated simultaneously
 - **50% error reduction** with Excel validator
-- **90% time saved** with AI test case generator
+- **2+ hours saved daily** with Job Master data processor
+- **90% time saved** with AI workflow for test case generation
 - **1000+ test cases** managed in Testiny
 - **2+ years** professional QA experience
 - **Tech stack:** Playwright, Selenium, Cypress, Python, JavaScript, TypeScript, Next.js, React

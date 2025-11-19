@@ -12,7 +12,7 @@ Built this to solve a testing problem: verifying job data from Transport Managem
 - Calculates job and load counts with three different methods (including prorated FTL-DISTRIBUTION logic)
 - Exports filtered data with smart filenames that include your filters
 - Shows summary metrics (revenue, costs, profit, duration)
-- Bulk job checker: verify GPS/payment/invoice status for 100+ jobs in 30 seconds
+- Bulk job checker: verify GPS/payment/invoice status for 2000+ jobs in 30 seconds
 
 **Why it's useful for QA:**
 
