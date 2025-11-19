@@ -16,11 +16,12 @@ Associate Software QA Engineer | 2+ Years Experience
 I build QA tools and automation frameworks to solve real testing problems. Most of these were built during my work at **Haulmatic Technologies** (Transport Management Systems) and **IFS R&D International** (ERP systems).
 
 **Quick stats:**
+- 8 standalone tools built (plus AI/MCP workflows)
 - 1000+ GPS devices simulated (no physical hardware needed)
 - 50% reduction in customer upload errors
-- 90% faster test case creation with AI
+- 2+ hours saved daily on test data verification
+- 90% faster test case creation with AI workflows
 - 1000+ test cases managed across projects
-- 10+ tools built and in use
 
 ---
 
@@ -67,14 +68,48 @@ Python tool that validates and auto-corrects Excel files before TMS upload. Redu
 
 ---
 
-### AI Test Case Generator
-Uses Jira MCP, Figma MCP, RTMS mind mapping, and AI to auto-generate test cases. Reduced creation time from 2-4 hours to 30 minutes (90% savings).
+### Job Master Data Processor
+Desktop app for verifying job data from TMS Excel exports. Saves 2+ hours daily on test data verification.
 
-**Workflow:** Jira MCP → Figma MCP → RTMS Mind Maps → AI → Manual Review → CSV → Testiny
+**The testing problem:** Manually filtering Excel exports, calculating expected load counts for validation, and checking GPS/payment/invoice status across hundreds of test cases was taking too long.
+
+**Solution:** Real-time search across all fields, calculates loads with three different methods (including prorated FTL-DISTRIBUTION logic), bulk status checker for 100+ jobs.
+
+**QA benefits:**
+- Test data verification: 15-20 minutes → 2 minutes
+- Load calculation validation (three methods side-by-side)
+- Bug reporting with complete job data exports
+- Multi-sheet exports for test evidence
+
+**Tech:** Python, Pandas, Tkinter
+
+[View code →](jobmaster/)
+
+<img src="jobmaster/screenshots/jobmaster1.png" alt="Job Master Main Interface" width="800"/>
+
+---
+
+## AI/MCP Workflows
+
+### AI Test Case Generation Workflow
+Automated test case creation using MCP integrations and AI. Reduced creation time from 2-4 hours to 30 minutes (90% savings).
+
+**Process:** Jira MCP → Figma MCP → RTMS Mind Maps → AI → Manual Review → CSV → Testiny
+
+**What it is:** A workflow/process, not a standalone tool. Uses existing platforms (Jira, Figma, AI) with MCP integrations to automate test case generation.
 
 **Tech:** Jira MCP, Figma MCP, RTMS, ChatGPT/Claude, Python
 
-[View code →](test-cases-creation-automatic/)
+[View workflow docs →](test-cases-creation-automatic/)
+
+### Agent & MCP Works
+AI-powered QA workflows and automation processes using Model Context Protocol integrations.
+
+**What it includes:** Various AI workflows for invoice analysis, job progress checking, platform data collection, and other QA tasks.
+
+**Tech:** MCP, Prompt Engineering, AI Agents
+
+[View workflows →](agent-and-mcp-works/)
 
 ---
 
@@ -88,7 +123,6 @@ Quick utilities built for specific testing needs:
 | [Excel Diff Tool](excel-master-diff/) | Compare Excel files sheet-by-sheet | Python, Pandas |
 | [Excel Job Highlighter](excel-job-highlighter/) | Color-code rows by job ID | Python, OpenPyXL |
 | [Order Data Generator](order-data-generator/) | Generate realistic test order data | Python, Faker |
-| [Agent & MCP Works](agent-and-mcp-works/) | AI-powered QA workflows | MCP, Prompt Engineering |
 
 ---
 
@@ -98,10 +132,11 @@ Quick utilities built for specific testing needs:
 **Associate Software QA Engineer**
 
 Working on Transport Management System (TMS) QA:
-- Built GPS simulation suite (500+ devices)
+- Built GPS simulation suite (1000+ devices)
 - Created route optimization testing tool
 - Developed Excel validator (50% error reduction)
-- AI-powered test case generation (90% time savings)
+- Built Job Master data processor (saves 2+ hours daily on test verification)
+- Implemented AI/MCP workflows for test case generation (90% time savings)
 - UI/API automation with Playwright & Selenium (POM)
 - Manage 1000+ test cases (Testiny-Jira integration)
 
@@ -169,6 +204,11 @@ npm install && npm run dev
 cd bulkfile-generator/excel-corrector
 pip install -r requirements.txt
 python excel_corrector_gui.py
+
+# Job Master Data Processor
+cd jobmaster
+pip install -r requirements.txt
+python desktop_app.py
 ```
 
 Each tool has its own README with setup instructions.

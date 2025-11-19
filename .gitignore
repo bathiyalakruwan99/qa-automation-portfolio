@@ -67,6 +67,7 @@ test-report.html
 # Test automation artifacts
 # screenshots/    # PORTFOLIO: Allow screenshots for documentation
 # videos/         # PORTFOLIO: Allow demo videos
+!jobmaster/screenshots/  # PORTFOLIO: Include jobmaster screenshots
 traces/
 downloads/
 test-artifacts/
@@ -114,6 +115,16 @@ Created file/*
 !Created file/.gitkeep
 uploaded order file/*
 !uploaded order file/.gitkeep
+
+# JobMaster output folders - ignore generated files
+jobmaster/exports/*
+!jobmaster/exports/.gitkeep
+jobmaster/downloads/*
+!jobmaster/downloads/.gitkeep
+jobmaster/reports/*
+!jobmaster/reports/.gitkeep
+jobmaster/uploads/*
+!jobmaster/uploads/.gitkeep
 
 # Large test files
 *.xlsx
