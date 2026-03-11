@@ -120,7 +120,9 @@ Python tools for syncing Jira tickets, building manifests, and generating QA rep
 
 **What it does:**
 - Syncs tickets from configured Jira epics into local JSON
+- **Ticket history** — 10 sample tickets, export to Excel with status changes (14+ rows)
 - Builds a manifest of all synced tickets for quick lookup
+- Data gathering & updates — scripts to update ticket JSONs and refresh manifests
 - Generates ready-for-release reports (markdown)
 - Extracts regression test cases from bug/task tickets
 - Includes 76+ QA prompts for API testing, security, automation, and more

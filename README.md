@@ -119,7 +119,7 @@ Quick utilities built for specific testing needs:
 
 | Tool | What It Does | Tech |
 |------|--------------|------|
-| [Jira QA Tools](jira-tools/) | Sync tickets, build manifests, generate reports, 76+ QA prompts | Python, Jira API |
+| [Jira QA Tools](jira-tools/) | Sync tickets, ticket history (10+ samples), manifests, reports, 76+ QA prompts | Python, Jira API |
 | [Geo Coordinate Converter](geo-coordinate-converter/) | Address ↔ GPS conversion, batch processing | Python, Geocoding APIs |
 | [Excel Diff Tool](excel-master-diff/) | Compare Excel files sheet-by-sheet | Python, Pandas |
 | [Excel Job Highlighter](excel-job-highlighter/) | Color-code rows by job ID | Python, OpenPyXL |
@@ -137,6 +137,7 @@ Working on Transport Management System (TMS) QA:
 - Created route optimization testing tool
 - Developed Excel validator (50% error reduction)
 - Built Job Master data processor (saves 2+ hours daily on test verification)
+- Built Jira QA tools (ticket sync, history, manifests, reports)
 - Implemented AI/MCP workflows for test case generation (90% time savings)
 - UI/API automation with Playwright & Selenium (POM)
 - Manage 1000+ test cases (Testiny-Jira integration)
@@ -190,8 +191,8 @@ Working on R&D team configuration:
 Clone and explore:
 
 ```bash
-git clone https://github.com/bathiyalakruwan99/testing-tool.git
-cd testing-tool
+git clone https://github.com/bathiyalakruwan99/qa-automation-portfolio.git
+cd qa-automation-portfolio
 
 # GPS Testing Suite
 cd gps-testing-suite
@@ -210,6 +211,11 @@ python excel_corrector_gui.py
 cd jobmaster
 pip install -r requirements.txt
 python desktop_app.py
+
+# Jira QA Tools
+cd jira-tools
+pip install -r requirements.txt
+python scripts/export_ticket_history_to_excel.py
 ```
 
 Each tool has its own README with setup instructions.
