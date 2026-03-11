@@ -16,7 +16,7 @@ Associate Software QA Engineer | 2+ Years Experience
 I build QA tools and automation frameworks to solve real testing problems. Most of these were built during my work at **Haulmatic Technologies** (Transport Management Systems) and **IFS R&D International** (ERP systems).
 
 **Quick stats:**
-- 8 standalone tools built (plus AI/MCP workflows)
+- 9 standalone tools built (plus AI/MCP workflows)
 - 1000+ GPS devices simulated (no physical hardware needed)
 - 50% reduction in customer upload errors
 - 2+ hours saved daily on test data verification
@@ -119,6 +119,7 @@ Quick utilities built for specific testing needs:
 
 | Tool | What It Does | Tech |
 |------|--------------|------|
+| [Jira QA Tools](jira-tools/) | Sync tickets, build manifests, generate reports, 76+ QA prompts | Python, Jira API |
 | [Geo Coordinate Converter](geo-coordinate-converter/) | Address ↔ GPS conversion, batch processing | Python, Geocoding APIs |
 | [Excel Diff Tool](excel-master-diff/) | Compare Excel files sheet-by-sheet | Python, Pandas |
 | [Excel Job Highlighter](excel-job-highlighter/) | Color-code rows by job ID | Python, OpenPyXL |

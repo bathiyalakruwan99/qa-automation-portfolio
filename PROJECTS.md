@@ -112,6 +112,27 @@ Desktop app for verifying job data from TMS Excel exports. Built to solve a test
 
 ---
 
+### Jira QA Automation Tools
+
+Python tools for syncing Jira tickets, building manifests, and generating QA reports. Uses the Jira REST API to automate ticket tracking and report generation.
+
+**Why I built it:** Needed to sync tickets from multiple Jira epics, track ready-for-release status, and generate regression test cases from bug/task tickets. Manual tracking across epics was error-prone and time-consuming.
+
+**What it does:**
+- Syncs tickets from configured Jira epics into local JSON
+- Builds a manifest of all synced tickets for quick lookup
+- Generates ready-for-release reports (markdown)
+- Extracts regression test cases from bug/task tickets
+- Includes 76+ QA prompts for API testing, security, automation, and more
+
+**Tech:** Python, Jira REST API, OpenPyXL, Requests
+
+**Note:** Sanitized for portfolio — uses environment variables for epic keys and credentials. No company-specific data.
+
+[Code](jira-tools/)
+
+---
+
 ## AI/MCP Workflows (Not Standalone Tools)
 
 ### AI Test Case Generation Workflow (90% Time Savings)
@@ -246,7 +267,7 @@ During my time as a QA trainee at IFS, I worked on:
 
 ## Stats
 
-- **8 standalone tools built** (in this repo)
+- **9 standalone tools built** (in this repo)
 - **AI/MCP workflows implemented** (test case generation, invoice audits, job analysis)
 - **1000+ GPS devices** simulated simultaneously
 - **50% error reduction** with Excel validator

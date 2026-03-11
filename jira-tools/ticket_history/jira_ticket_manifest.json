@@ -1,0 +1,25 @@
+{
+  "generated_at": "2024-01-20T00:00:00Z",
+  "source_dir": "ticket_history/ticket_data",
+  "ticket_count": 2,
+  "ids_with_status": {
+    "SAMPLE-001": "Ready for Release",
+    "SAMPLE-002": "To Do"
+  },
+  "tickets": [
+    {
+      "key": "SAMPLE-001",
+      "summary": "Sample bug: Login button not responding on mobile",
+      "status": "Ready for Release",
+      "updated": "2024-01-20T14:30:00.000Z",
+      "created": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "key": "SAMPLE-002",
+      "summary": "Sample task: Add validation for email field",
+      "status": "To Do",
+      "updated": "2024-01-18T09:00:00.000Z",
+      "created": "2024-01-18T09:00:00.000Z"
+    }
+  ]
+}
