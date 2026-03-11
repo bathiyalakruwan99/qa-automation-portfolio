@@ -1,0 +1,19 @@
+{
+  "id": "10003",
+  "key": "SAMPLE-003",
+  "summary": "[API] Rate limit not enforced on bulk endpoint",
+  "description": "**Expected:** 429 after 100 req/min\n**Actual:** No rate limiting applied",
+  "status": {"name": "In Progress"},
+  "issue_type": {"name": "Bug"},
+  "priority": {"name": "High"},
+  "assignee": {"displayName": "dev@example.com"},
+  "reporter": {"displayName": "qa@example.com"},
+  "created": "2024-01-10T08:00:00.000Z",
+  "updated": "2024-01-19T11:00:00.000Z",
+  "url": "https://example.atlassian.net/rest/api/2/issue/10003",
+  "changelogs": [
+    {"created": "2024-01-10T08:00:00.000Z", "items": [{"field": "status", "fromString": "To Do", "toString": "In Progress"}]}
+  ],
+  "comments": [],
+  "issuelinks": []
+}

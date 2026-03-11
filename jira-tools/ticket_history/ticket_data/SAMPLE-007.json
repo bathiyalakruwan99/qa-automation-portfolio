@@ -1,0 +1,20 @@
+{
+  "id": "10007",
+  "key": "SAMPLE-007",
+  "summary": "[Invoice] PDF export missing currency symbol",
+  "description": "**Expected:** USD symbol on amounts\n**Actual:** Numbers only, no symbol",
+  "status": {"name": "Ready for Lead Review"},
+  "issue_type": {"name": "Bug"},
+  "priority": {"name": "Medium"},
+  "assignee": {"displayName": "dev@example.com"},
+  "reporter": {"displayName": "qa@example.com"},
+  "created": "2024-01-14T13:00:00.000Z",
+  "updated": "2024-01-21T12:00:00.000Z",
+  "url": "https://example.atlassian.net/rest/api/2/issue/10007",
+  "changelogs": [
+    {"created": "2024-01-16T10:00:00.000Z", "items": [{"field": "status", "fromString": "To Do", "toString": "In Progress"}]},
+    {"created": "2024-01-21T12:00:00.000Z", "items": [{"field": "status", "fromString": "In Progress", "toString": "Ready for Lead Review"}]}
+  ],
+  "comments": [],
+  "issuelinks": []
+}
