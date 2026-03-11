@@ -130,19 +130,21 @@ Quick utilities built for specific testing needs:
 ## Professional Experience
 
 ### Haulmatic Technologies (Jul 2024 – Present)
-**Associate Software QA Engineer**
+**Software Quality Assurance Engineer**
 
-Working on Transport Management System (TMS) QA:
-- Built GPS simulation suite (1000+ devices)
-- Created route optimization testing tool
-- Developed Excel validator (50% error reduction)
-- Built Job Master data processor (saves 2+ hours daily on test verification)
-- Built Jira QA tools (ticket sync, history, manifests, reports)
-- Implemented AI/MCP workflows for test case generation (90% time savings)
-- UI/API automation with Playwright & Selenium (POM)
-- Manage 1000+ test cases (Testiny-Jira integration)
+- Own end-to-end QA for web and mobile applications across core TMS modules: Job Master, GPS Live Map, Work Orders, Optimizer, Invoicing, and Contracts
+- Create and maintain test plans, test scenarios, test cases, and RTMs
+- Execute regression, exploratory, and UAT cycles for production releases
+- Manage complete defect lifecycle in Jira including reproduction steps, severity prioritization, triage support, verification, and release sign-off
+- Perform REST API validation using Postman and Cypress, including negative testing and authentication scenarios
+- Validate GPS and live map workflows using simulation datasets to reproduce production edge cases
+- Delivered 1000+ test cases and identified 1000+ defects across continuous release cycles
+- Built GPS simulation suite supporting 500+ devices to improve high-load testing
+- Developed Python and Excel validation utilities, reducing customer upload errors by over 50%
+- Automated key UI and API workflows using Playwright and Selenium (POM structure)
+- Built route and optimization validation using OSRM and Google Maps APIs, reducing route testing time by 75%
 
-**Tech:** Playwright, Selenium, Python, JavaScript, Next.js, Testiny, Jira
+**Tech:** Jira, Postman, Testiny, Playwright, Selenium, Git, Bitbucket, Excel
 
 ---
 
