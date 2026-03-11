@@ -1,8 +1,8 @@
 # QA Automation Portfolio
 
 **Bathiya Lakruwan**  
-Associate Software QA Engineer | 2+ Years Experience  
-📧 bathiyalakruwan99@gmail.com | 🌐 [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)
+Software QA Engineer | Manual | Web + Mobile | Automation (Playwright, Cypress, Selenium)  
+📧 bathiyalakruwan99@gmail.com | 🌐 [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/) | [GitHub](https://github.com/bathiyalakruwan99)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.7+-blue.svg)](https://www.python.org/)
@@ -162,11 +162,37 @@ Working on R&D team configuration:
 
 ---
 
+### Team Telous (Dec 2023 – Present)
+**Product / QA — Part-time**
+
+- Support QA planning, requirement clarification, and UAT coordination for SME ERP and management platforms
+- Convert customer feedback into structured test scenarios and validation checklists
+- Coordinate fixes, retesting, and stakeholder sign-off
+- Contribute to product planning, QA strategy, sprint planning, UX validation, and release cycles
+- Platforms: GoldStoneRP, CoreSuite ERP, ServiStation Management System, Fuel Station Management System
+
+**Tech:** Cypress, Cucumber (BDD), Jira, Agile methodologies
+
+---
+
+## Education & Certifications
+
+**Education:**
+- B.Sc. (Hons) in Engineering (Information & Communication) — SLTC Research University, Colombo
+- Advanced Certificate in HR & Marketing Management — IDM Nations Campus
+
+**Certifications:**
+- ISTQB Certified Tester — Foundation Level (CTFL) v4.0 *(valid until Jan 2026)*
+- AWS Cloud Architecting — AWS Academy
+- CCNA — Cisco Academy
+
+---
+
 ## Tech Stack
 
 **Test Automation:** Playwright, Selenium, Cypress, BDD (Cucumber), POM design
 
-**Languages:** Python, JavaScript, TypeScript, SQL, HTML/CSS, PHP, SQL
+**Languages:** Java, JavaScript, TypeScript, Python, SQL, HTML/CSS, PHP
 
 **Frameworks:** Next.js, React, Flask, Pandas, Leaflet.js, Tkinter, POM, TestNG, Cucumber BDD, REST APIs, Kendo UI
 
@@ -234,8 +260,10 @@ Each tool has its own README with setup instructions.
 ## Contact
 
 **Email:** bathiyalakruwan99@gmail.com  
+**Phone:** 0712294741  
 **Website:** [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)  
-**LinkedIn:** [linkedin.com/in/bathiyalakruwan](https://www.linkedin.com/in/bathiyalakruwan/)  
+**LinkedIn:** [linkedin.com/in/bathiyalakruwan99](https://www.linkedin.com/in/bathiyalakruwan99/)  
+**GitHub:** [github.com/bathiyalakruwan99](https://github.com/bathiyalakruwan99)  
 **Location:** Badulla / Colombo, Sri Lanka
 
 Currently open to **Senior QA Engineer** and **SDET** roles.

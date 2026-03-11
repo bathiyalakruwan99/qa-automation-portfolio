@@ -12,6 +12,8 @@ A breakdown of my technical expertise across QA automation, programming, and eme
 - **TypeScript** - Type-safe React apps, complex state management
 
 **Proficient:**
+- **Java** - Test automation, TestNG
+- **PHP** - Web development, scripting
 - **HTML5/CSS3** - Semantic markup, responsive design, modern layouts
 - **SQL** - Database queries, data validation, test data management
 - **Bash/Shell** - Automation scripts, CI/CD pipelines
