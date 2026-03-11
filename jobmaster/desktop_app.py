@@ -6,6 +6,9 @@ from datetime import datetime
 import tempfile
 import threading
 import io
+import math
+
+import config
 
 class JobMasterDesktopApp:
     def __init__(self, root):
@@ -26,6 +29,7 @@ class JobMasterDesktopApp:
         # Column mapping configuration
         self.column_mapping_config = {
             'Job ID': ['Job ID', 'job_id', 'JobID', 'ID'],
+            'Load ID': ['Load ID', 'load_id', 'LoadID', 'Shipment ID', 'ShipmentID'],
             'Job Name': ['Job Name', 'job_name', 'Job Title', 'Name'],
             'Job Date': ['Job Creation DateTime', 'job_date', 'creation_date', 'Job Date'],
             'GPS Executed': ['Distance: GPS', 'gps_distance', 'GPS Distance', 'Distance'],
@@ -34,6 +38,8 @@ class JobMasterDesktopApp:
             'End Time': ['End Time: Actual', 'actual_end_time', 'End Time'],
             'Duration': ['Duration: Actual', 'actual_duration', 'Duration'],
             'Duration Variance': ['Duration: Variance', 'duration_variance', 'Variance'],
+            'Job Count': ['Job Count', 'job_count', 'Jobs Count', 'Number of Jobs'],
+            'Load Count': ['Load Count', 'load_count', 'Loads Count', 'Number of Loads'],
             'Payment Schedule Status': ['Payment Schedule Status', 'payment_schedule_status', 'Schedule Status'],
             'Payment Schedule Number': ['Payment Schedule Number', 'payment_schedule_number', 'Schedule Number'],
             'Cost Item': ['Cost Item', 'cost_item'],
@@ -47,23 +53,24 @@ class JobMasterDesktopApp:
             'Sub Total Revenue': ['Sub Total: Revenue', 'subtotal_revenue', 'Revenue'],
             'Vehicle': ['Vehicle', 'vehicle_id', 'Vehicle ID'],
             'Vehicle Type': ['Vehicle Type', 'vehicle_type'],
+            'Trip Type': ['Trip Type', 'trip_type', 'TripType'],
+            'Planned Stops: Qty': ['Planned Stops: Qty', 'planned_stops_qty', 'Planned Stops Qty', 'Stops Qty'],
+            'Count: Load and Route Optimiser': ['Count: Load and Route Optimiser', 'Count: Load and Route Optimiser', 'Route Optimiser', 'Route Optimizer', 'Load and Route Optimiser'],
             'Driver Name': ['Driver Name', 'driver_name', 'Driver'],
             'Driver Phone': ['Driver Phone', 'driver_phone', 'Phone'],
-            'Driver NIC': ['Driver NIC', 'driver_nic', 'NIC']
+            'Driver NIC': ['Driver NIC', 'driver_nic', 'NIC'],
+            'Operation': ['Operation', 'operation', 'Operation Name', 'Op']
         }
         
         self.setup_ui()
         
     def create_directories(self):
         """Create necessary directories for file organization"""
-        self.base_dir = os.path.dirname(os.path.abspath(__file__))
-        self.downloads_dir = os.path.join(self.base_dir, 'downloads')
-        self.reports_dir = os.path.join(self.base_dir, 'reports')
-        self.exports_dir = os.path.join(self.base_dir, 'exports')
-        
-        for directory in [self.downloads_dir, self.reports_dir, self.exports_dir]:
-            if not os.path.exists(directory):
-                os.makedirs(directory)
+        config.ensure_directories()
+        self.base_dir = config.PROJECT_ROOT
+        self.downloads_dir = config.DOWNLOAD_DIR
+        self.reports_dir = config.REPORTS_DIR
+        self.exports_dir = config.EXPORTS_DIR
                 
         # Note: Directory creation will be shown in welcome message
     
@@ -89,6 +96,12 @@ class JobMasterDesktopApp:
                 filter_parts.append(f"Driver-{driver}")
             if self.current_filters.get('vehicle'):
                 filter_parts.append(f"Vehicle-{self.current_filters['vehicle']}")
+            if self.current_filters.get('trip_type') and self.current_filters['trip_type'] != 'All':
+                filter_parts.append(f"TripType-{self.current_filters['trip_type']}")
+            if self.current_filters.get('payment_schedule_status') and self.current_filters['payment_schedule_status'] != 'All':
+                filter_parts.append(f"PaymentStatus-{self.current_filters['payment_schedule_status']}")
+            if self.current_filters.get('invoice_status') and self.current_filters['invoice_status'] != 'All':
+                filter_parts.append(f"InvoiceStatus-{self.current_filters['invoice_status']}")
             if self.current_filters.get('date_from') or self.current_filters.get('date_to'):
                 if self.current_filters.get('date_from') and self.current_filters.get('date_to'):
                     filter_parts.append(f"DateRange-{self.current_filters['date_from']}-to-{self.current_filters['date_to']}")
@@ -96,6 +109,10 @@ class JobMasterDesktopApp:
                     filter_parts.append(f"DateFrom-{self.current_filters['date_from']}")
                 elif self.current_filters.get('date_to'):
                     filter_parts.append(f"DateTo-{self.current_filters['date_to']}")
+            
+            if self.current_filters.get('gps_executed_only'):
+                filter_parts.append("GPSExecutedOnly")
+
             
             if filter_parts:
                 filename_parts.extend(filter_parts)
@@ -127,14 +144,215 @@ class JobMasterDesktopApp:
         # Title
         title_label = ttk.Label(main_frame, text="Job Master Data Processor", 
                                font=('Arial', 16, 'bold'))
-        title_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
+        title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))
         
-        # Left panel for controls
+        # Count Summary section - Moved to top with horizontal scroll
+        count_summary_container = ttk.LabelFrame(main_frame, text="Count Summary", padding="5")
+        count_summary_container.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+        
+        # Create canvas and horizontal scrollbar for count summary
+        count_canvas = tk.Canvas(count_summary_container, height=150)
+        count_scrollbar = ttk.Scrollbar(count_summary_container, orient="horizontal", command=count_canvas.xview)
+        count_frame = ttk.Frame(count_canvas)
+        
+        count_canvas.create_window((0, 0), window=count_frame, anchor="nw")
+        count_canvas.configure(xscrollcommand=count_scrollbar.set)
+        
+        count_canvas.pack(side="top", fill="both", expand=True)
+        count_scrollbar.pack(side="bottom", fill="x")
+        
+        def configure_count_scroll(event):
+            # Update scroll region to include all content
+            count_canvas.update_idletasks()
+            bbox = count_canvas.bbox("all")
+            if bbox:
+                count_canvas.configure(scrollregion=bbox)
+        
+        count_frame.bind("<Configure>", configure_count_scroll)
+        
+        # Enable mouse wheel scrolling for count canvas
+        def on_count_canvas_mousewheel(event):
+            count_canvas.xview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        count_canvas.bind("<MouseWheel>", on_count_canvas_mousewheel)
+        
+        # Configure grid columns to allow proper expansion
+        for i in range(11):
+            count_frame.columnconfigure(i, weight=0, minsize=100)
+        
+        # Job Count display
+        job_count_display_frame = ttk.Frame(count_frame)
+        job_count_display_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 5), padx=(5, 0))
+        
+        ttk.Label(job_count_display_frame, text="Total Jobs:", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.job_count_label = ttk.Label(job_count_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="blue")
+        self.job_count_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # Load Count display
+        load_count_display_frame = ttk.Frame(count_frame)
+        load_count_display_frame.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(load_count_display_frame, text="Non FTL-DIST:", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.load_count_label = ttk.Label(load_count_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="green")
+        self.load_count_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Load Count display (Current Logic)
+        ftl_load_count_display_frame = ttk.Frame(count_frame)
+        ftl_load_count_display_frame.grid(row=0, column=2, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftl_load_count_display_frame, text="FTL-DIST (Cur):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftl_load_count_label = ttk.Label(ftl_load_count_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="red")
+        self.ftl_load_count_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Load Count display (Previous Logic - 8x)
+        ftl_prev_load_count_display_frame = ttk.Frame(count_frame)
+        ftl_prev_load_count_display_frame.grid(row=0, column=3, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftl_prev_load_count_display_frame, text="FTL-DIST (8x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftl_prev_load_count_label = ttk.Label(ftl_prev_load_count_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="orange")
+        self.ftl_prev_load_count_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Load Count display (10x Logic)
+        ftl_10x_load_count_display_frame = ttk.Frame(count_frame)
+        ftl_10x_load_count_display_frame.grid(row=0, column=4, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftl_10x_load_count_display_frame, text="FTL-DIST (10x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftl_10x_load_count_label = ttk.Label(ftl_10x_load_count_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="darkorange")
+        self.ftl_10x_load_count_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Route Optimiser (ftldis-op) Load Count display (Current Logic)
+        ftldis_op_current_display_frame = ttk.Frame(count_frame)
+        ftldis_op_current_display_frame.grid(row=0, column=5, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldis_op_current_display_frame, text="ftldis-op (Cur):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldis_op_current_label = ttk.Label(ftldis_op_current_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="teal")
+        self.ftldis_op_current_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Route Optimiser (ftldis-op) Load Count display (8x Logic)
+        ftldis_op_8x_display_frame = ttk.Frame(count_frame)
+        ftldis_op_8x_display_frame.grid(row=0, column=6, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldis_op_8x_display_frame, text="ftldis-op (8x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldis_op_8x_label = ttk.Label(ftldis_op_8x_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="darkgreen")
+        self.ftldis_op_8x_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DISTRIBUTION Route Optimiser (ftldis-op) Load Count display (10x Logic)
+        ftldis_op_10x_display_frame = ttk.Frame(count_frame)
+        ftldis_op_10x_display_frame.grid(row=0, column=7, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldis_op_10x_display_frame, text="ftldis-op (10x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldis_op_10x_label = ttk.Label(ftldis_op_10x_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="darkcyan")
+        self.ftldis_op_10x_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DOMESTIC Route Optimiser (ftldom-op) Load Count display (Current Logic)
+        ftldom_op_current_display_frame = ttk.Frame(count_frame)
+        ftldom_op_current_display_frame.grid(row=0, column=8, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldom_op_current_display_frame, text="ftldom-op (Cur):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldom_op_current_label = ttk.Label(ftldom_op_current_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="steelblue")
+        self.ftldom_op_current_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DOMESTIC Route Optimiser (ftldom-op) Load Count display (8x Logic)
+        ftldom_op_8x_display_frame = ttk.Frame(count_frame)
+        ftldom_op_8x_display_frame.grid(row=0, column=9, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldom_op_8x_display_frame, text="ftldom-op (8x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldom_op_8x_label = ttk.Label(ftldom_op_8x_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="forestgreen")
+        self.ftldom_op_8x_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # FTL-DOMESTIC Route Optimiser (ftldom-op) Load Count display (10x Logic)
+        ftldom_op_10x_display_frame = ttk.Frame(count_frame)
+        ftldom_op_10x_display_frame.grid(row=0, column=10, sticky=(tk.W, tk.E), pady=(0, 5), padx=(15, 0))
+        
+        ttk.Label(ftldom_op_10x_display_frame, text="ftldom-op (10x):", font=('Arial', 8, 'bold')).grid(row=0, column=0, sticky=tk.W)
+        self.ftldom_op_10x_label = ttk.Label(ftldom_op_10x_display_frame, text="0", font=('Arial', 11, 'bold'), foreground="cadetblue")
+        self.ftldom_op_10x_label.grid(row=0, column=1, padx=(5, 0))
+        
+        # Table for Total Loads
+        table_frame = ttk.Frame(count_frame)
+        table_frame.grid(row=1, column=0, columnspan=11, sticky=(tk.W, tk.E), pady=(10, 0), padx=(5, 0))
+        
+        # Table headers
+        header_style = {'font': ('Arial', 9, 'bold'), 'bg': '#D0D0D0', 'relief': 'raised', 'borderwidth': 2}
+        cell_style = {'font': ('Arial', 9), 'relief': 'sunken', 'borderwidth': 1, 'anchor': 'center', 'bg': 'white'}
+        row_label_style = {'font': ('Arial', 9), 'relief': 'sunken', 'borderwidth': 1, 'anchor': 'w', 'bg': '#F0F0F0'}
+        
+        # Header row
+        tk.Label(table_frame, text="Total Type", **header_style, width=20).grid(row=0, column=0, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        tk.Label(table_frame, text="Current", **header_style, width=15).grid(row=0, column=1, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        tk.Label(table_frame, text="8x", **header_style, width=15).grid(row=0, column=2, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        tk.Label(table_frame, text="10x", **header_style, width=15).grid(row=0, column=3, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        
+        # Row 1: Total (No OP)
+        tk.Label(table_frame, text="Total (No OP)", **row_label_style, width=20).grid(row=1, column=0, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_no_op_current_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="purple")
+        self.total_no_op_current_label.grid(row=1, column=1, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_no_op_8x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="brown")
+        self.total_no_op_8x_label.grid(row=1, column=2, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_no_op_10x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="darkred")
+        self.total_no_op_10x_label.grid(row=1, column=3, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        
+        # Row 2: Total (+ftldis-op)
+        tk.Label(table_frame, text="Total (+ftldis-op)", **row_label_style, width=20).grid(row=2, column=0, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldis_op_current_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="purple")
+        self.total_ftldis_op_current_label.grid(row=2, column=1, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldis_op_8x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="brown")
+        self.total_ftldis_op_8x_label.grid(row=2, column=2, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldis_op_10x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="darkred")
+        self.total_ftldis_op_10x_label.grid(row=2, column=3, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        
+        # Row 3: Total (+ftldom-op)
+        tk.Label(table_frame, text="Total (+ftldom-op)", **row_label_style, width=20).grid(row=3, column=0, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldom_op_current_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="purple")
+        self.total_ftldom_op_current_label.grid(row=3, column=1, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldom_op_8x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="brown")
+        self.total_ftldom_op_8x_label.grid(row=3, column=2, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_ftldom_op_10x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="darkred")
+        self.total_ftldom_op_10x_label.grid(row=3, column=3, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        
+        # Row 4: Total (+Both OP)
+        tk.Label(table_frame, text="Total (+Both OP)", **row_label_style, width=20).grid(row=4, column=0, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_both_op_current_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="purple")
+        self.total_both_op_current_label.grid(row=4, column=1, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_both_op_8x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="brown")
+        self.total_both_op_8x_label.grid(row=4, column=2, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        self.total_both_op_10x_label = tk.Label(table_frame, text="0", **cell_style, width=15, fg="darkred")
+        self.total_both_op_10x_label.grid(row=4, column=3, sticky=(tk.W, tk.E), padx=(0, 1), pady=(0, 1))
+        
+        # Configure table columns
+        table_frame.columnconfigure(0, weight=1, minsize=150)
+        table_frame.columnconfigure(1, weight=1, minsize=120)
+        table_frame.columnconfigure(2, weight=1, minsize=120)
+        table_frame.columnconfigure(3, weight=1, minsize=120)
+        
+        # Left panel for controls with scrollbar
         left_panel = ttk.Frame(main_frame)
-        left_panel.grid(row=1, column=0, rowspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 10))
+        left_panel.grid(row=2, column=0, rowspan=3, sticky=(tk.W, tk.E, tk.N, tk.S), padx=(0, 10))
+        
+        # Create canvas and scrollbar for left panel
+        left_canvas = tk.Canvas(left_panel)
+        left_scrollbar = ttk.Scrollbar(left_panel, orient="vertical", command=left_canvas.yview)
+        scrollable_frame = ttk.Frame(left_canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: left_canvas.configure(scrollregion=left_canvas.bbox("all"))
+        )
+        
+        left_canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        left_canvas.configure(yscrollcommand=left_scrollbar.set)
+        
+        # Pack canvas and scrollbar
+        left_canvas.pack(side="left", fill="both", expand=True)
+        left_scrollbar.pack(side="right", fill="y")
+        
+        # Bind mouse wheel to canvas
+        def _on_mousewheel(event):
+            left_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        left_canvas.bind_all("<MouseWheel>", _on_mousewheel)
         
         # File upload section
-        upload_frame = ttk.LabelFrame(left_panel, text="File Upload", padding="10")
+        upload_frame = ttk.LabelFrame(scrollable_frame, text="File Upload", padding="10")
         upload_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         
         ttk.Button(upload_frame, text="Select Excel File", 
@@ -145,18 +363,29 @@ class JobMasterDesktopApp:
         self.file_label.grid(row=1, column=0, pady=(0, 10))
         
         ttk.Button(upload_frame, text="Process File", 
-                  command=self.process_file).grid(row=2, column=0)
+                  command=self.process_file).grid(row=2, column=0, pady=(0, 10))
+        
+        # Action buttons section
+        action_buttons_frame = ttk.LabelFrame(scrollable_frame, text="Actions", padding="10")
+        action_buttons_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        
+        ttk.Button(action_buttons_frame, text="Count Jobs & Loads", 
+                  command=self.count_jobs_and_loads).grid(row=0, column=0, pady=(0, 5), sticky=(tk.W, tk.E))
+        ttk.Button(action_buttons_frame, text="Export Count Report", 
+                  command=self.export_count_report).grid(row=1, column=0, pady=(0, 5), sticky=(tk.W, tk.E))
+        ttk.Button(action_buttons_frame, text="Export Operation-Wise Report", 
+                  command=self.export_operation_wise_report).grid(row=2, column=0, sticky=(tk.W, tk.E))
         
         # Status section
-        status_frame = ttk.LabelFrame(left_panel, text="Status", padding="10")
-        status_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        status_frame = ttk.LabelFrame(scrollable_frame, text="Status", padding="10")
+        status_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         
         self.status_text = scrolledtext.ScrolledText(status_frame, height=8, width=35)
         self.status_text.grid(row=0, column=0, sticky=(tk.W, tk.E))
         
         # Search section
-        search_frame = ttk.LabelFrame(left_panel, text="Search & Filter", padding="10")
-        search_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
+        search_frame = ttk.LabelFrame(scrollable_frame, text="Search & Filter", padding="10")
+        search_frame.grid(row=3, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         
         # Search instructions
         ttk.Label(search_frame, text="Search data in real-time:", 
@@ -192,11 +421,29 @@ class JobMasterDesktopApp:
         self.vehicle_entry.grid(row=10, column=0, pady=(0, 5))
         self.vehicle_entry.bind('<KeyRelease>', self.on_search_change)
         
+        # Trip Type filter
+        ttk.Label(search_frame, text="Trip Type:").grid(row=11, column=0, sticky=tk.W)
+        self.trip_type_combo = ttk.Combobox(search_frame, width=27, state="readonly")
+        self.trip_type_combo.grid(row=12, column=0, pady=(0, 5))
+        self.trip_type_combo.bind('<<ComboboxSelected>>', self.on_search_change)
+        
+        # Payment Schedule Status filter
+        ttk.Label(search_frame, text="Payment Schedule Status:").grid(row=13, column=0, sticky=tk.W)
+        self.payment_schedule_combo = ttk.Combobox(search_frame, width=27, state="readonly")
+        self.payment_schedule_combo.grid(row=14, column=0, pady=(0, 5))
+        self.payment_schedule_combo.bind('<<ComboboxSelected>>', self.on_search_change)
+        
+        # Invoice Status filter
+        ttk.Label(search_frame, text="Invoice Status:").grid(row=15, column=0, sticky=tk.W)
+        self.invoice_status_combo = ttk.Combobox(search_frame, width=27, state="readonly")
+        self.invoice_status_combo.grid(row=16, column=0, pady=(0, 5))
+        self.invoice_status_combo.bind('<<ComboboxSelected>>', self.on_search_change)
+        
         # Date range
-        ttk.Label(search_frame, text="Date Range:").grid(row=11, column=0, sticky=tk.W)
+        ttk.Label(search_frame, text="Date Range:").grid(row=17, column=0, sticky=tk.W)
         
         date_frame = ttk.Frame(search_frame)
-        date_frame.grid(row=12, column=0, pady=(0, 5))
+        date_frame.grid(row=18, column=0, pady=(0, 5))
         
         ttk.Label(date_frame, text="From:").grid(row=0, column=0, sticky=tk.W)
         self.date_from_entry = ttk.Entry(date_frame, width=12)
@@ -208,9 +455,11 @@ class JobMasterDesktopApp:
         self.date_to_entry.grid(row=0, column=3, padx=(5, 0))
         self.date_to_entry.bind('<KeyRelease>', self.on_search_change)
         
+
+        
         # Search buttons
         search_buttons_frame = ttk.Frame(search_frame)
-        search_buttons_frame.grid(row=13, column=0, pady=(10, 0))
+        search_buttons_frame.grid(row=19, column=0, pady=(10, 0))
         
         ttk.Button(search_buttons_frame, text="Search Now", 
                   command=self.search_data).grid(row=0, column=0, padx=(0, 5))
@@ -220,15 +469,22 @@ class JobMasterDesktopApp:
         # Search results counter
         self.search_results_label = ttk.Label(search_frame, text="", 
                                             font=('Arial', 9), foreground="blue")
-        self.search_results_label.grid(row=14, column=0, pady=(5, 0))
+        self.search_results_label.grid(row=20, column=0, pady=(5, 0))
         
         # Real-time search toggle
         self.realtime_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(search_frame, text="Real-time search", 
-                       variable=self.realtime_var).grid(row=15, column=0, pady=(5, 0), sticky=tk.W)
+                       variable=self.realtime_var).grid(row=21, column=0, pady=(5, 0), sticky=tk.W)
+        
+        # GPS Executed filter
+        self.gps_executed_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(search_frame, text="GPS Executed Only", 
+                       variable=self.gps_executed_var).grid(row=22, column=0, pady=(5, 0), sticky=tk.W)
+        
+
         
         # Export section
-        export_frame = ttk.LabelFrame(left_panel, text="Export", padding="10")
+        export_frame = ttk.LabelFrame(scrollable_frame, text="Export", padding="10")
         export_frame.grid(row=3, column=0, sticky=(tk.W, tk.E))
         
         ttk.Button(export_frame, text="Export to Excel", 
@@ -251,7 +507,7 @@ class JobMasterDesktopApp:
         
         # Right panel for data display
         right_panel = ttk.Frame(main_frame)
-        right_panel.grid(row=1, column=1, rowspan=3, sticky=(tk.W, tk.E, tk.N, tk.S))
+        right_panel.grid(row=2, column=1, rowspan=4, sticky=(tk.W, tk.E, tk.N, tk.S))
         right_panel.columnconfigure(0, weight=1)
         right_panel.rowconfigure(1, weight=1)
         
@@ -260,12 +516,12 @@ class JobMasterDesktopApp:
         metrics_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), pady=(0, 10))
         
         self.metrics_labels = {}
-        metric_names = ["Total Records", "Completed Jobs", "Total Revenue", "Avg Duration"]
+        metric_names = ["Total Records", "Completed Jobs", "Total Revenue", "Total Costs", "Total Profit", "Avg Duration"]
         for i, metric in enumerate(metric_names):
             frame = ttk.Frame(metrics_frame)
-            frame.grid(row=0, column=i, padx=10)
+            frame.grid(row=0, column=i, padx=5)  # Reduced padding to fit more metrics
             ttk.Label(frame, text=metric, font=('Arial', 8)).grid(row=0, column=0)
-            self.metrics_labels[metric] = ttk.Label(frame, text="0", font=('Arial', 12, 'bold'))
+            self.metrics_labels[metric] = ttk.Label(frame, text="0", font=('Arial', 10, 'bold'))  # Slightly smaller font
             self.metrics_labels[metric].grid(row=1, column=0)
         
         # Data table
@@ -323,7 +579,7 @@ class JobMasterDesktopApp:
         
         # Initialize status
         self.log_message("Welcome to Job Master Data Processor!")
-        self.log_message("Folder structure ready: exports/, reports/, downloads/")
+        self.log_message("Folder structure ready: data/exports/, data/reports/, data/downloads/")
         self.log_message("Please select an Excel file to begin processing.")
         
     def _display_pending_messages(self):
@@ -352,6 +608,7 @@ class JobMasterDesktopApp:
         """Open file dialog to select Excel file"""
         file_path = filedialog.askopenfilename(
             title="Select Excel File",
+            initialdir=config.INPUT_DIR if os.path.exists(config.INPUT_DIR) else config.PROJECT_ROOT,
             filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")]
         )
         
@@ -440,7 +697,7 @@ class JobMasterDesktopApp:
                 df.loc[:, col] = pd.to_datetime(df[col], errors='coerce')
         
         # Convert numeric columns
-        numeric_cols = ['GPS Executed', 'Duration', 'Duration Variance', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
+        numeric_cols = ['GPS Executed', 'Duration', 'Duration Variance', 'Job Count', 'Load Count', 'Planned Stops: Qty', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
         for col in numeric_cols:
             if col in df.columns:
                 df.loc[:, col] = pd.to_numeric(df[col], errors='coerce')
@@ -461,6 +718,30 @@ class JobMasterDesktopApp:
             self.status_combo['values'] = status_list
             self.status_combo.set('All')
             
+    def update_trip_type_combo(self):
+        """Update the trip type combo box with available trip types"""
+        if self.processed_data is not None and 'Trip Type' in self.processed_data.columns:
+            trip_types = self.processed_data['Trip Type'].dropna().unique()
+            trip_type_list = ['All'] + list(trip_types)
+            self.trip_type_combo['values'] = trip_type_list
+            self.trip_type_combo.set('All')
+            
+    def update_payment_schedule_combo(self):
+        """Update the payment schedule status combo box with available statuses"""
+        if self.processed_data is not None and 'Payment Schedule Status' in self.processed_data.columns:
+            payment_statuses = self.processed_data['Payment Schedule Status'].dropna().unique()
+            payment_status_list = ['All'] + list(payment_statuses)
+            self.payment_schedule_combo['values'] = payment_status_list
+            self.payment_schedule_combo.set('All')
+            
+    def update_invoice_status_combo(self):
+        """Update the invoice status combo box with available statuses"""
+        if self.processed_data is not None and 'Invoice Status' in self.processed_data.columns:
+            invoice_statuses = self.processed_data['Invoice Status'].dropna().unique()
+            invoice_status_list = ['All'] + list(invoice_statuses)
+            self.invoice_status_combo['values'] = invoice_status_list
+            self.invoice_status_combo.set('All')
+            
     def search_data(self):
         """Enhanced search and filter data based on multiple criteria"""
         if self.processed_data is None:
@@ -472,8 +753,13 @@ class JobMasterDesktopApp:
         status = self.status_combo.get()
         driver = self.driver_entry.get().strip()
         vehicle = self.vehicle_entry.get().strip()
+        trip_type = self.trip_type_combo.get()
+        payment_schedule_status = self.payment_schedule_combo.get()
+        invoice_status = self.invoice_status_combo.get()
         date_from = self.date_from_entry.get().strip()
         date_to = self.date_to_entry.get().strip()
+        gps_executed_only = self.gps_executed_var.get()
+
         
         # Store current filters for filename generation
         self.current_filters = {
@@ -482,8 +768,12 @@ class JobMasterDesktopApp:
             'status': status,
             'driver': driver,
             'vehicle': vehicle,
+            'trip_type': trip_type,
+            'payment_schedule_status': payment_schedule_status,
+            'invoice_status': invoice_status,
             'date_from': date_from,
-            'date_to': date_to
+            'date_to': date_to,
+            'gps_executed_only': gps_executed_only
         }
         
         df = self.processed_data.copy()
@@ -509,6 +799,18 @@ class JobMasterDesktopApp:
         if vehicle:
             df = df[df['Vehicle'].astype(str).str.contains(vehicle, case=False, na=False, regex=False)]
             
+        # Apply trip type filter
+        if trip_type and trip_type != 'All':
+            df = df[df['Trip Type'] == trip_type]
+            
+        # Apply payment schedule status filter
+        if payment_schedule_status and payment_schedule_status != 'All':
+            df = df[df['Payment Schedule Status'] == payment_schedule_status]
+            
+        # Apply invoice status filter
+        if invoice_status and invoice_status != 'All':
+            df = df[df['Invoice Status'] == invoice_status]
+            
         # Apply date range filters
         if date_from and 'Job Date' in df.columns:
             try:
@@ -523,6 +825,13 @@ class JobMasterDesktopApp:
                 df = df[df['Job Date'] <= date_to_parsed]
             except:
                 pass
+        
+        # Apply GPS Executed filter
+        if gps_executed_only and 'GPS Executed' in df.columns:
+            # Filter for records that have GPS Executed data (not NaN and not 0)
+            df = df[df['GPS Executed'].notna() & (df['GPS Executed'] > 0)]
+            self.log_message(f"Filtered to {len(df)} records with GPS Executed data")
+
         
         self.filtered_data = df
         
@@ -544,10 +853,20 @@ class JobMasterDesktopApp:
         self.job_name_entry.delete(0, tk.END)
         self.driver_entry.delete(0, tk.END)
         self.vehicle_entry.delete(0, tk.END)
+        if hasattr(self, 'trip_type_combo'):
+            self.trip_type_combo.set('All')
+        if hasattr(self, 'payment_schedule_combo'):
+            self.payment_schedule_combo.set('All')
+        if hasattr(self, 'invoice_status_combo'):
+            self.invoice_status_combo.set('All')
         self.date_from_entry.delete(0, tk.END)
         self.date_to_entry.delete(0, tk.END)
+
         if hasattr(self, 'status_combo'):
             self.status_combo.set('All')
+        
+        if hasattr(self, 'gps_executed_var'):
+            self.gps_executed_var.set(False)
         
         # Clear current filters
         self.current_filters = {}
@@ -573,11 +892,17 @@ class JobMasterDesktopApp:
             self.update_metrics()
             self.update_columns_listbox()
             self.update_job_combo()
-            self.update_status_combo()  # Add this line
+            self.update_status_combo()
+            self.update_trip_type_combo()
+            self.update_payment_schedule_combo()
+            self.update_invoice_status_combo()
             self.update_data_table()
             
             # Update search results label
             self.search_results_label.config(text="Showing all records")
+            
+            # Automatically count jobs and loads
+            self.count_jobs_and_loads()
             
             self.log_message("Data loaded successfully. Use search filters to find specific records.")
         else:
@@ -608,6 +933,25 @@ class JobMasterDesktopApp:
                     self.metrics_labels["Total Revenue"].config(text="$0.00")
             else:
                 self.metrics_labels["Total Revenue"].config(text="$0.00")
+            
+            # Total costs
+            if 'Sub Total Cost' in df.columns:
+                total_costs = df['Sub Total Cost'].sum()
+                if pd.notna(total_costs):
+                    self.metrics_labels["Total Costs"].config(text=f"${total_costs:,.2f}")
+                else:
+                    self.metrics_labels["Total Costs"].config(text="$0.00")
+            else:
+                self.metrics_labels["Total Costs"].config(text="$0.00")
+            
+            # Total profit (Revenue - Costs)
+            if 'Sub Total Revenue' in df.columns and 'Sub Total Cost' in df.columns:
+                total_revenue = df['Sub Total Revenue'].sum() if pd.notna(df['Sub Total Revenue'].sum()) else 0
+                total_costs = df['Sub Total Cost'].sum() if pd.notna(df['Sub Total Cost'].sum()) else 0
+                total_profit = total_revenue - total_costs
+                self.metrics_labels["Total Profit"].config(text=f"${total_profit:,.2f}")
+            else:
+                self.metrics_labels["Total Profit"].config(text="$0.00")
             
             # Average duration
             if 'Duration' in df.columns:
@@ -848,7 +1192,7 @@ class JobMasterDesktopApp:
                 summary_data.append({'Metric': f'Jobs - {status}', 'Value': count})
         
         # Numeric summaries
-        numeric_cols = ['GPS Executed', 'Duration', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
+        numeric_cols = ['GPS Executed', 'Duration', 'Job Count', 'Load Count', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
         for col in numeric_cols:
             if col in df.columns:
                 total = df[col].sum()
@@ -862,6 +1206,926 @@ class JobMasterDesktopApp:
     def generate_pdf_report(self, df, filename):
         """Generate PDF report - Disabled"""
         pass
+    
+    def count_jobs_and_loads(self):
+        """Count total jobs and loads in the processed data with new logic"""
+        if self.processed_data is None:
+            messagebox.showwarning("Warning", "Please process a file first!")
+            return
+        
+        try:
+            df = self.processed_data
+            
+            # Count unique Job IDs (excluding empty fields)
+            if 'Job ID' in df.columns:
+                unique_jobs = df['Job ID'].dropna().nunique()
+                self.job_count_label.config(text=str(unique_jobs))
+                self.log_message(f"Counted {unique_jobs} unique jobs (excluding empty fields)")
+            else:
+                self.job_count_label.config(text="N/A")
+                self.log_message("Job ID column not found")
+                unique_jobs = 0
+            
+            # Initialize load counts
+            total_loads = 0
+            ftl_distribution_loads = 0
+            
+            # Check if we have the required columns for load counting
+            if 'Job ID' in df.columns and 'Trip Type' in df.columns:
+                # Initialize FTL-DISTRIBUTION variables
+                ftl_distribution_loads_current = 0.0
+                ftl_distribution_loads_previous = 0.0
+                ftl_distribution_loads_10x = 0.0
+                # Initialize FTL-DISTRIBUTION Route Optimiser (ftldis-op) variables
+                ftldis_op_loads_current = 0.0
+                ftldis_op_loads_8x = 0.0
+                ftldis_op_loads_10x = 0.0
+                # Initialize FTL-DOMESTIC Route Optimiser (ftldom-op) variables
+                ftldom_op_loads_current = 0.0
+                ftldom_op_loads_8x = 0.0
+                ftldom_op_loads_10x = 0.0
+                # Initialize total variables for different combinations
+                total_no_op_current = 0.0
+                total_no_op_8x = 0.0
+                total_no_op_10x = 0.0
+                total_ftldis_op_current = 0.0
+                total_ftldis_op_8x = 0.0
+                total_ftldis_op_10x = 0.0
+                total_ftldom_op_current = 0.0
+                total_ftldom_op_8x = 0.0
+                total_ftldom_op_10x = 0.0
+                total_both_op_current = 0.0
+                total_both_op_8x = 0.0
+                total_both_op_10x = 0.0
+                
+                # Check for Route Optimiser column - check both processed and original data
+                route_opt_col = 'Count: Load and Route Optimiser'
+                has_route_opt = route_opt_col in df.columns
+                
+                # If not in processed_data, check original_data
+                if not has_route_opt and hasattr(self, 'original_data') and self.original_data is not None:
+                    # Try to find the column in original_data with various possible names
+                    possible_names = ['Count: Load and Route Optimiser', 'Route Optimiser', 'Route Optimizer', 'Load and Route Optimiser']
+                    for col_name in possible_names:
+                        if col_name in self.original_data.columns:
+                            # Add the column to df from original_data
+                            df[route_opt_col] = self.original_data[col_name]
+                            has_route_opt = True
+                            self.log_message(f"Found Route Optimiser column in original data: '{col_name}'")
+                            break
+                
+                # Separate FTL-DISTRIBUTION and non-FTL-DISTRIBUTION data
+                # Exclude records with Route Optimiser values from non-FTL counting
+                if has_route_opt:
+                    route_opt_records = df[df[route_opt_col].notna()]
+                    self.log_message(f"Records with Route Optimiser values: {len(route_opt_records)}")
+                    if len(route_opt_records) > 0:
+                        # Show sample of Route Optimiser values for debugging
+                        sample_values = route_opt_records[route_opt_col].head(5).tolist()
+                        self.log_message(f"Sample Route Optimiser values: {sample_values}")
+                    # Exclude Route Optimiser records from non-FTL counting
+                    non_route_opt_df = df[df[route_opt_col].isna()]
+                else:
+                    non_route_opt_df = df
+                    self.log_message("Route Optimiser column not found in processed or original data")
+                
+                ftl_data = non_route_opt_df[non_route_opt_df['Trip Type'] == 'FTL-DISTRIBUTION'].copy()
+                non_ftl_data = non_route_opt_df[non_route_opt_df['Trip Type'] != 'FTL-DISTRIBUTION'].copy()
+                
+                # Get FTL-DISTRIBUTION records with Route Optimiser values (ftldis-op)
+                if has_route_opt:
+                    # Check for exact match and also handle potential whitespace/casing issues
+                    ftldis_op_mask = (
+                        df['Trip Type'].notna() & 
+                        (df['Trip Type'].astype(str).str.strip() == 'FTL-DISTRIBUTION') & 
+                        (df[route_opt_col].notna())
+                    )
+                    ftldis_op_data = df[ftldis_op_mask].copy()
+                    self.log_message(f"FTL-DISTRIBUTION with Route Optimiser (ftldis-op): {len(ftldis_op_data)} records")
+                    if len(ftldis_op_data) > 0:
+                        # Show sample data for debugging
+                        sample_trip_types = ftldis_op_data['Trip Type'].unique().tolist()
+                        sample_route_opt = ftldis_op_data[route_opt_col].head(3).tolist()
+                        self.log_message(f"  Sample Trip Types: {sample_trip_types}")
+                        self.log_message(f"  Sample Route Optimiser values: {sample_route_opt}")
+                else:
+                    ftldis_op_data = pd.DataFrame()
+                    self.log_message("Route Optimiser column not available for ftldis-op counting")
+                
+                # Get FTL-DOMESTIC records with Route Optimiser values (ftldom-op)
+                if has_route_opt:
+                    # Check for exact match and also handle potential whitespace/casing issues
+                    ftldom_op_mask = (
+                        df['Trip Type'].notna() & 
+                        (df['Trip Type'].astype(str).str.strip() == 'FTL-DOMESTIC') & 
+                        (df[route_opt_col].notna())
+                    )
+                    ftldom_op_data = df[ftldom_op_mask].copy()
+                    self.log_message(f"FTL-DOMESTIC with Route Optimiser (ftldom-op): {len(ftldom_op_data)} records")
+                    if len(ftldom_op_data) > 0:
+                        # Show sample data for debugging
+                        sample_trip_types = ftldom_op_data['Trip Type'].unique().tolist()
+                        sample_route_opt = ftldom_op_data[route_opt_col].head(3).tolist()
+                        self.log_message(f"  Sample Trip Types: {sample_trip_types}")
+                        self.log_message(f"  Sample Route Optimiser values: {sample_route_opt}")
+                else:
+                    ftldom_op_data = pd.DataFrame()
+                    self.log_message("Route Optimiser column not available for ftldom-op counting")
+                
+                self.log_message(f"Data separation: {len(df)} total records")
+                self.log_message(f"FTL-DISTRIBUTION records: {len(ftl_data)}")
+                self.log_message(f"Non FTL-DISTRIBUTION records: {len(non_ftl_data)}")
+                
+                # Show available trip types for debugging
+                trip_types = df['Trip Type'].dropna().unique()
+                self.log_message(f"Available trip types: {list(trip_types)}")
+                
+                # Count loads for non-FTL-DISTRIBUTION trips
+                if not non_ftl_data.empty:
+                    # Prefer direct Load ID if available
+                    if 'Load ID' in non_ftl_data.columns:
+                        # Filter out empty/NaN Load IDs then count uniques
+                        load_ids = non_ftl_data['Load ID'].astype(str).str.strip()
+                        load_ids = load_ids[load_ids.ne('') & load_ids.ne('nan')]
+                        total_loads = load_ids.nunique()
+                        self.log_message(f"Non FTL-DISTRIBUTION: counted {total_loads} unique non-empty Load IDs")
+                    else:
+                        # Fallback: job-based unique combinations (legacy)
+                        unique_non_ftl_jobs = non_ftl_data['Job ID'].dropna().unique()
+                        self.log_message(f"Load ID not found; falling back. {len(unique_non_ftl_jobs)} jobs without FTL-DISTRIBUTION")
+
+                        all_loads_for_non_ftl = []
+                        for job_id in unique_non_ftl_jobs:
+                            job_records = non_ftl_data[non_ftl_data['Job ID'] == job_id]
+                            for _, record in job_records.iterrows():
+                                load_identifier = []
+                                if pd.notna(record['Job ID']):
+                                    load_identifier.append(f"Job:{record['Job ID']}")
+                                if 'Vehicle' in record and pd.notna(record['Vehicle']):
+                                    load_identifier.append(f"Vehicle:{record['Vehicle']}")
+                                if 'Driver Name' in record and pd.notna(record['Driver Name']):
+                                    load_identifier.append(f"Driver:{record['Driver Name']}")
+                                if len(load_identifier) > 0:
+                                    all_loads_for_non_ftl.append('|'.join(load_identifier))
+
+                        unique_loads = list(set(all_loads_for_non_ftl))
+                        total_loads = len(unique_loads)
+                        self.log_message(f"Non FTL-DISTRIBUTION (fallback): {len(unique_non_ftl_jobs)} jobs with {total_loads} unique loads")
+                
+                # Count loads for FTL-DISTRIBUTION trips
+                if not ftl_data.empty and 'Planned Stops: Qty' in ftl_data.columns:
+                    trips_with_load_id = 0
+                    trips_without_load_id = 0
+                    
+                    for _, row in ftl_data.iterrows():
+                        # Only count if the trip has a Load ID
+                        has_load_id = False
+                        if 'Load ID' in row:
+                            load_id_str = str(row['Load ID']).strip()
+                            has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                        
+                        if has_load_id and pd.notna(row['Planned Stops: Qty']):
+                            stops_qty = int(row['Planned Stops: Qty'])
+                            
+                            # CURRENT PRORATED CALCULATION
+                            if stops_qty <= 8:
+                                loads_for_trip_current = 1.0
+                            else:
+                                # Calculate base loads (multiples of 8)
+                                base_loads = stops_qty // 8
+                                # Calculate remaining locations for proration
+                                remaining = stops_qty % 8
+                                if remaining == 0:
+                                    loads_for_trip_current = float(base_loads)
+                                else:
+                                    # Calculate prorated load for remaining locations
+                                    prorated = remaining / 8
+                                    loads_for_trip_current = base_loads + prorated
+                            
+                            # PREVIOUS SIMPLE MULTIPLICATION CALCULATION (8x)
+                            loads_for_trip_previous = math.ceil(stops_qty / 8)
+                            
+                            # NEW 10x MULTIPLICATION CALCULATION
+                            loads_for_trip_10x = math.ceil(stops_qty / 10)
+                            
+                            ftl_distribution_loads_current += loads_for_trip_current
+                            ftl_distribution_loads_previous += loads_for_trip_previous
+                            ftl_distribution_loads_10x += loads_for_trip_10x
+                            trips_with_load_id += 1
+                        elif not has_load_id:
+                            trips_without_load_id += 1
+                    
+                    self.log_message(f"FTL-DISTRIBUTION: {trips_with_load_id} trips with Load ID")
+                    self.log_message(f"  Current (Prorated): {ftl_distribution_loads_current:.3f} loads")
+                    self.log_message(f"  Previous (8x): {ftl_distribution_loads_previous:.0f} loads")
+                    self.log_message(f"  New (10x): {ftl_distribution_loads_10x:.0f} loads")
+                    if trips_without_load_id > 0:
+                        self.log_message(f"FTL-DISTRIBUTION: {trips_without_load_id} trips without Load ID (excluded from count)")
+                
+                # Count loads for FTL-DISTRIBUTION with Route Optimiser (ftldis-op)
+                # Step 1: Calculate loads from "Planned Stops: Qty" (same as FTL-DISTRIBUTION)
+                # Step 2: Multiply by "Count: Load and Route Optimiser" value
+                # Also add base loads (without multiplier) to FTL-DISTRIBUTION totals for "Total No OP"
+                if not ftldis_op_data.empty and 'Planned Stops: Qty' in ftldis_op_data.columns and has_route_opt:
+                    ftldis_op_trips = 0
+                    ftldis_op_trips_without_load_id = 0
+                    for _, row in ftldis_op_data.iterrows():
+                        # Only count if the trip has a Load ID (same requirement as regular FTL-DISTRIBUTION)
+                        has_load_id = False
+                        if 'Load ID' in row:
+                            load_id_str = str(row['Load ID']).strip()
+                            has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                        
+                        if has_load_id and pd.notna(row['Planned Stops: Qty']) and pd.notna(row[route_opt_col]):
+                            stops_qty = int(row['Planned Stops: Qty'])
+                            route_opt_value = float(row[route_opt_col])
+                            
+                            # Step 1: Calculate loads from Planned Stops: Qty (same as FTL-DISTRIBUTION)
+                            # CURRENT PRORATED CALCULATION
+                            if stops_qty <= 8:
+                                loads_from_stops_current = 1.0
+                            else:
+                                # Calculate base loads (multiples of 8)
+                                base_loads = stops_qty // 8
+                                # Calculate remaining locations for proration
+                                remaining = stops_qty % 8
+                                if remaining == 0:
+                                    loads_from_stops_current = float(base_loads)
+                                else:
+                                    # Calculate prorated load for remaining locations
+                                    prorated = remaining / 8
+                                    loads_from_stops_current = base_loads + prorated
+                            
+                            # PREVIOUS SIMPLE MULTIPLICATION CALCULATION (8x)
+                            loads_from_stops_8x = math.ceil(stops_qty / 8)
+                            
+                            # NEW 10x MULTIPLICATION CALCULATION
+                            loads_from_stops_10x = math.ceil(stops_qty / 10)
+                            
+                            # Add base loads to FTL-DISTRIBUTION totals (for "Total No OP")
+                            ftl_distribution_loads_current += loads_from_stops_current
+                            ftl_distribution_loads_previous += loads_from_stops_8x
+                            ftl_distribution_loads_10x += loads_from_stops_10x
+                            
+                            # Step 2: Multiply by Route Optimiser value (for ftldis-op counts)
+                            loads_current = loads_from_stops_current * route_opt_value
+                            loads_8x = loads_from_stops_8x * route_opt_value
+                            loads_10x = loads_from_stops_10x * route_opt_value
+                            
+                            ftldis_op_loads_current += loads_current
+                            ftldis_op_loads_8x += loads_8x
+                            ftldis_op_loads_10x += loads_10x
+                            ftldis_op_trips += 1
+                        elif not has_load_id:
+                            ftldis_op_trips_without_load_id += 1
+                    
+                    self.log_message(f"FTL-DISTRIBUTION Route Optimiser (ftldis-op): {ftldis_op_trips} trips with Load ID")
+                    self.log_message(f"  Current (Prorated): {ftldis_op_loads_current:.3f} loads (with Route Optimiser multiplier)")
+                    self.log_message(f"  8x Logic: {ftldis_op_loads_8x:.0f} loads (with Route Optimiser multiplier)")
+                    self.log_message(f"  10x Logic: {ftldis_op_loads_10x:.0f} loads (with Route Optimiser multiplier)")
+                    if ftldis_op_trips_without_load_id > 0:
+                        self.log_message(f"ftldis-op: {ftldis_op_trips_without_load_id} trips without Load ID (excluded from count)")
+                
+                # Count loads for FTL-DOMESTIC with Route Optimiser (ftldom-op)
+                # Step 1: Calculate loads from "Planned Stops: Qty" (same as FTL-DISTRIBUTION)
+                # Step 2: Multiply by "Count: Load and Route Optimiser" value
+                # Note: FTL-DOMESTIC records are NOT added to FTL-DISTRIBUTION totals (they're separate)
+                if not ftldom_op_data.empty and 'Planned Stops: Qty' in ftldom_op_data.columns and has_route_opt:
+                    ftldom_op_trips = 0
+                    ftldom_op_trips_without_load_id = 0
+                    for _, row in ftldom_op_data.iterrows():
+                        # Only count if the trip has a Load ID (same requirement as regular FTL-DISTRIBUTION)
+                        has_load_id = False
+                        if 'Load ID' in row:
+                            load_id_str = str(row['Load ID']).strip()
+                            has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                        
+                        if has_load_id and pd.notna(row['Planned Stops: Qty']) and pd.notna(row[route_opt_col]):
+                            stops_qty = int(row['Planned Stops: Qty'])
+                            route_opt_value = float(row[route_opt_col])
+                            
+                            # Step 1: Calculate loads from Planned Stops: Qty (same as FTL-DISTRIBUTION)
+                            # CURRENT PRORATED CALCULATION
+                            if stops_qty <= 8:
+                                loads_from_stops_current = 1.0
+                            else:
+                                # Calculate base loads (multiples of 8)
+                                base_loads = stops_qty // 8
+                                # Calculate remaining locations for proration
+                                remaining = stops_qty % 8
+                                if remaining == 0:
+                                    loads_from_stops_current = float(base_loads)
+                                else:
+                                    # Calculate prorated load for remaining locations
+                                    prorated = remaining / 8
+                                    loads_from_stops_current = base_loads + prorated
+                            
+                            # PREVIOUS SIMPLE MULTIPLICATION CALCULATION (8x)
+                            loads_from_stops_8x = math.ceil(stops_qty / 8)
+                            
+                            # NEW 10x MULTIPLICATION CALCULATION
+                            loads_from_stops_10x = math.ceil(stops_qty / 10)
+                            
+                            # Step 2: Multiply by Route Optimiser value (for ftldom-op counts)
+                            loads_current = loads_from_stops_current * route_opt_value
+                            loads_8x = loads_from_stops_8x * route_opt_value
+                            loads_10x = loads_from_stops_10x * route_opt_value
+                            
+                            ftldom_op_loads_current += loads_current
+                            ftldom_op_loads_8x += loads_8x
+                            ftldom_op_loads_10x += loads_10x
+                            ftldom_op_trips += 1
+                        elif not has_load_id:
+                            ftldom_op_trips_without_load_id += 1
+                    
+                    self.log_message(f"FTL-DOMESTIC Route Optimiser (ftldom-op): {ftldom_op_trips} trips with Load ID")
+                    self.log_message(f"  Current (Prorated): {ftldom_op_loads_current:.3f} loads (with Route Optimiser multiplier)")
+                    self.log_message(f"  8x Logic: {ftldom_op_loads_8x:.0f} loads (with Route Optimiser multiplier)")
+                    self.log_message(f"  10x Logic: {ftldom_op_loads_10x:.0f} loads (with Route Optimiser multiplier)")
+                    if ftldom_op_trips_without_load_id > 0:
+                        self.log_message(f"ftldom-op: {ftldom_op_trips_without_load_id} trips without Load ID (excluded from count)")
+                
+                # Calculate total loads for different combinations
+                # Total without op (No Route Optimiser)
+                total_no_op_current = total_loads + ftl_distribution_loads_current
+                total_no_op_8x = total_loads + ftl_distribution_loads_previous
+                total_no_op_10x = total_loads + ftl_distribution_loads_10x
+                
+                # Total with ftldis-op only
+                total_ftldis_op_current = total_loads + ftl_distribution_loads_current + ftldis_op_loads_current
+                total_ftldis_op_8x = total_loads + ftl_distribution_loads_previous + ftldis_op_loads_8x
+                total_ftldis_op_10x = total_loads + ftl_distribution_loads_10x + ftldis_op_loads_10x
+                
+                # Total with ftldom-op only
+                total_ftldom_op_current = total_loads + ftl_distribution_loads_current + ftldom_op_loads_current
+                total_ftldom_op_8x = total_loads + ftl_distribution_loads_previous + ftldom_op_loads_8x
+                total_ftldom_op_10x = total_loads + ftl_distribution_loads_10x + ftldom_op_loads_10x
+                
+                # Total with both op (ftldis-op + ftldom-op)
+                total_both_op_current = total_loads + ftl_distribution_loads_current + ftldis_op_loads_current + ftldom_op_loads_current
+                total_both_op_8x = total_loads + ftl_distribution_loads_previous + ftldis_op_loads_8x + ftldom_op_loads_8x
+                total_both_op_10x = total_loads + ftl_distribution_loads_10x + ftldis_op_loads_10x + ftldom_op_loads_10x
+                
+                # Update labels with proper formatting for decimal values
+                self.load_count_label.config(text=str(total_loads))
+                self.ftl_load_count_label.config(text=f"{ftl_distribution_loads_current:.3f}")
+                self.ftl_prev_load_count_label.config(text=f"{ftl_distribution_loads_previous:.0f}")
+                self.ftl_10x_load_count_label.config(text=f"{ftl_distribution_loads_10x:.0f}")
+                self.ftldis_op_current_label.config(text=f"{ftldis_op_loads_current:.3f}")
+                self.ftldis_op_8x_label.config(text=f"{ftldis_op_loads_8x:.0f}")
+                self.ftldis_op_10x_label.config(text=f"{ftldis_op_loads_10x:.0f}")
+                self.ftldom_op_current_label.config(text=f"{ftldom_op_loads_current:.3f}")
+                self.ftldom_op_8x_label.config(text=f"{ftldom_op_loads_8x:.0f}")
+                self.ftldom_op_10x_label.config(text=f"{ftldom_op_loads_10x:.0f}")
+                
+                # Update total labels for different combinations
+                self.total_no_op_current_label.config(text=f"{total_no_op_current:.3f}")
+                self.total_no_op_8x_label.config(text=f"{total_no_op_8x:.0f}")
+                self.total_no_op_10x_label.config(text=f"{total_no_op_10x:.0f}")
+                self.total_ftldis_op_current_label.config(text=f"{total_ftldis_op_current:.3f}")
+                self.total_ftldis_op_8x_label.config(text=f"{total_ftldis_op_8x:.0f}")
+                self.total_ftldis_op_10x_label.config(text=f"{total_ftldis_op_10x:.0f}")
+                self.total_ftldom_op_current_label.config(text=f"{total_ftldom_op_current:.3f}")
+                self.total_ftldom_op_8x_label.config(text=f"{total_ftldom_op_8x:.0f}")
+                self.total_ftldom_op_10x_label.config(text=f"{total_ftldom_op_10x:.0f}")
+                self.total_both_op_current_label.config(text=f"{total_both_op_current:.3f}")
+                self.total_both_op_8x_label.config(text=f"{total_both_op_8x:.0f}")
+                self.total_both_op_10x_label.config(text=f"{total_both_op_10x:.0f}")
+                
+                self.log_message(f"Counted {total_loads} non FTL-DISTRIBUTION loads (excluding Route Optimiser records)")
+                self.log_message(f"  FTL-DISTRIBUTION Current: {ftl_distribution_loads_current:.3f} loads")
+                self.log_message(f"  FTL-DISTRIBUTION 8x: {ftl_distribution_loads_previous:.0f} loads")
+                self.log_message(f"  FTL-DISTRIBUTION 10x: {ftl_distribution_loads_10x:.0f} loads")
+                if ftldis_op_loads_current > 0:
+                    self.log_message(f"  FTL-DISTRIBUTION Route Optimiser (ftldis-op) Current: {ftldis_op_loads_current:.3f} loads")
+                    self.log_message(f"  FTL-DISTRIBUTION Route Optimiser (ftldis-op) 8x: {ftldis_op_loads_8x:.0f} loads")
+                    self.log_message(f"  FTL-DISTRIBUTION Route Optimiser (ftldis-op) 10x: {ftldis_op_loads_10x:.0f} loads")
+                if ftldom_op_loads_current > 0:
+                    self.log_message(f"  FTL-DOMESTIC Route Optimiser (ftldom-op) Current: {ftldom_op_loads_current:.3f} loads")
+                    self.log_message(f"  FTL-DOMESTIC Route Optimiser (ftldom-op) 8x: {ftldom_op_loads_8x:.0f} loads")
+                    self.log_message(f"  FTL-DOMESTIC Route Optimiser (ftldom-op) 10x: {ftldom_op_loads_10x:.0f} loads")
+                self.log_message(f"  Total (No OP) Current: {total_no_op_current:.3f}, 8x: {total_no_op_8x:.0f}, 10x: {total_no_op_10x:.0f}")
+                self.log_message(f"  Total (+ftldis-op) Current: {total_ftldis_op_current:.3f}, 8x: {total_ftldis_op_8x:.0f}, 10x: {total_ftldis_op_10x:.0f}")
+                self.log_message(f"  Total (+ftldom-op) Current: {total_ftldom_op_current:.3f}, 8x: {total_ftldom_op_8x:.0f}, 10x: {total_ftldom_op_10x:.0f}")
+                self.log_message(f"  Total (+Both OP) Current: {total_both_op_current:.3f}, 8x: {total_both_op_8x:.0f}, 10x: {total_both_op_10x:.0f}")
+                
+            else:
+                # Fallback to old method if required columns not available
+                if 'Load Count' in df.columns:
+                    total_loads = df['Load Count'].sum()
+                    if pd.notna(total_loads):
+                        self.load_count_label.config(text=f"{total_loads:.0f}")
+                        self.ftl_load_count_label.config(text="0")
+                        self.ftl_prev_load_count_label.config(text="0")
+                        self.ftl_10x_load_count_label.config(text="0")
+                        self.ftldis_op_current_label.config(text="0")
+                        self.ftldis_op_8x_label.config(text="0")
+                        self.ftldis_op_10x_label.config(text="0")
+                        self.ftldom_op_current_label.config(text="0")
+                        self.ftldom_op_8x_label.config(text="0")
+                        self.ftldom_op_10x_label.config(text="0")
+                        self.total_no_op_current_label.config(text=f"{total_loads:.0f}")
+                        self.total_no_op_8x_label.config(text=f"{total_loads:.0f}")
+                        self.total_no_op_10x_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldis_op_current_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldis_op_8x_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldis_op_10x_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldom_op_current_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldom_op_8x_label.config(text=f"{total_loads:.0f}")
+                        self.total_ftldom_op_10x_label.config(text=f"{total_loads:.0f}")
+                        self.total_both_op_current_label.config(text=f"{total_loads:.0f}")
+                        self.total_both_op_8x_label.config(text=f"{total_loads:.0f}")
+                        self.total_both_op_10x_label.config(text=f"{total_loads:.0f}")
+                        self.log_message(f"Counted {total_loads:.0f} total loads (fallback method)")
+                    else:
+                        self.load_count_label.config(text="0")
+                        self.ftl_load_count_label.config(text="0")
+                        self.ftl_prev_load_count_label.config(text="0")
+                        self.ftl_10x_load_count_label.config(text="0")
+                        self.ftldis_op_current_label.config(text="0")
+                        self.ftldis_op_8x_label.config(text="0")
+                        self.ftldis_op_10x_label.config(text="0")
+                        self.ftldom_op_current_label.config(text="0")
+                        self.ftldom_op_8x_label.config(text="0")
+                        self.ftldom_op_10x_label.config(text="0")
+                        self.total_no_op_current_label.config(text="0")
+                        self.total_no_op_8x_label.config(text="0")
+                        self.total_no_op_10x_label.config(text="0")
+                        self.total_ftldis_op_current_label.config(text="0")
+                        self.total_ftldis_op_8x_label.config(text="0")
+                        self.total_ftldis_op_10x_label.config(text="0")
+                        self.total_ftldom_op_current_label.config(text="0")
+                        self.total_ftldom_op_8x_label.config(text="0")
+                        self.total_ftldom_op_10x_label.config(text="0")
+                        self.total_both_op_current_label.config(text="0")
+                        self.total_both_op_8x_label.config(text="0")
+                        self.total_both_op_10x_label.config(text="0")
+                        self.log_message("No valid load count data found")
+                        total_loads = 0
+                else:
+                    self.load_count_label.config(text="N/A")
+                    self.ftl_load_count_label.config(text="N/A")
+                    self.ftl_prev_load_count_label.config(text="N/A")
+                    self.ftl_10x_load_count_label.config(text="N/A")
+                    self.ftldis_op_current_label.config(text="N/A")
+                    self.ftldis_op_8x_label.config(text="N/A")
+                    self.ftldis_op_10x_label.config(text="N/A")
+                    self.ftldom_op_current_label.config(text="N/A")
+                    self.ftldom_op_8x_label.config(text="N/A")
+                    self.ftldom_op_10x_label.config(text="N/A")
+                    self.total_no_op_current_label.config(text="N/A")
+                    self.total_no_op_8x_label.config(text="N/A")
+                    self.total_no_op_10x_label.config(text="N/A")
+                    self.total_ftldis_op_current_label.config(text="N/A")
+                    self.total_ftldis_op_8x_label.config(text="N/A")
+                    self.total_ftldis_op_10x_label.config(text="N/A")
+                    self.total_ftldom_op_current_label.config(text="N/A")
+                    self.total_ftldom_op_8x_label.config(text="N/A")
+                    self.total_ftldom_op_10x_label.config(text="N/A")
+                    self.total_both_op_current_label.config(text="N/A")
+                    self.total_both_op_8x_label.config(text="N/A")
+                    self.total_both_op_10x_label.config(text="N/A")
+                    self.log_message("Required columns not found for load counting")
+                    total_loads = 0
+                    ftl_distribution_loads_current = 0.0
+                    ftl_distribution_loads_previous = 0.0
+                    ftl_distribution_loads_10x = 0.0
+                    ftldis_op_loads_current = 0.0
+                    ftldis_op_loads_8x = 0.0
+                    ftldis_op_loads_10x = 0.0
+                    ftldom_op_loads_current = 0.0
+                    ftldom_op_loads_8x = 0.0
+                    ftldom_op_loads_10x = 0.0
+                    total_no_op_current = 0.0
+                    total_no_op_8x = 0.0
+                    total_no_op_10x = 0.0
+                    total_ftldis_op_current = 0.0
+                    total_ftldis_op_8x = 0.0
+                    total_ftldis_op_10x = 0.0
+                    total_ftldom_op_current = 0.0
+                    total_ftldom_op_8x = 0.0
+                    total_ftldom_op_10x = 0.0
+                    total_both_op_current = 0.0
+                    total_both_op_8x = 0.0
+                    total_both_op_10x = 0.0
+            
+            # Store counts for export
+            self.job_load_counts = {
+                'unique_jobs': unique_jobs,
+                'total_loads': total_loads,
+                'ftl_distribution_loads_current': ftl_distribution_loads_current,
+                'ftl_distribution_loads_previous': ftl_distribution_loads_previous,
+                'ftl_distribution_loads_10x': ftl_distribution_loads_10x,
+                'ftldis_op_loads_current': ftldis_op_loads_current,
+                'ftldis_op_loads_8x': ftldis_op_loads_8x,
+                'ftldis_op_loads_10x': ftldis_op_loads_10x,
+                'ftldom_op_loads_current': ftldom_op_loads_current,
+                'ftldom_op_loads_8x': ftldom_op_loads_8x,
+                'ftldom_op_loads_10x': ftldom_op_loads_10x,
+                'total_no_op_current': total_no_op_current,
+                'total_no_op_8x': total_no_op_8x,
+                'total_no_op_10x': total_no_op_10x,
+                'total_ftldis_op_current': total_ftldis_op_current,
+                'total_ftldis_op_8x': total_ftldis_op_8x,
+                'total_ftldis_op_10x': total_ftldis_op_10x,
+                'total_ftldom_op_current': total_ftldom_op_current,
+                'total_ftldom_op_8x': total_ftldom_op_8x,
+                'total_ftldom_op_10x': total_ftldom_op_10x,
+                'total_both_op_current': total_both_op_current,
+                'total_both_op_8x': total_both_op_8x,
+                'total_both_op_10x': total_both_op_10x,
+                'total_records': len(df),
+                'count_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+            
+        except Exception as e:
+            self.log_message(f"Error counting jobs and loads: {str(e)}")
+            messagebox.showerror("Error", f"Error counting jobs and loads: {str(e)}")
+    
+    def export_count_report(self):
+        """Export a detailed count report to Excel"""
+        if not hasattr(self, 'job_load_counts'):
+            messagebox.showwarning("Warning", "Please count jobs and loads first!")
+            return
+        
+        try:
+            # Generate filename
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            default_filename = f'JobMaster_CountReport_{timestamp}.xlsx'
+            
+            file_path = filedialog.asksaveasfilename(
+                defaultextension=".xlsx",
+                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],
+                title="Save Count Report",
+                initialdir=self.exports_dir,
+                initialfile=default_filename
+            )
+            
+            if file_path:
+                with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                    # Create count summary sheet
+                    count_summary = [
+                        {'Metric': 'Total Records Processed', 'Value': self.job_load_counts['total_records']},
+                        {'Metric': 'Unique Jobs Count', 'Value': self.job_load_counts['unique_jobs']},
+                        {'Metric': 'Non FTL-DISTRIBUTION Loads Count', 'Value': self.job_load_counts['total_loads']},
+                        {'Metric': 'FTL-DISTRIBUTION Loads Count (Current - Prorated)', 'Value': f"{self.job_load_counts['ftl_distribution_loads_current']:.3f}"},
+                        {'Metric': 'FTL-DISTRIBUTION Loads Count (8x - Simple)', 'Value': f"{self.job_load_counts['ftl_distribution_loads_previous']:.0f}"},
+                        {'Metric': 'FTL-DISTRIBUTION Loads Count (10x - Simple)', 'Value': f"{self.job_load_counts['ftl_distribution_loads_10x']:.0f}"},
+                        {'Metric': 'FTL-DISTRIBUTION Route Optimiser (ftldis-op) Loads (Current - Prorated)', 'Value': f"{self.job_load_counts['ftldis_op_loads_current']:.3f}"},
+                        {'Metric': 'FTL-DISTRIBUTION Route Optimiser (ftldis-op) Loads (8x - Simple)', 'Value': f"{self.job_load_counts['ftldis_op_loads_8x']:.0f}"},
+                        {'Metric': 'FTL-DISTRIBUTION Route Optimiser (ftldis-op) Loads (10x - Simple)', 'Value': f"{self.job_load_counts['ftldis_op_loads_10x']:.0f}"},
+                        {'Metric': 'FTL-DOMESTIC Route Optimiser (ftldom-op) Loads (Current - Prorated)', 'Value': f"{self.job_load_counts['ftldom_op_loads_current']:.3f}"},
+                        {'Metric': 'FTL-DOMESTIC Route Optimiser (ftldom-op) Loads (8x - Simple)', 'Value': f"{self.job_load_counts['ftldom_op_loads_8x']:.0f}"},
+                        {'Metric': 'FTL-DOMESTIC Route Optimiser (ftldom-op) Loads (10x - Simple)', 'Value': f"{self.job_load_counts['ftldom_op_loads_10x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - No OP (Current)', 'Value': f"{self.job_load_counts['total_no_op_current']:.3f}"},
+                        {'Metric': 'Total Unique Loads - No OP (8x)', 'Value': f"{self.job_load_counts['total_no_op_8x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - No OP (10x)', 'Value': f"{self.job_load_counts['total_no_op_10x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With ftldis-op (Current)', 'Value': f"{self.job_load_counts['total_ftldis_op_current']:.3f}"},
+                        {'Metric': 'Total Unique Loads - With ftldis-op (8x)', 'Value': f"{self.job_load_counts['total_ftldis_op_8x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With ftldis-op (10x)', 'Value': f"{self.job_load_counts['total_ftldis_op_10x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With ftldom-op (Current)', 'Value': f"{self.job_load_counts['total_ftldom_op_current']:.3f}"},
+                        {'Metric': 'Total Unique Loads - With ftldom-op (8x)', 'Value': f"{self.job_load_counts['total_ftldom_op_8x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With ftldom-op (10x)', 'Value': f"{self.job_load_counts['total_ftldom_op_10x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With Both OP (Current)', 'Value': f"{self.job_load_counts['total_both_op_current']:.3f}"},
+                        {'Metric': 'Total Unique Loads - With Both OP (8x)', 'Value': f"{self.job_load_counts['total_both_op_8x']:.0f}"},
+                        {'Metric': 'Total Unique Loads - With Both OP (10x)', 'Value': f"{self.job_load_counts['total_both_op_10x']:.0f}"},
+                        {'Metric': 'Count Date', 'Value': self.job_load_counts['count_date']}
+                    ]
+                    
+                    summary_df = pd.DataFrame(count_summary)
+                    summary_df.to_excel(writer, sheet_name='Count Summary', index=False)
+                    
+                    # Add detailed analysis if data is available
+                    if self.processed_data is not None:
+                        df = self.processed_data
+                        
+                        # Job analysis
+                        if 'Job ID' in df.columns:
+                            job_analysis = df['Job ID'].value_counts().reset_index()
+                            job_analysis.columns = ['Job ID', 'Occurrences']
+                            job_analysis.to_excel(writer, sheet_name='Job Analysis', index=False)
+                        
+                        # Load analysis
+                        if 'Load Count' in df.columns:
+                            load_analysis = df[['Job ID', 'Load Count']].dropna()
+                            load_analysis.to_excel(writer, sheet_name='Load Analysis', index=False)
+                        
+                        # Status distribution
+                        if 'Job Status' in df.columns:
+                            status_analysis = df['Job Status'].value_counts().reset_index()
+                            status_analysis.columns = ['Job Status', 'Count']
+                            status_analysis.to_excel(writer, sheet_name='Status Distribution', index=False)
+                
+                self.log_message(f"Count report saved to: {file_path}")
+                messagebox.showinfo("Success", f"Count report exported successfully!\nSaved to: {os.path.basename(file_path)}")
+                
+        except Exception as e:
+            self.log_message(f"Error exporting count report: {str(e)}")
+            messagebox.showerror("Error", f"Error exporting count report: {str(e)}")
+    
+    def calculate_loads_for_dataframe(self, df):
+        """Helper function to calculate all load counts for a given DataFrame"""
+        # Initialize all variables
+        total_loads = 0
+        ftl_distribution_loads_current = 0.0
+        ftl_distribution_loads_previous = 0.0
+        ftl_distribution_loads_10x = 0.0
+        ftldis_op_loads_current = 0.0
+        ftldis_op_loads_8x = 0.0
+        ftldis_op_loads_10x = 0.0
+        ftldom_op_loads_current = 0.0
+        ftldom_op_loads_8x = 0.0
+        ftldom_op_loads_10x = 0.0
+        
+        # Check for Route Optimiser column
+        route_opt_col = 'Count: Load and Route Optimiser'
+        has_route_opt = route_opt_col in df.columns
+        
+        # Separate data
+        if has_route_opt:
+            non_route_opt_df = df[df[route_opt_col].isna()]
+        else:
+            non_route_opt_df = df
+        
+        ftl_data = non_route_opt_df[non_route_opt_df['Trip Type'] == 'FTL-DISTRIBUTION'].copy()
+        non_ftl_data = non_route_opt_df[non_route_opt_df['Trip Type'] != 'FTL-DISTRIBUTION'].copy()
+        
+        # Get ftldis-op and ftldom-op data
+        if has_route_opt:
+            ftldis_op_mask = (
+                df['Trip Type'].notna() & 
+                (df['Trip Type'].astype(str).str.strip() == 'FTL-DISTRIBUTION') & 
+                (df[route_opt_col].notna())
+            )
+            ftldis_op_data = df[ftldis_op_mask].copy()
+            
+            ftldom_op_mask = (
+                df['Trip Type'].notna() & 
+                (df['Trip Type'].astype(str).str.strip() == 'FTL-DOMESTIC') & 
+                (df[route_opt_col].notna())
+            )
+            ftldom_op_data = df[ftldom_op_mask].copy()
+        else:
+            ftldis_op_data = pd.DataFrame()
+            ftldom_op_data = pd.DataFrame()
+        
+        # Count non-FTL loads
+        if not non_ftl_data.empty and 'Load ID' in non_ftl_data.columns:
+            load_ids = non_ftl_data['Load ID'].astype(str).str.strip()
+            load_ids = load_ids[load_ids.ne('') & load_ids.ne('nan')]
+            total_loads = load_ids.nunique()
+        
+        # Count FTL-DISTRIBUTION loads
+        if not ftl_data.empty and 'Planned Stops: Qty' in ftl_data.columns:
+            for _, row in ftl_data.iterrows():
+                has_load_id = False
+                if 'Load ID' in row:
+                    load_id_str = str(row['Load ID']).strip()
+                    has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                
+                if has_load_id and pd.notna(row['Planned Stops: Qty']):
+                    stops_qty = int(row['Planned Stops: Qty'])
+                    
+                    # Current prorated
+                    if stops_qty <= 8:
+                        loads_for_trip_current = 1.0
+                    else:
+                        base_loads = stops_qty // 8
+                        remaining = stops_qty % 8
+                        if remaining == 0:
+                            loads_for_trip_current = float(base_loads)
+                        else:
+                            prorated = remaining / 8
+                            loads_for_trip_current = base_loads + prorated
+                    
+                    # 8x
+                    loads_for_trip_previous = math.ceil(stops_qty / 8)
+                    
+                    # 10x
+                    loads_for_trip_10x = math.ceil(stops_qty / 10)
+                    
+                    ftl_distribution_loads_current += loads_for_trip_current
+                    ftl_distribution_loads_previous += loads_for_trip_previous
+                    ftl_distribution_loads_10x += loads_for_trip_10x
+        
+        # Count ftldis-op loads
+        if not ftldis_op_data.empty and 'Planned Stops: Qty' in ftldis_op_data.columns and has_route_opt:
+            for _, row in ftldis_op_data.iterrows():
+                has_load_id = False
+                if 'Load ID' in row:
+                    load_id_str = str(row['Load ID']).strip()
+                    has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                
+                if has_load_id and pd.notna(row['Planned Stops: Qty']) and pd.notna(row[route_opt_col]):
+                    stops_qty = int(row['Planned Stops: Qty'])
+                    route_opt_value = float(row[route_opt_col])
+                    
+                    # Calculate loads from stops
+                    if stops_qty <= 8:
+                        loads_from_stops_current = 1.0
+                    else:
+                        base_loads = stops_qty // 8
+                        remaining = stops_qty % 8
+                        if remaining == 0:
+                            loads_from_stops_current = float(base_loads)
+                        else:
+                            prorated = remaining / 8
+                            loads_from_stops_current = base_loads + prorated
+                    
+                    loads_from_stops_8x = math.ceil(stops_qty / 8)
+                    loads_from_stops_10x = math.ceil(stops_qty / 10)
+                    
+                    # Add base loads to FTL-DISTRIBUTION totals (for "Total No OP")
+                    ftl_distribution_loads_current += loads_from_stops_current
+                    ftl_distribution_loads_previous += loads_from_stops_8x
+                    ftl_distribution_loads_10x += loads_from_stops_10x
+                    
+                    # Multiply by Route Optimiser (for ftldis-op counts)
+                    loads_current = loads_from_stops_current * route_opt_value
+                    loads_8x = loads_from_stops_8x * route_opt_value
+                    loads_10x = loads_from_stops_10x * route_opt_value
+                    
+                    ftldis_op_loads_current += loads_current
+                    ftldis_op_loads_8x += loads_8x
+                    ftldis_op_loads_10x += loads_10x
+        
+        # Count ftldom-op loads
+        if not ftldom_op_data.empty and 'Planned Stops: Qty' in ftldom_op_data.columns and has_route_opt:
+            for _, row in ftldom_op_data.iterrows():
+                has_load_id = False
+                if 'Load ID' in row:
+                    load_id_str = str(row['Load ID']).strip()
+                    has_load_id = load_id_str != '' and load_id_str.lower() != 'nan'
+                
+                if has_load_id and pd.notna(row['Planned Stops: Qty']) and pd.notna(row[route_opt_col]):
+                    stops_qty = int(row['Planned Stops: Qty'])
+                    route_opt_value = float(row[route_opt_col])
+                    
+                    # Calculate loads from stops
+                    if stops_qty <= 8:
+                        loads_from_stops_current = 1.0
+                    else:
+                        base_loads = stops_qty // 8
+                        remaining = stops_qty % 8
+                        if remaining == 0:
+                            loads_from_stops_current = float(base_loads)
+                        else:
+                            prorated = remaining / 8
+                            loads_from_stops_current = base_loads + prorated
+                    
+                    loads_from_stops_8x = math.ceil(stops_qty / 8)
+                    loads_from_stops_10x = math.ceil(stops_qty / 10)
+                    
+                    # Multiply by Route Optimiser
+                    loads_current = loads_from_stops_current * route_opt_value
+                    loads_8x = loads_from_stops_8x * route_opt_value
+                    loads_10x = loads_from_stops_10x * route_opt_value
+                    
+                    ftldom_op_loads_current += loads_current
+                    ftldom_op_loads_8x += loads_8x
+                    ftldom_op_loads_10x += loads_10x
+        
+        # Calculate totals
+        total_no_op_current = total_loads + ftl_distribution_loads_current
+        total_no_op_8x = total_loads + ftl_distribution_loads_previous
+        total_no_op_10x = total_loads + ftl_distribution_loads_10x
+        
+        total_ftldis_op_current = total_loads + ftl_distribution_loads_current + ftldis_op_loads_current
+        total_ftldis_op_8x = total_loads + ftl_distribution_loads_previous + ftldis_op_loads_8x
+        total_ftldis_op_10x = total_loads + ftl_distribution_loads_10x + ftldis_op_loads_10x
+        
+        total_ftldom_op_current = total_loads + ftl_distribution_loads_current + ftldom_op_loads_current
+        total_ftldom_op_8x = total_loads + ftl_distribution_loads_previous + ftldom_op_loads_8x
+        total_ftldom_op_10x = total_loads + ftl_distribution_loads_10x + ftldom_op_loads_10x
+        
+        total_both_op_current = total_loads + ftl_distribution_loads_current + ftldis_op_loads_current + ftldom_op_loads_current
+        total_both_op_8x = total_loads + ftl_distribution_loads_previous + ftldis_op_loads_8x + ftldom_op_loads_8x
+        total_both_op_10x = total_loads + ftl_distribution_loads_10x + ftldis_op_loads_10x + ftldom_op_loads_10x
+        
+        return {
+            'total_no_op_current': total_no_op_current,
+            'total_no_op_8x': total_no_op_8x,
+            'total_no_op_10x': total_no_op_10x,
+            'total_ftldis_op_current': total_ftldis_op_current,
+            'total_ftldis_op_8x': total_ftldis_op_8x,
+            'total_ftldis_op_10x': total_ftldis_op_10x,
+            'total_ftldom_op_current': total_ftldom_op_current,
+            'total_ftldom_op_8x': total_ftldom_op_8x,
+            'total_ftldom_op_10x': total_ftldom_op_10x,
+            'total_both_op_current': total_both_op_current,
+            'total_both_op_8x': total_both_op_8x,
+            'total_both_op_10x': total_both_op_10x
+        }
+    
+    def export_operation_wise_report(self):
+        """Export operation-wise load counts to Excel"""
+        if self.processed_data is None:
+            messagebox.showwarning("Warning", "Please process a file first!")
+            return
+        
+        try:
+            df = self.processed_data.copy()
+            
+            # Merge Operation column from original_data if needed
+            if 'Operation' not in df.columns:
+                if hasattr(self, 'original_data') and self.original_data is not None:
+                    possible_names = ['Operation', 'operation', 'Operation Name', 'Op']
+                    for col_name in possible_names:
+                        if col_name in self.original_data.columns:
+                            if 'Job ID' in df.columns and 'Job ID' in self.original_data.columns:
+                                # Merge without creating duplicate columns
+                                merge_df = self.original_data[['Job ID', col_name]].drop_duplicates(subset=['Job ID'])
+                                df = df.merge(merge_df, on='Job ID', how='left', suffixes=('', '_orig'))
+                                df['Operation'] = df[col_name] if col_name in df.columns else df.get(f'{col_name}_orig', None)
+                                # Drop the _orig column if it was created
+                                if f'{col_name}_orig' in df.columns:
+                                    df = df.drop(columns=[f'{col_name}_orig'])
+                                break
+                
+                if 'Operation' not in df.columns:
+                    messagebox.showerror("Error", "Operation column not found in the data!")
+                    return
+            
+            # Merge Route Optimiser column from original_data if needed (for use in calculate_loads_for_dataframe)
+            route_opt_col = 'Count: Load and Route Optimiser'
+            if route_opt_col not in df.columns:
+                if hasattr(self, 'original_data') and self.original_data is not None:
+                    possible_names = ['Count: Load and Route Optimiser', 'Route Optimiser', 'Route Optimizer', 'Load and Route Optimiser']
+                    for col_name in possible_names:
+                        if col_name in self.original_data.columns:
+                            if 'Job ID' in df.columns and 'Job ID' in self.original_data.columns:
+                                merge_df = self.original_data[['Job ID', col_name]].drop_duplicates(subset=['Job ID'])
+                                df = df.merge(merge_df, on='Job ID', how='left', suffixes=('', '_orig'))
+                                df[route_opt_col] = df[col_name] if col_name in df.columns else df.get(f'{col_name}_orig', None)
+                                if f'{col_name}_orig' in df.columns:
+                                    df = df.drop(columns=[f'{col_name}_orig'])
+                                break
+            
+            # Check required columns
+            if 'Job ID' not in df.columns or 'Trip Type' not in df.columns:
+                messagebox.showerror("Error", "Required columns (Job ID, Trip Type) not found!")
+                return
+            
+            # Group by Operation
+            operations = df['Operation'].dropna().unique()
+            
+            if len(operations) == 0:
+                messagebox.showwarning("Warning", "No operations found in the data!")
+                return
+            
+            # Calculate counts for each operation
+            operation_results = []
+            
+            for operation in operations:
+                operation_df = df[df['Operation'] == operation].copy()
+                
+                if len(operation_df) == 0:
+                    continue
+                
+                counts = self.calculate_loads_for_dataframe(operation_df)
+                
+                operation_results.append({
+                    'Operation': operation,
+                    'total no op(Current)': counts['total_no_op_current'],
+                    'total(+fltdis-op)(Current)': counts['total_ftldis_op_current'],
+                    'total(+fltdom-op)(Current)': counts['total_ftldom_op_current'],
+                    'total(+bothop)(Current)': counts['total_both_op_current'],
+                    'total no op(x8)': counts['total_no_op_8x'],
+                    'total(+fltdis-op)(x8)': counts['total_ftldis_op_8x'],
+                    'total(+fltdom-op)(x8)': counts['total_ftldom_op_8x'],
+                    'total(+bothop)(x8)': counts['total_both_op_8x'],
+                    'total no op(x10)': counts['total_no_op_10x'],
+                    'total(+fltdis-op)(x10)': counts['total_ftldis_op_10x'],
+                    'total(+fltdom-op)(x10)': counts['total_ftldom_op_10x'],
+                    'total(+bothop)(x10)': counts['total_both_op_10x']
+                })
+            
+            # Create DataFrame
+            results_df = pd.DataFrame(operation_results)
+            
+            # Generate filename
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            default_filename = f'JobMaster_OperationWiseReport_{timestamp}.xlsx'
+            
+            file_path = filedialog.asksaveasfilename(
+                defaultextension=".xlsx",
+                filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],
+                title="Save Operation-Wise Report",
+                initialdir=self.exports_dir,
+                initialfile=default_filename
+            )
+            
+            if file_path:
+                with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                    results_df.to_excel(writer, sheet_name='Operation Wise Loads', index=False)
+                
+                self.log_message(f"Operation-wise report saved to: {file_path}")
+                self.log_message(f"Exported {len(operations)} operations")
+                messagebox.showinfo("Success", f"Operation-wise report exported successfully!\nSaved to: {os.path.basename(file_path)}\n{len(operations)} operations exported")
+                
+        except Exception as e:
+            self.log_message(f"Error exporting operation-wise report: {str(e)}")
+            messagebox.showerror("Error", f"Error exporting operation-wise report: {str(e)}")
 
 def main():
     root = tk.Tk()

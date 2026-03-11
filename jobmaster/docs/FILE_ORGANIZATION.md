@@ -6,11 +6,13 @@ The Job Master application now automatically creates and organizes files in the 
 
 ```
 jobmaster/
-├── uploads/           # Uploaded source files
-├── downloads/         # Web app search results and exports
-├── exports/           # Desktop app exports and reports
-├── reports/           # Generated reports and summaries
-└── file/             # Your original Excel files
+├── data/
+│   ├── input/         # Your Excel files
+│   ├── exports/       # Desktop app exports and reports
+│   ├── samples/       # Sample job IDs for bulk checker
+│   ├── uploads/       # Web app uploaded files
+│   ├── downloads/     # Web app search results and exports
+│   └── reports/       # Generated reports and summaries
 ```
 
 ## 📝 **File Naming Conventions**
@@ -29,7 +31,7 @@ Files are now automatically named based on:
 - `JobMaster_SearchResults_Status-Completed_Keyword-Development_20241215_143155.xlsx`
 - `JobMaster_SearchResults_Driver-John_Vehicle-VH001_20241215_143312.xlsx`
 
-### **Desktop App Files** (`exports/` folder)
+### **Desktop App Files** (`data/exports/` folder)
 - `JobMaster_Export_[filters]_YYYYMMDD_HHMMSS.xlsx`
 - `JobMaster_Job_[JobID]_[filters]_YYYYMMDD_HHMMSS.xlsx`
 
@@ -101,7 +103,7 @@ All exported Excel files now contain multiple sheets:
 1. Process your Excel file
 2. Apply search filters as needed
 3. Click "Export to Excel"
-4. Choose location (defaults to `exports/` folder)
+4. Choose location (defaults to `data/exports/` folder)
 5. Filename is automatically suggested based on your filters
 
 ## 💡 **Tips**

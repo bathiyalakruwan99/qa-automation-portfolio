@@ -6,18 +6,16 @@ import tempfile
 import io
 import secrets
 
+import config
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 # Configure upload and download folders
-UPLOAD_FOLDER = 'uploads'
-DOWNLOAD_FOLDER = 'downloads'
-REPORTS_FOLDER = 'reports'
-
-# Create necessary directories
-for folder in [UPLOAD_FOLDER, DOWNLOAD_FOLDER, REPORTS_FOLDER]:
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+config.ensure_directories()
+UPLOAD_FOLDER = config.UPLOADS_DIR
+DOWNLOAD_FOLDER = config.DOWNLOAD_DIR
+REPORTS_FOLDER = config.REPORTS_DIR
 
 # Store processed data in session (for demo purposes)
 # In production, you'd use a database or cache
@@ -35,6 +33,8 @@ class JobMasterProcessor:
             'End Time': ['End Time: Actual', 'actual_end_time', 'End Time'],
             'Duration': ['Duration: Actual', 'actual_duration', 'Duration'],
             'Duration Variance': ['Duration: Variance', 'duration_variance', 'Variance'],
+            'Job Count': ['Job Count', 'job_count', 'Jobs Count', 'Number of Jobs'],
+            'Load Count': ['Load Count', 'load_count', 'Loads Count', 'Number of Loads'],
             'Payment Schedule Status': ['Payment Schedule Status', 'payment_schedule_status', 'Schedule Status'],
             'Payment Schedule Number': ['Payment Schedule Number', 'payment_schedule_number', 'Schedule Number'],
             'Cost Item': ['Cost Item', 'cost_item'],
@@ -105,7 +105,7 @@ class JobMasterProcessor:
                 df[col] = pd.to_datetime(df[col], errors='coerce')
         
         # Convert numeric columns
-        numeric_cols = ['GPS Executed', 'Duration', 'Duration Variance', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
+        numeric_cols = ['GPS Executed', 'Duration', 'Duration Variance', 'Job Count', 'Load Count', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
         for col in numeric_cols:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -163,6 +163,16 @@ class JobMasterProcessor:
         # Basic counts
         summary_data.append({'Metric': 'Total Records', 'Value': len(df)})
         
+        # Job and Load counts
+        if 'Job ID' in df.columns:
+            unique_jobs = df['Job ID'].dropna().nunique()
+            summary_data.append({'Metric': 'Unique Jobs Count', 'Value': unique_jobs})
+        
+        if 'Load Count' in df.columns:
+            total_loads = df['Load Count'].sum()
+            if pd.notna(total_loads):
+                summary_data.append({'Metric': 'Total Loads Count', 'Value': f"{total_loads:.0f}"})
+        
         # Job Status distribution
         if 'Job Status' in df.columns:
             status_counts = df['Job Status'].value_counts()
@@ -170,7 +180,7 @@ class JobMasterProcessor:
                 summary_data.append({'Metric': f'Jobs - {status}', 'Value': count})
         
         # Numeric summaries
-        numeric_cols = ['GPS Executed', 'Duration', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
+        numeric_cols = ['GPS Executed', 'Duration', 'Job Count', 'Load Count', 'Cost Contract Amount', 'Sub Total Cost', 'Revenue Contract Amount', 'Sub Total Revenue']
         for col in numeric_cols:
             if col in df.columns:
                 total = df[col].sum()
