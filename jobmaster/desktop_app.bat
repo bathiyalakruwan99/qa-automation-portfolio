@@ -10,5 +10,5 @@ echo   - reports/     : Generated reports and summaries
 echo.
 echo Starting desktop application...
 echo.
-python desktop_app.py
+py desktop_app.py
 pause 
