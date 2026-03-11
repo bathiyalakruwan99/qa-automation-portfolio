@@ -120,6 +120,8 @@ uploaded order file/*
 *.xls
 !sample*.xlsx
 !sample*.xls
+!**/samples/*.xlsx
+!**/samples/*.xls
 
 # Database files
 *.sqlite

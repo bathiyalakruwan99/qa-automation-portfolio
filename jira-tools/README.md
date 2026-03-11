@@ -43,11 +43,23 @@ Set these environment variables (or use `.env`):
 jira-tools/
 ├── scripts/           # Python automation scripts
 ├── qa_prompts/         # QA prompt templates (76+ prompts)
+├── samples/            # Sample Excel outputs
+│   ├── regression_test_cases_sample.xlsx
+│   └── tickets_ready_for_release_sample.xlsx
 ├── ticket_history/
 │   ├── ticket_data/   # Synced ticket JSON files
 │   └── jira_ticket_manifest.json
 └── reports/            # Generated markdown reports
 ```
+
+## Sample Files
+
+The `samples/` folder contains example Excel outputs:
+
+- `regression_test_cases_sample.xlsx` — Example regression test cases (ID, Title, Module, Expected, Actual)
+- `tickets_ready_for_release_sample.xlsx` — Example ready-for-release list (Ticket ID, Summary, Ready Date, Previous Status)
+
+Use these as reference for expected output format without running the scripts.
 
 ## Usage
 
