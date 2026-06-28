@@ -1,8 +1,6 @@
-# Jira QA Tools
+# Jira QA Tools (Case Study)
 
-Python utilities for syncing Jira tickets, building manifests, exporting ticket history, generating ready-for-release reports, and a curated set of 76+ QA prompts for API, security, and automation testing.
-
----
+> Synthetic example for portfolio demonstration. No real ticket data, credentials, or internal epic keys are included.
 
 ## Business Problem
 
@@ -19,73 +17,23 @@ QA teams spend meaningful time pulling Jira data into a shape that supports rele
 
 A small collection of focused Python scripts that:
 
-- Sync Jira tickets to local JSON
+- Sync Jira tickets to local JSON via the Jira REST API
 - Build a manifest for quick lookup
 - Export ticket data and status history to Excel
 - Generate ready-for-release and regression-test-case reports
-- Provide 76+ QA prompts under `qa_prompts/`
+- Provide a curated library of 76+ QA prompts for API, security, and automation testing
 
 ## Key Capabilities
 
 - **Ticket sync** from configured Jira epics into local JSON
-- **Ticket history** Excel export (sample dataset of 10+ tickets and 14+ status rows)
+- **Ticket history** Excel export with status changelog
 - **Manifest builder** for fast indexing of all synced tickets
-- **Report generators** — ready-for-release list and regression test cases
-- **QA prompt library** — 76+ prompts for API, security, automation, and more
+- **Report generators** for ready-for-release lists and regression test cases
+- **QA prompt library** covering API, security, automation, and more
 
 ## Tech Stack
 
 Python 3.8+, Jira REST API, Requests, OpenPyXL
-
-## How It Works
-
-### Setup
-
-```bash
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with your Jira credentials and epic keys
-```
-
-### Configuration
-
-| Variable | Description |
-|----------|-------------|
-| `JIRA_URL` | Your Jira instance URL (e.g. `https://your-domain.atlassian.net`) |
-| `JIRA_USERNAME` | Email or username |
-| `JIRA_API_TOKEN` | API token from Jira account settings |
-| `JIRA_EPICS` | Comma-separated epic keys (e.g. `EPIC-1,EPIC-2`) |
-
-### Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `sync_from_jira.py` | Sync tickets from configured epics to `ticket_history/ticket_data/` |
-| `build_ticket_manifest.py` | Build manifest from ticket JSON files |
-| `export_ticket_history_to_excel.py` | Export ticket data + status history to Excel |
-| `update_ticket_json.py` | Update ticket JSON fields or add status changelog entries |
-| `gen_ready_for_release.py` | Generate markdown list of tickets in "Ready for Release" |
-| `gen_regression_test_cases.py` | Generate regression test cases from bug/task tickets |
-
-### Project structure
-
-```
-jira-tools/
-├── scripts/                       # Python automation scripts
-├── qa_prompts/                    # 76+ QA prompt templates
-├── samples/                       # Sample Excel outputs
-├── ticket_history/
-│   ├── ticket_data/               # 10 sample ticket JSONs
-│   └── jira_ticket_manifest.json
-└── reports/                       # Generated markdown reports
-```
-
-## Sample Evidence / Screenshots
-
-- `samples/ticket_history_sample.xlsx` — ticket data + status history
-- `samples/regression_test_cases_sample.xlsx` — example regression test cases
-- `samples/tickets_ready_for_release_sample.xlsx` — example ready-for-release list
-- `ticket_history/ticket_data/` — 10 sample ticket JSONs (SAMPLE-001 … SAMPLE-010)
 
 ## QA Value
 
@@ -96,10 +44,10 @@ jira-tools/
 
 ## Limitations
 
-- Requires valid Jira credentials to sync (sample data is included for review)
+- Requires valid Jira credentials to sync
 - Reports are intentionally focused; deeper analytics belong in a BI tool
 - Status-history depth depends on what Jira's changelog API returns
 
 ## Confidentiality Note
 
-The repository ships with **sanitized sample data only** (SAMPLE-001 … SAMPLE-010). No real ticket data, customer references, internal epic keys, or credentials are included. Credentials must be supplied through environment variables that are not committed. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+No real ticket data, customer references, internal epic keys, credentials, or proprietary prompts are included. This case study describes the approach at a high level only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

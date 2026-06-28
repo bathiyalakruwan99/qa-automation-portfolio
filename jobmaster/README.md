@@ -1,118 +1,153 @@
-# Job Master Data Validation and Evidence Processor
+# Job Master Data Validation and Evidence Processor (Case Study)
 
-## Overview
+> Synthetic example for portfolio demonstration. No real Python code, Excel data, exports, or screenshots are included.
 
-A QA tool for validating large job and work-order exports from a Transport Management System. It ingests an export, applies validation rules, highlights data quality issues, runs bulk status checks, and produces evidence-ready outputs that travel cleanly into defect reports and release reviews.
+## Business Problem
+
+TMS releases must be validated against large job and work-order exports covering jobs, loads, GPS, invoices, and payments. Manual reconciliation is slow and error-prone, especially when load-counting methods vary across trip types and modules. A single release may involve 1,000+ job records with 200+ FTL-DISTRIBUTION trips, each with different stop quantities and counting rules.
 
 ## QA Challenge
 
-Releases must be validated against large Excel and report exports covering jobs, loads, GPS, payments, and invoices:
+- Validate large exports (1,000+ rows) across jobs, loads, GPS, invoices, and payments
+- Apply multiple load-counting methods consistently across three separate categories
+- Detect calculation defects in bulk status, GPS, payment, and invoice checks
+- Handle column mapping variations across different export formats
+- Produce evidence-ready outputs that travel cleanly into defect reports and release reviews
 
-- Manually filtering and reconciling tens of thousands of rows is slow and error-prone.
-- Load counting rules differ by trip type (e.g. distribution trips vs non-distribution trips) and must be validated under several methods.
-- Status checks for GPS execution, invoicing, and payment schedule must be done across many job IDs at once.
-- QA needs an audit trail (filters used, totals, exceptions) to defend release decisions.
+## Solution
 
-## Solution Approach
+A Python application suite with four components:
 
-A Python application (desktop + web + command line) that loads an export and provides search, filter, calculation-comparison, and bulk-status views. Outputs are written back as Excel with the filter context embedded in the filename, so each export is self-describing.
+### 1. Desktop App (Tkinter)
 
-```mermaid
-flowchart LR
-    A[Sanitized export<br/>Excel / CSV] --> B[Validation rules<br/>fields, statuses, totals]
-    B --> C[Exception detection<br/>missing data, mismatches]
-    C --> D[QA review sheet<br/>filtered, sortable]
-    D --> E[Evidence / report<br/>Excel with filter context]
+Primary data processing tool with full GUI:
+- Upload Excel files (.xlsx, .xls)
+- Search and filter by Job ID, name, status, keywords, trip type
+- View data in interactive tables with customizable columns
+- Export to Excel (full, filtered, job-wise, operation-wise, count reports)
+- Automatic job and load counting on file processing
+
+### 2. Web App (Flask)
+
+Browser-based interface for the same processing workflow:
+- Upload, process, search, filter, export
+- Share access across devices on the same network
+
+### 3. Bulk Job Checker
+
+Bulk status verification for multiple job IDs:
+- Input: CSV, TXT, or Excel list of job IDs
+- Checks: GPS execution, payment schedule, invoice status
+- Colour-coded results and detailed export
+
+### 4. Counting Logic Test
+
+Validates load counting logic on Job Master Excel files:
+- Compares Non FTL-DISTRIBUTION vs FTL-DISTRIBUTION loads
+- Tests three calculation methods
+- Reports file structure, data separation, and totals
+
+## Multi-Method Load Counting System
+
+The core validation capability is a sophisticated multi-method counting system with three separate categories and three calculation methods for each.
+
+### Three Main Categories
+
+| Category | What It Counts | Method |
+|---|---|---|
+| Non FTL-DISTRIBUTION | All records where Trip Type is not FTL-DISTRIBUTION | Count unique, non-empty Load ID values (fallback: unique Job ID + Vehicle + Driver) |
+| FTL-DISTRIBUTION | Records where Trip Type = FTL-DISTRIBUTION | Based on Planned Stops: Qty value with three calculation methods |
+| FTL-DOMESTIC Route Optimiser | Records where Trip Type = FTL-DOMESTIC with Route Optimiser value | Based on Route Optimiser value (not Planned Stops) |
+
+### Route Optimiser Exclusion
+
+Records with a "Count: Load and Route Optimiser" value are completely excluded from Non FTL-DISTRIBUTION and FTL-DISTRIBUTION counting. They are only counted in the FTL-DOMESTIC Route Optimiser category.
+
+### Three Calculation Methods
+
+| Method | Formula | Result Type | Example |
+|---|---|---|---|
+| Current (Prorated) | Stops <= 8: 1.0 load. Stops > 8: base_loads + (remaining / 8) | Decimal (3 dp) | 5 stops = 1.000, 9 stops = 1.125, 17 stops = 2.125 |
+| 8x Multiplication | ceil(stops / 8) | Whole number | 1-8 stops = 1, 9-16 = 2, 17-24 = 3 |
+| 10x Multiplication | ceil(stops / 10) | Whole number | 1-10 stops = 1, 11-20 = 2, 21-30 = 3 |
+
+### Total Calculation
+
+```
+Total Current = Non FTL-DIST + FTL-DIST (Current) + Route Optimiser (Current)
+Total 8x     = Non FTL-DIST + FTL-DIST (8x)     + Route Optimiser (8x)
+Total 10x    = Non FTL-DIST + FTL-DIST (10x)    + Route Optimiser (10x)
 ```
 
-## Key Capabilities
+## Column Mapping
 
-- **Real-time search and filter** across all columns
-- **Multi-method load counting** (e.g. Non-distribution unique-load counting and distribution-trip calculations with prorated / 8x / 10x variants) presented side-by-side for comparison
-- **Bulk status checker** that verifies GPS, payment-schedule, and invoice status across thousands of job IDs
-- **Column mapping** that tolerates variations in export headers across environments
-- **Smart exports** with filter context embedded in the filename
-- **Multi-sheet output** including raw data, summary statistics, and applied filters
-- **Counting-logic test mode** that documents which calculation rule was applied to each row
+The applications use tolerant column mapping to handle export format variations:
 
-## Example Workflow
+| Internal Field | Possible Excel Column Names |
+|---|---|
+| Job ID | Job ID, job_id, JobID, ID |
+| Job Date | Job Creation DateTime, job_date, Job Date |
+| GPS Executed | Distance: GPS, gps_distance, GPS Distance |
+| Job Status | Status, job_status, Job Status |
+| Job Count | Job Count, job_count, Jobs Count |
+| Load Count | Load Count, load_count, Loads Count |
+| Trip Type | Trip Type, trip_type |
+| Load ID | Load ID, load_id |
+| Planned Stops | Planned Stops: Qty |
+| Invoice Status | Invoice Status, invoice_status |
+| Payment Schedule | Payment Schedule Status |
 
-A fictional QA scenario, using generic names only:
+## Export Options
 
-1. Load a sanitized export with the columns: `Job ID`, `Trip Type`, `Planned Stops: Qty`, `Load ID`, `Status`, `Invoice Status`, `Payment Schedule Status`, `Distance: GPS`.
-2. Filter to `Trip Type = FTL-DISTRIBUTION` and `Planned Stops: Qty BETWEEN 9 AND 16`.
-3. Compare load counts under the three calculation methods (prorated, 8x, 10x) side by side.
-4. Run a bulk status check for the resulting job IDs to confirm GPS, payment, and invoice status.
-5. Export with the filename `JobMaster_Export_TripType-FTL-DISTRIBUTION_Stops-9to16_20260101.xlsx` and attach it to the test case.
+### Excel Exports
+- Full data export with summary
+- Filtered export (by status, invoice, payment, trip type, etc.)
+- Job-wise export (individual jobs)
+- Operation-wise reports
+- Count reports with job analysis, load analysis, and status distribution
 
-Safe sanitized row examples:
+### Bulk Checker Exports
+- Detailed status report with colour-coded results
 
-```text
-Job ID: JOB-1001
-Load ID: LOAD-2001
-Status: Completed
-Invoice Status: Pending
-Payment Schedule Status: Scheduled
-GPS Status: Available
-```
+## Dummy Scenario Example
 
-```text
-Job ID: JOB-1002
-Load ID: LOAD-2002
-Status: In Progress
-Invoice Status: Not Created
-Payment Schedule Status: Pending
-GPS Status: Missing
-```
+| Input | Value |
+|---|---|
+| Total records | 1,200 |
+| Non FTL-DISTRIBUTION records | 1,000 (954 unique Load IDs) |
+| FTL-DISTRIBUTION records | 200 (average 10 stops per record) |
+| Route Optimiser records | 4 (values: 6, 3, 4, 3) |
 
-## QA Scenarios Supported
+| Metric | Current (Prorated) | 8x | 10x |
+|---|---|---|---|
+| Non FTL-DIST | 954 | 954 | 954 |
+| FTL-DIST | 250.000 | 400 | 200 |
+| Route Optimiser | 4.000 | 4 | 4 |
+| **Total** | **1,208.000** | **1,358** | **1,158** |
 
-- Validation of load and job counting rules across trip types
-- Reconciliation of GPS, invoice, and payment-schedule statuses for large job sets
-- Regression of calculation changes after a release
-- UAT support for new export formats or new business rules
-- Edge-case testing: boundary stop counts, missing data fields, duplicate identifiers
-- Evidence capture for defect reports and audit trails
+This shows why three methods matter: the same dataset produces three different total load counts depending on the calculation method used. QA needs to verify which method the product uses and whether the numbers match.
 
-## Technology Approach
+## Tech Stack
 
-- Python 3.8+ with Pandas and OpenPyXL for data processing and Excel I/O
-- Tkinter desktop GUI with background threading to keep the UI responsive on large files
-- Flask web interface for browser-based access
-- Configurable column mapping so the tool tolerates header variations across dev / staging / production-like exports
-
-## Evidence and Outputs
-
-Safe public artefacts:
-
-- [`../assets/demo-data/jobmaster-sample-export.csv`](../assets/demo-data/jobmaster-sample-export.csv) — fictional rows that follow the validation shape
-- [`../assets/sample-reports/jobmaster-validation-summary.md`](../assets/sample-reports/jobmaster-validation-summary.md) — synthetic summary report
-- Multi-sheet Excel exports with raw data + summary statistics + filter context in the filename
-- `screenshots/jobmaster1.png` — GUI screenshot (no real data)
+Python 3.8+ (3.11 recommended), Pandas, OpenPyXL, Tkinter (desktop GUI), Flask (web app), Werkzeug
 
 ## QA Value
 
-- Reduces test-data verification on TMS exports from minutes per check to seconds.
-- Detects calculation defects in load counting and prorated math before release.
-- Catches GPS / payment / invoice status mismatches in bulk.
-- Produces evidence-ready exports that travel cleanly into defect reports and release reviews.
+- Cuts data verification from minutes per check to seconds
+- Detects calculation defects that manual review would miss
+- Three counting methods catch discrepancies between how different teams count loads
+- Route Optimiser exclusion prevents double-counting across categories
+- Tolerant column mapping handles export format variations without code changes
+- Produces clean evidence for defect reports and release reviews
+- Bulk checker verifies GPS, payment, and invoice status for hundreds of jobs in one pass
 
 ## Limitations
 
-- Validation rules are scoped to the documented columns and trip types.
-- Heavy customization belongs in a rules-config file rather than code.
-- The tool is a QA aid, not an authoritative system of record.
+- Source code is not included in this public portfolio
+- Validation rules are tuned for specific TMS export schemas
+- Column mapping patterns are specific to known export variants
+- Sample data and screenshots are not included
 
 ## Confidentiality Note
 
-This is a sanitized portfolio case study. Production code, real system data, confidential workflows, credentials, real customer or driver names, real financial values, and real export headers are not included. Sample identifiers such as `JOB-1001` and `LOAD-2001` are fictional.
-
-## Documentation
-
-See the `docs/` folder for usage guides:
-
-- `docs/APP_OVERVIEW.md`
-- `docs/CURRENT_COUNTING_LOGIC.md`
-- `docs/BULK_JOB_CHECKER_GUIDE.md`
-- `docs/DESKTOP_APP_TROUBLESHOOTING.md`
-- `docs/TROUBLESHOOTING.md`
+No real Python code, Excel data, exports, validation rules, calculations, sample reports, or screenshots containing real structure or data are included. This case study describes the approach and counting logic at a high level with dummy data only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

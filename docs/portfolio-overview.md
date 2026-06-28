@@ -5,21 +5,21 @@ A recruiter-friendly tour of this repository.
 ## Start here
 
 1. **Smart QA Agent OS** ([`smart-qa-agent-os/`](../smart-qa-agent-os/)) — automation framework reference covering UI, API, hybrid, BDD, performance, and release-gate workflows.
-2. **GPS Suite** ([`gps-testing-suite/`](../gps-testing-suite/)) — high-load, multi-device GPS, route-path, vehicle-movement, and geofence testing tools.
-3. **Route Optimizer Validation Engine** ([`route-optimizer/`](../route-optimizer/)) — independent engine to validate route distance, route path, and multi-stop behaviour.
+2. **GPS Suite** ([`gps-testing-suite/`](../gps-testing-suite/)) — 8 GPS testing tools including road-aware path builder, live manual simulator with pause/drag/rejoin, scenario JSON generator, and 1000-device load testing.
+3. **Route Optimizer Validation Engine** ([`route-optimizer/`](../route-optimizer/)) — 6-stage load optimizer with reconciliation guarantees, unassigned reason codes, vehicle accessibility, and validation summary export.
 
 ## Then explore
 
-4. **Job Master Data Validation and Evidence Processor** ([`jobmaster/`](../jobmaster/)) — TMS export validation with multiple load-counting methods, bulk status checks, and evidence-ready exports.
-5. **Data Quality and Test Data Utilities** — small Python tools for Excel validation, comparisons, highlighting, and bulk test-data generation (see the table in the root README).
+4. **Job Master Data Validation and Evidence Processor** ([`jobmaster/`](../jobmaster/)) — multi-method load counting (3 categories x 3 methods), bulk GPS/payment/invoice status checks, tolerant column mapping, and evidence-ready exports.
+5. **Bulk Upload Data Quality Utilities** ([`bulkfile-generator/`](../bulkfile-generator/)) — Excel validation, auto-correction, diff comparison, job highlighting, and test-data generation.
 6. **AI-Assisted Test Case Workflow** ([`test-cases-creation-automatic/`](../test-cases-creation-automatic/)) — Jira and Figma to draft test cases with a mandatory QA review step.
 7. **Jira QA Tools** ([`jira-tools/`](../jira-tools/)) — Jira REST API utilities, ticket history, manifests, and curated QA prompt library.
+8. **AI and MCP QA Workflows** ([`case-studies/ai-mcp-qa-workflows.md`](../case-studies/ai-mcp-qa-workflows.md)) — AI-powered data analysis, invoice validation, and cross-system reconciliation.
 
 ## What to look at in each project
 
 - `README.md` — business problem, QA challenge, solution, capabilities, tech stack, limitations, confidentiality note.
-- `screenshots/` and `videos/` — visible evidence where available.
-- `docs/` — deeper notes and rules.
+- Projects are presented as case studies. Source code is not included (except for the Smart QA Agent OS Playwright demo).
 
 ## Smart QA Agent OS - deeper dive
 

@@ -48,14 +48,14 @@ For a guided tour, see [`docs/portfolio-overview.md`](docs/portfolio-overview.md
 | # | Project | What It Demonstrates | Core Stack |
 |---|---|---|---|
 | 1 | [Smart QA Agent OS / Automation Framework + AI QA Operating Model](smart-qa-agent-os/) | Reusable UI, API, hybrid, performance, evidence, and release-gate QA workflow plus a modular AI QA operating model (agents, skills, rules, memory) | Playwright, TypeScript, BDD, POM, Postman/Newman, k6, AI QA Operating Model |
-| 2 | [GPS Simulator and Path Generation Suite](gps-testing-suite/) | Synthetic GPS streams, road-aware paths, geofences, and high-load testing | JavaScript, Leaflet, OSM, OpenRouteService |
-| 3 | [Route Optimizer Validation Engine](route-optimizer/) | Route distance, capacity, cost, and multi-stop validation (cost-vs-distance trap) | Next.js, TypeScript, OSRM, Leaflet |
-| 4 | [Job Master Data Validation and Evidence Processor](jobmaster/) | TMS export validation, multi-method load counting, bulk status, evidence | Python, Pandas, OpenPyXL, Tkinter, Flask |
-| 5 | [Data Quality and Test Data Utilities](#5-data-quality-and-test-data-utilities) | Excel validation, test-data generation, bulk-upload checks, comparisons | Python, Pandas, OpenPyXL |
-| 6 | [AI-Assisted Test Case Workflow](test-cases-creation-automatic/) | Requirement-to-test-case drafting with mandatory QA review | AI, MCP, Jira, Figma |
-| 7 | [Jira QA Tools](jira-tools/) | QA reporting and Jira/API productivity workflows | Python, REST API, Jira |
+| 2 | [GPS Simulator and Path Generation Suite](gps-testing-suite/) | 8 GPS testing tools: road-aware paths, live manual simulator, scenario JSON generator, 1000-device load testing | JavaScript, Leaflet, OSM, OpenRouteService, React/Vite, Google Maps |
+| 3 | [Route Optimizer Validation Engine](route-optimizer/) | 6-stage load optimizer with reconciliation guarantees, unassigned reason codes, vehicle accessibility, and validation summary export | Next.js, TypeScript, OSRM, Leaflet, Web Workers, LRU cache |
+| 4 | [Job Master Data Validation and Evidence Processor](jobmaster/) | Multi-method load counting (3 categories x 3 methods), bulk status checks, tolerant column mapping, evidence-ready exports | Python, Pandas, OpenPyXL, Tkinter, Flask |
+| 5 | [Bulk Upload Data Quality Utilities](bulkfile-generator/) | Excel validation, auto-correction, diff comparison, job highlighting, test-data generation | Python, Pandas, OpenPyXL, Tkinter, Flask |
+| 6 | [AI-Assisted Test Case Workflow](test-cases-creation-automatic/) | Jira + Figma MCP to AI-drafted test cases with mandatory QA review | AI, MCP, Jira, Figma |
+| 7 | [Jira QA Tools](jira-tools/) | QA reporting, ticket sync, and 76+ QA prompt library | Python, REST API, Jira |
 
-Sanitized QA tools and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows.
+Sanitized case studies and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows. Source code is not included; each project is presented as a case study with architecture, capabilities, and QA value.
 
 ---
 
@@ -148,20 +148,20 @@ Architecture-only public showcase — no private prompts, source files, customer
 
 ### 2. GPS Simulator and Path Generation Suite
 
-**Problem:** GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware, and the hardest scenarios — off-route drivers, GPS jumps, and rejoin behaviour — must be reproducible on demand.
+**Problem:** GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware, and the hardest scenarios, off-route drivers, GPS jumps, rejoin behaviour, and multi-device scenario coverage, must be reproducible on demand.
 
-**Solution:** A web-based toolkit with a central dashboard and focused tools, including:
+**Solution:** A web-based toolkit with a central dashboard and 8 specialised tools:
+- **GPS Vehicle Simulator** for manual single-device path authoring with real-time API transmission and multi-environment support
+- **Live GPS Simulator** for high-load multi-device streaming (up to 1000 devices) with staggered start and OpenStreetMap
+- **GPS Path Builder (road-aware)** for real road-following routes via OpenRouteService with 10 m interpolation and configurable speed
+- **GPS Live Manual Simulator** for interactive pause/drag/rejoin testing with four separate map path layers (planned, completed, manual drag, rejoin) and PNG export
+- **GPS Unified Builder** for scenario-specific JSON generation (short stop, return early, out of sequence, unplanned stop, reassignment split) with geofence mapping and mixed-scenario per-device output
+- **GPS Path Visualizer** for drag-and-drop JSON/CSV inspection with path metrics
+- **Multi-Device Combiner** for merging per-device JSONs into simulator-ready payloads
 
-- **GPS Path Builder (road-aware)** — click waypoints on a map, fetch the real driving route via OpenRouteService, and interpolate to a configurable step (default 10 m) with a configurable speed (default 40 km/h). Exports a simulator-ready JSON. Includes `data-testid` attributes so the tool itself is testable in Playwright / Cypress / Selenium.
-- **GPS Live Manual Simulator** — stream a multi-device payload while letting the tester pause selected devices, drag them off-route, and resume with either *On-route* (snap to nearest planned point) or *Rejoin* (draw a rejoin connector first). Renders planned / completed / manual-drag / rejoin paths as separate layers. Supports a local-only mode, exports the actual traveled JSON with movement metadata, and exports the map as a PNG for evidence.
-- **Live GPS Simulator** for high-load multi-device streaming with staggered start.
-- **GPS Vehicle Simulator** for manual / dev-tool authoring of single-device paths.
-- **GPS Path Visualizer** for inspecting JSON / CSV paths on a map.
-- **Multi-Device Combiner** for merging per-device JSONs into one simulator payload.
+**QA value:** Makes off-route, detour, geofence-edge, rejoin, and scenario-based testing deterministic and repeatable; supports 1000+ device load testing without real hardware; produces JSON and PNG evidence; includes data-testid attributes so the tools themselves are testable in Playwright / Cypress / Selenium.
 
-**QA value:** Makes off-route, detour, geofence-edge, and rejoin scenarios deterministic and repeatable; removes physical hardware from the test plan; produces JSON and PNG evidence that travels cleanly into defect reports.
-
-**Technology approach:** Vanilla HTML / CSS / JavaScript (ES6+), Leaflet.js with OpenStreetMap, OpenRouteService for driving routes, SLERP + Haversine for coordinate work, runtime-only bearer-token handling (never committed).
+**Technology approach:** Vanilla HTML / CSS / JavaScript (ES6+), React + Vite + TypeScript (Unified Builder), Leaflet.js with OpenStreetMap, OpenRouteService, Google Maps (Vehicle Simulator), SLERP + Haversine, runtime-only bearer-token handling.
 
 [Open case study →](gps-testing-suite/)
 
@@ -169,10 +169,10 @@ Architecture-only public showcase — no private prompts, source files, customer
 
 ### 3. Route Optimizer Validation Engine
 
-**Problem:** Optimizer output is easy to ship and hard to verify. Lower distance does not always mean lower cost.
-**Solution:** A standalone Next.js reference engine that recomputes routes using Nearest Neighbour + 2-opt + 3-opt with a multi-start strategy and real road distances, then compares its result with the product's optimizer across distance, cost, vehicle selection, capacity, and feasibility.
-**QA value:** Provides a defensible expected result per scenario, catches the cost-vs-distance trap, and reduces route and optimizer testing effort significantly.
-**Technology approach:** Next.js, TypeScript, OSRM (public or local), Leaflet, Web Workers, LRU cache.
+**Problem:** Optimizer output is easy to ship and hard to verify. Lower distance does not always mean lower cost. A route with the shortest distance might pick the wrong vehicle, exceed capacity, miss a delivery window, or split a single drop across multiple loads.
+**Solution:** A standalone Next.js reference engine that accepts an order file and an org/master file, then runs a full 6-stage load optimization pipeline: validate orders, group shipments, build a global OSRM road matrix, construct corridors (seed + cheapest insertion), rebalance with split/merge/repair, and finalize with strict vehicle counts. Enforces hard reconciliation guarantees (order, SKU, weight/CBM conservation) at every stage boundary. Exports a consolidated manifest workbook with a 7-section Validation Summary.
+**QA value:** Provides a defensible expected result per scenario with full reconciliation; catches the cost-vs-distance trap; detects split drops, capacity violations, and accessibility violations; produces a Validation Summary that travels cleanly into defect reports; reduces route and optimizer testing effort by 75%.
+**Technology approach:** Next.js 15, React 18, TypeScript, Tailwind CSS, Leaflet, OSRM (public or local), Nominatim geocoding, Web Workers, LRU cache.
 
 [Open case study →](route-optimizer/)
 
@@ -180,45 +180,53 @@ Architecture-only public showcase — no private prompts, source files, customer
 
 ### 4. Job Master Data Validation and Evidence Processor
 
-**Problem:** TMS releases must be validated against large job and work-order exports covering jobs, loads, GPS, invoices, and payments. Manual reconciliation is slow and error-prone.
-**Solution:** A Python application (desktop + web + CLI) that validates exports, applies multi-method load counting, runs bulk GPS/payment/invoice status checks, and produces evidence-ready Excel outputs with filter context in the filename.
-**QA value:** Cuts data verification from minutes per check to seconds, detects calculation defects, and produces clean evidence for defect reports and release reviews.
+**Problem:** TMS releases must be validated against large job and work-order exports (1,000+ rows) covering jobs, loads, GPS, invoices, and payments. Manual reconciliation is slow and error-prone, especially when load-counting methods vary across trip types.
+**Solution:** A Python application suite (desktop GUI, web, CLI, bulk checker) that validates exports with a sophisticated multi-method load counting system: 3 categories (Non FTL-DISTRIBUTION, FTL-DISTRIBUTION, FTL-DOMESTIC Route Optimiser) x 3 calculation methods (Current/Prorated, 8x, 10x), with Route Optimiser exclusion logic and tolerant column mapping across export variants. Also runs bulk GPS, payment, and invoice status checks and produces evidence-ready Excel outputs with filter context in the filename.
+**QA value:** Cuts data verification from minutes per check to seconds; three counting methods catch discrepancies between how different teams count loads; Route Optimiser exclusion prevents double-counting; tolerant column mapping handles export format variations; bulk checker verifies hundreds of jobs in one pass.
 **Technology approach:** Python 3.8+, Pandas, OpenPyXL, Tkinter, Flask.
 
 [Open case study →](jobmaster/)
 
 ---
 
-### 5. Data Quality and Test Data Utilities
+### 5. Bulk Upload Data Quality Utilities
 
-Grouped small utilities used for Excel validation, test-data generation, bulk-upload checks, comparisons, and colour-coded review:
+**Problem:** Customers uploading bulk data to a TMS regularly hit validation errors. Support gets flooded with tickets that are really data-quality problems, not product defects.
+**Solution:** A Python validator and corrector (desktop GUI, web, CLI) that validates organization, vehicle, driver, and location data, auto-corrects common mistakes, and produces evidence-ready outputs. Includes complementary utilities for Excel diff comparison, job-row highlighting, and synthetic test-data generation.
+**QA value:** Removes a common class of false defects, cuts support load by 50%+ for upload-related tickets, and provides QA with a reusable validator to harden new ingestion flows.
+**Technology approach:** Python 3.7+, Pandas, OpenPyXL, Tkinter, Flask.
 
-| Utility | What It Does |
-|---|---|
-| [Excel Validator / Corrector](bulkfile-generator/) | Validates and auto-corrects bulk upload Excel files before TMS ingestion. |
-| [Excel Diff Tool](excel-master-diff/) | Sheet-by-sheet comparison of two Excel files with a detailed diff report. |
-| [Excel Job Highlighter](excel-job-highlighter/) | Colour-codes rows by job ID to speed up large-dataset manual review. |
-| [Order Data Generator](order-data-generator/) | Generates realistic test order data for performance and workflow testing. |
-| [Bulkfile Generator](bulkfile-generator/) | Creates bulk upload payloads aligned to TMS schema rules. |
-| [Geo Coordinate Converter](geo-coordinate-converter/) | Address ↔ GPS conversion and batch processing. |
-
-These tools demonstrate Python, Pandas, OpenPyXL, Tkinter, and data-integrity validation skills.
+[Open case study →](bulkfile-generator/)
 
 ---
 
 ### 6. AI-Assisted Test Case Workflow
 
-A documented workflow (not a standalone tool) that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published.
+**Problem:** Writing comprehensive test cases for new features is slow and repetitive. Reading Jira tickets, opening Figma, walking acceptance criteria, and producing 50-100 test cases per module slows the release cycle.
+**Solution:** A documented workflow that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published. Includes RTM traceability and CSV import into the test management tool.
+**QA value:** Cuts time-to-first-draft from hours to minutes per module, improves coverage consistency, and keeps a defensible authoring trail.
+**Technology approach:** Jira MCP, Figma MCP, ChatGPT / Claude / Cursor, mind-mapping, Python (CSV conversion).
 
-[Open workflow →](test-cases-creation-automatic/)
+[Open case study →](test-cases-creation-automatic/)
 
 ---
 
 ### 7. Jira QA Tools
 
-Python utilities for syncing Jira tickets, building manifests, exporting ticket history, generating ready-for-release reports, and a curated set of 76+ QA prompts for API, security, and automation testing.
+**Problem:** QA teams spend meaningful time pulling Jira data into a shape that supports release decisions. Doing that by hand across many epics is slow and error-prone.
+**Solution:** Python utilities for syncing Jira tickets, building manifests, exporting ticket history to Excel, generating ready-for-release reports, and a curated library of 76+ QA prompts for API, security, and automation testing.
+**QA value:** Provides repeatable, evidence-friendly views of release readiness and enables a reusable QA prompt library for consistent testing artefacts.
+**Technology approach:** Python 3.8+, Jira REST API, Requests, OpenPyXL.
 
-[Open project →](jira-tools/)
+[Open case study →](jira-tools/)
+
+---
+
+### Additional Case Study: AI and MCP QA Workflows
+
+AI-powered QA workflows using Model Context Protocol (MCP) for automated data analysis, invoice validation, job progress tracking, and cross-system reconciliation.
+
+[Open case study →](case-studies/ai-mcp-qa-workflows.md)
 
 ---
 
@@ -326,27 +334,14 @@ Sample identifiers throughout this repository (`Vehicle-001`, `Warehouse A`, `Cu
 git clone https://github.com/bathiyalakruwan99/qa-automation-portfolio.git
 cd qa-automation-portfolio
 
-# Smart QA Agent OS — Playwright demo
+# Smart QA Agent OS — Playwright demo (only project with runnable code)
 cd smart-qa-agent-os/playwright-demo
 npm install
 npx playwright install --with-deps
 npm run test:smoke
-
-# GPS Testing Suite
-cd ../../gps-testing-suite
-# open dashboard.html in a browser
-
-# Route Optimizer
-cd ../route-optimizer
-npm install && npm run dev
-
-# Job Master Data Processor
-cd ../jobmaster
-pip install -r requirements.txt
-python desktop_app.py
 ```
 
-Each project has its own README with setup instructions.
+All other projects are presented as case studies with architecture, capabilities, and QA value. Source code is not included in the public portfolio.
 
 ---
 

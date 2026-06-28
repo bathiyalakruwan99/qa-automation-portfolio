@@ -8,9 +8,11 @@ Featured order — open in this sequence:
 2. GPS Simulator and Path Generation Suite
 3. Route Optimizer Validation Engine
 4. Job Master Data Validation and Evidence Processor
-5. Data Quality and Test Data Utilities
+5. Bulk Upload Data Quality Utilities
 6. AI-Assisted Test Case Workflow
 7. Jira QA Tools
+
+Additional: AI and MCP QA Workflows (case study)
 
 ---
 
@@ -51,73 +53,51 @@ AI QA Operating Model side (architecture-only, public showcase):
 
 ## 2. GPS Simulator and Path Generation Suite
 
-Web-based tools for testing GPS and location-based features without physical hardware: multi-device simulator, road-aware path builder using OpenRouteService, coordinate visualizer, and multi-device combiner.
+Web-based toolkit with 8 specialised GPS testing tools: vehicle simulator, live simulator (up to 1000 devices), road-aware path builder, live manual simulator with pause/drag/rejoin and 4 path layers, unified scenario JSON generator (short stop, return early, out of sequence, unplanned stop, reassignment split), path visualizer, and multi-device combiner. Includes data-testid attributes for automation.
 
-Built a GPS simulation suite for high-load, multi-device GPS, route-path, vehicle-movement, and geofence testing scenarios.
+**Tech:** JavaScript, Leaflet.js, OpenStreetMap, OpenRouteService, React + Vite + TypeScript, Google Maps
 
-**Tech:** JavaScript, Leaflet.js, OpenStreetMap, OpenRouteService API
-
-[Open project →](gps-testing-suite/)
+[Open case study →](gps-testing-suite/)
 
 ---
 
 ## 3. Route Optimizer Validation Engine
 
-Next.js application that solves multi-stop routing problems (Nearest Neighbour + 2-opt + 3-opt) using OSRM for real road distances. Used as a reference engine to validate route distance, route path, cost, and multi-stop behaviour for TMS optimizers. Result: 75% reduction in route and optimizer testing effort.
+Standalone Next.js reference engine that runs a full 6-stage load optimization pipeline (validate, group shipments, OSRM road matrix, corridor construction, rebalance, finalize) with hard reconciliation guarantees (order, SKU, weight/CBM conservation), unassigned reason codes, vehicle accessibility rules, penalty-based optimization objective, and a 7-section Validation Summary export. Result: 75% reduction in route and optimizer testing effort.
 
-**Tech:** Next.js, TypeScript, React, OSRM, Google Maps API
+**Tech:** Next.js 15, React 18, TypeScript, Tailwind CSS, OSRM, Leaflet, Web Workers, LRU cache
 
-[Open project →](route-optimizer/)
+[Open case study →](route-optimizer/)
 
 ---
 
 ## 4. Job Master Data Validation and Evidence Processor
 
-QA tool for validating large job and work-order exports from a TMS. Ingests an export, applies validation rules, highlights data quality issues, runs bulk GPS/payment/invoice status checks, and produces evidence-ready Excel outputs with filter context in the filename.
+Python application suite (desktop, web, CLI, bulk checker) for validating TMS job/work-order exports. Core capability is a multi-method load counting system: 3 categories (Non FTL-DISTRIBUTION, FTL-DISTRIBUTION, FTL-DOMESTIC Route Optimiser) x 3 calculation methods (Current/Prorated, 8x, 10x), with Route Optimiser exclusion logic, tolerant column mapping, bulk GPS/payment/invoice status checks, and evidence-ready Excel exports.
 
-- Real-time search and filter across all columns
-- Multi-method load counting (Non-distribution unique loads + distribution prorated / 8x / 10x)
-- Bulk status checking for thousands of jobs
-- Tolerant column mapping across export variants
-- Multi-sheet exports with raw data + summary + applied filters
+**Tech:** Python 3.8+, Pandas, OpenPyXL, Tkinter, Flask
 
-**Tech:** Python, Pandas, OpenPyXL, Tkinter, Flask
-
-[Open project →](jobmaster/)
+[Open case study →](jobmaster/)
 
 ---
 
-## 5. Data Quality and Test Data Utilities
+## 5. Bulk Upload Data Quality Utilities
 
-Grouped small utilities used for Excel validation, test-data generation, bulk-upload checks, comparisons, and color-coded review:
+Python validator and corrector for TMS bulk uploads (desktop GUI, web, CLI). Validates organization, vehicle, driver, and location data, auto-corrects common mistakes, and produces evidence-ready outputs. Includes complementary utilities for Excel diff comparison, job-row highlighting, and synthetic test-data generation. Reduced customer upload errors by 50%+.
 
-- **Excel Validator / Corrector** — validates and auto-corrects bulk upload Excel files before TMS ingestion. Reduced customer upload errors by 50%+.
-- **Excel Diff Tool** — sheet-by-sheet comparison of two Excel files with a detailed diff report.
-- **Excel Job Highlighter** — color-codes rows by job ID to speed up large-dataset manual review.
-- **Order Data Generator** — generates realistic test order data for performance and workflow testing.
-- **Bulkfile Generator** — creates bulk upload payloads aligned to TMS schema rules.
-- **Geo Coordinate Converter** — address ↔ GPS conversion and batch processing.
+**Tech:** Python, Pandas, OpenPyXL, Tkinter, Flask, Faker
 
-**Tech:** Python, Pandas, OpenPyXL, Tkinter, Faker
-
-[Bulkfile Generator](bulkfile-generator/) · [Excel Diff Tool](excel-master-diff/) · [Excel Job Highlighter](excel-job-highlighter/) · [Order Data Generator](order-data-generator/) · [Geo Coordinate Converter](geo-coordinate-converter/)
+[Open case study →](bulkfile-generator/)
 
 ---
 
 ## 6. AI-Assisted Test Case Workflow
 
-A documented workflow (not a standalone tool) that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published.
-
-- Jira MCP for tickets and acceptance criteria
-- Figma MCP for design context
-- Mind map / RTM for coverage visualization
-- AI drafts test cases
-- **Mandatory** human review before publishing
-- CSV import into the test management tool
+A documented workflow that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published. Includes RTM traceability and CSV import into the test management tool.
 
 **Tech:** Jira MCP, Figma MCP, ChatGPT/Claude, Python (CSV conversion)
 
-[Open workflow →](test-cases-creation-automatic/)
+[Open case study →](test-cases-creation-automatic/)
 
 ---
 
@@ -127,7 +107,15 @@ Python utilities for syncing Jira tickets, building manifests, exporting ticket 
 
 **Tech:** Python, Jira REST API, OpenPyXL, Requests
 
-[Open project →](jira-tools/)
+[Open case study →](jira-tools/)
+
+---
+
+## Additional: AI and MCP QA Workflows
+
+AI-powered QA workflows using Model Context Protocol (MCP) for automated data analysis, invoice validation, job progress tracking, and cross-system reconciliation.
+
+[Open case study →](case-studies/ai-mcp-qa-workflows.md)
 
 ---
 
