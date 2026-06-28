@@ -1,6 +1,6 @@
 # Portfolio Overview
 
-A recruiter-friendly tour of this repository. Every project is a sanitized case study. No runnable source code, production data, or confidential implementation details are included.
+A guided tour of this repository. Every project is a sanitized case study. No runnable source code, production data, or confidential implementation details are included.
 
 ## Start here
 
