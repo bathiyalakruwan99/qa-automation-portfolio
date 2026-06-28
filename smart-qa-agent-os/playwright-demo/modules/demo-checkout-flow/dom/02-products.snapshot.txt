@@ -1,0 +1,10 @@
+# DOM snapshot - products (synthetic demo example)
+
+## Headings
+- Products
+
+## Interactive elements
+- button: Add to cart
+
+## Test-id anchors
+- product-card

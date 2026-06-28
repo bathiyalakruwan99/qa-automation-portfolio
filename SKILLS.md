@@ -1,256 +1,87 @@
 # Technical Skills
 
-A breakdown of my technical expertise across QA automation, programming, and emerging technologies.
+Skills breakdown aligned to Software QA Engineer, Automation QA Engineer, Senior QA Engineer, and SDET-track roles.
 
 ---
 
-## Programming Languages
+## Test Automation
 
-**Expert Level:**
-- **Python** - Test automation, data processing, GUI apps, web scraping
-- **JavaScript (ES6+)** - Full-stack development, async programming, modern APIs
-- **TypeScript** - Type-safe React apps, complex state management
+- **Playwright (TypeScript)** — UI, API, hybrid; POM, fixtures, traces, video, HTML reports
+- **Cypress** — UI testing, component testing, Cucumber BDD integration
+- **Selenium WebDriver** — cross-browser support, legacy regression
+- **BDD / Cucumber-style** — feature files, step definitions, business-readable smoke
+- **Page Object Model (POM)** — centralized locators, reusable flows
+- **Tagging strategy** — `@smoke`, `@regression`, `@api`, `@ui`, `@hybrid`
 
-**Proficient:**
-- **Java** - Test automation, TestNG
-- **PHP** - Web development, scripting
-- **HTML5/CSS3** - Semantic markup, responsive design, modern layouts
-- **SQL** - Database queries, data validation, test data management
-- **Bash/Shell** - Automation scripts, CI/CD pipelines
+## API & Performance Testing
 
----
+- **REST API testing** — Postman, Newman, Playwright API request context
+- **Schema and contract checks** — JSON shape, status, headers, response time
+- **Negative & auth scenarios** — invalid input, expired tokens, 4xx / 5xx behaviour
+- **k6** — smoke, load, stress, soak; thresholds for p95 latency and error rate
 
-## Test Automation Frameworks
+## Manual & Product QA
 
-**Primary:**
-- **Playwright** - Modern automation, reliable selectors, fast execution
-- **Selenium WebDriver** - Cross-browser testing, legacy support
-- **Cypress** - Component testing, time-travel debugging
-- **BDD (Cucumber)** - Behavior-driven testing, readable scenarios
+- End-to-end product validation, UAT coordination, release sign-off
+- Test planning, test scenarios, test cases, RTMs
+- Exploratory testing and risk-based prioritization
+- Cross-browser and Android assistance / mobile testing
+- Defect lifecycle: reproduction, severity, triage, verification
 
-**Design Patterns:**
-- Page Object Model (POM) for maintainability
-- Data-driven testing
-- Keyword-driven frameworks
+## Data & Reporting Validation
 
----
+- **SQL** — queries, joins, aggregations, reconciliation against expected results
+- **MongoDB** — document inspection, data-integrity validation
+- **Excel / CSV** — Pandas, OpenPyXL, validation, diff, color-coded review
+- Report and calculation validation (e.g. job/load counting, prorated math)
 
-## Web Development
+## Domain — Transport & GPS
 
-**Frontend:**
-- **React** - Component architecture, hooks, context API
-- **Next.js** - Server-side rendering, API routes, static generation
-- **Tailwind CSS** - Utility-first styling, responsive design
+- GPS simulation for high-load, multi-device scenarios
+- Live map, route-path, vehicle-movement, and geofence validation
+- Route optimization validation using OSRM and Google Maps APIs
+- TMS workflows: Job Master, Optimizer, Control Tower, Work Orders, Contracts, Invoicing
 
-**Backend:**
-- **Flask** - REST APIs, file uploads, web applications
-- **Tkinter** - Desktop GUI applications
+## CI & Tooling
 
-**Mapping & Visualization:**
-- **Leaflet.js** - Interactive maps, markers, real-time tracking
-- **OpenStreetMap** - Map tiles, geocoding
+- **GitHub Actions** — smoke on push/PR, nightly regression, manual dispatch
+- **Reporting & evidence** — Playwright HTML report, Newman HTML report, k6 summary
+- Artifact upload for traces, screenshots, video on failure
+- Jira, Testiny, Git/GitHub, Bitbucket, VS Code, Cursor AI
 
----
+## AI-Assisted QA
 
-## Data Processing & Testing
+- Requirement-to-test-case workflow with mandatory human review
+- QA knowledge memory pattern (validation rules, edge cases, healing notes)
+- Evidence-based release validation rules
+- Locator/test-healing **as a documented concept and pattern**, not a runtime auto-healer
 
-**Libraries:**
-- **Pandas** - Data manipulation, Excel operations, CSV processing
-- **OpenPyXL** - Excel file generation, styling, validation
-- **Faker** - Realistic test data generation
+## Languages
 
-**Testing Types:**
-- Functional testing
-- UI/UX testing
-- API testing
-- Data validation testing
-- Regression testing
-- GPS/Location testing
-- Performance testing (basic)
+- **TypeScript, JavaScript, Python** — primary
+- **Java, PHP** — proficient
+- **SQL** — daily for validation
+- **HTML / CSS** — for test target understanding
 
----
+## Test Management & Methodology
 
-## Test Management & Tools
-
-**Primary Tools:**
-- **Testiny** - Test case management, execution tracking
-- **Jira** - Issue tracking, test case linking, workflows
-- **Postman** - API testing, collection management
-- **Git/GitHub** - Version control, collaboration
-
-**Development Tools:**
-- **VS Code** - Primary IDE
-- **Cursor AI** - AI-assisted development
-- **PyCharm** - Python development
-
----
-
-## AI & Automation
-
-**AI Integration:**
-- **ChatGPT/Claude** - Test case generation, documentation automation
-- **Prompt Engineering** - Custom prompts for QA workflows
-- **Model Context Protocol (MCP)** - Agent-based automation
-- **Jira MCP** - Automatic ticket reading and data extraction
-- **Figma MCP** - Design file access and UI spec extraction
-- **RTMS Mind Mapping** - Visual test coverage planning
-
-**Workflow:**
-- MCP tools gather requirements from Jira and Figma
-- Create structured mind maps for test planning
-- AI generates test cases from mind map structure
-- Manual refinement and validation
-
-**Use Cases:**
-- Automated test case generation (90% time savings)
-- Requirement gathering automation
-- Visual test coverage mapping
-- Test data generation
-- Documentation automation
-
----
-
-## Algorithms & Problem Solving
-
-**Implemented:**
-- Traveling Salesman Problem (TSP) - Nearest Neighbor, 2-opt, 3-opt
-- Graph algorithms - Route optimization, path finding
-- Caching strategies - LRU cache implementation
-
-**Optimization:**
-- Web Workers for non-blocking computation
-- Memoization and caching
-- Chunked API requests
-- Performance profiling
-
----
-
-## APIs & Integration
-
-**Working Experience:**
-- **OpenStreetMap/Nominatim** - Geocoding, reverse geocoding
-- **OSRM** - Route calculation, distance matrices
-- **OpenRouteService** - GPS path generation
-- **REST APIs** - Design, implementation, testing
-- **WebSockets** - Real-time data streaming
-
----
-
-## Specialized Skills
-
-**GPS & IoT Testing:**
-- Multi-device simulation (1000+ concurrent)
-- Geofencing validation
-- Location tracking workflows
-- Real-time data streaming
-
-**Route Optimization:**
-- TSP algorithm implementation
-- Route validation and comparison
-- Constraint handling
-- Performance optimization
-
-**Data Validation:**
-- Excel file validation
-- Format standardization
-- Duplicate detection
-- Error reporting
-
----
-
-## Development Practices
-
-**Code Quality:**
-- Clean code principles
-- DRY (Don't Repeat Yourself)
-- Separation of concerns
-- Error handling and validation
-- Comprehensive documentation
-
-**Testing Approach:**
-- Test-driven development (TDD) basics
-- Page Object Model (POM)
-- Data-driven testing
-- Regression automation
-- CI/CD integration awareness
-
----
-
-## Software Design
-
-**Design Patterns:**
-- Page Object Model (POM)
-- Factory pattern (test data generation)
-- Singleton pattern (configuration management)
-
-**Architecture:**
-- Component-based design (React)
-- Modular structure
-- API-first approach
-- Scalable test frameworks
-
----
-
-## Project Statistics
-
-| Metric | Value |
-|--------|-------|
-| **Projects Built** | 10+ |
-| **GPS Devices Simulated** | 500+ |
-| **Test Cases Managed** | 1000+ |
-| **Error Reduction Achieved** | 50%+ |
-| **Time Savings (AI Test Gen)** | 90% |
-| **Route Locations Handled** | 50+ |
-| **Professional Experience** | 2+ years |
-
----
-
-## Currently Learning
-
-- Advanced CI/CD integration (GitHub Actions)
-- Container orchestration (Docker)
-- Cloud platforms (AWS/Azure basics)
-- GraphQL APIs
-- Advanced performance testing
-
----
+- Testiny, Jira, RTMs, ISTQB-aligned terminology (CTFL v4.0)
+- Agile/Scrum, sprint planning, retros, release reviews
+- Shift-left mindset: early review of designs, requirements, and acceptance criteria
 
 ## Soft Skills
 
-**Collaboration:**
-- Work closely with developers on automation integration
-- Clear communication with stakeholders
-- Active participant in Agile ceremonies
-- Code reviews and feedback
+- Clear written defect reports with reproduction and evidence
+- Effective collaboration with developers and product owners
+- Risk communication for go / hold / block release decisions
 
-**Problem Solving:**
-- Root cause analysis
-- Building tools to solve recurring problems
-- Process optimization
-- Innovation mindset
+## Reproducible Metrics
 
-**Self-Learning:**
-- Quick technology adoption
-- Continuous improvement
-- Experimentation with emerging tech
-- Documentation and knowledge sharing
+- 1,000+ test cases prepared and executed
+- 1,000+ defects identified and reported
+- 75% reduction in route and optimizer testing effort
+- 50%+ reduction in customer upload errors
 
 ---
 
-## Work Environment
-
-**Methodologies:**
-- Agile/Scrum
-- Sprint-based QA
-- Continuous testing
-- Shift-left testing approach
-
-**Collaboration:**
-- Daily standups
-- Sprint planning
-- Retrospectives
-- Cross-functional teamwork
-
----
-
-*Skills reflect capabilities demonstrated in professional work and portfolio projects. Always learning and expanding.*
+*Skills reflect capabilities demonstrated in professional work and the sanitized projects in this portfolio.*

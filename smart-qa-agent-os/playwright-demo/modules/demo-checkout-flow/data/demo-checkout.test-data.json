@@ -1,0 +1,42 @@
+{
+  "_note": "Synthetic demo test data. Not from any real system or store.",
+  "user": {
+    "email": "demo.user@example.com",
+    "password": "Demo-Pass-123"
+  },
+  "items": [
+    {
+      "sku": "SKU-001",
+      "name": "Demo Notebook",
+      "quantity": 2,
+      "unitPrice": 12.5
+    },
+    {
+      "sku": "SKU-002",
+      "name": "Demo Pen Set",
+      "quantity": 1,
+      "unitPrice": 7.0
+    }
+  ],
+  "shipping": {
+    "fullName": "Demo Customer",
+    "line1": "1 Demo Street",
+    "city": "Demo City",
+    "postcode": "00000",
+    "country": "Demoland"
+  },
+  "coupon": {
+    "code": "WELCOME10",
+    "percentOff": 10
+  },
+  "payment": {
+    "cardholder": "Demo Customer",
+    "cardNumberMasked": "**** **** **** 4242",
+    "expiry": "12/30"
+  },
+  "expected": {
+    "orderRefPrefix": "ORD-DEMO-",
+    "finalStatus": "Confirmed",
+    "appearsInHistory": true
+  }
+}

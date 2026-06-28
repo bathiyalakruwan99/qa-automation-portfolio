@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Checkout Flow - Actual Flow Preview</title>
+  <style>
+    :root {
+      --page-bg: #070b1a;
+      --panel-bg: #09102a;
+      --panel-border: #1a2756;
+      --text: #d8e1ff;
+      --muted: #93a4d8;
+      --button-bg: #111b3d;
+      --button-hover: #18265a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden;
+      background: var(--page-bg); color: var(--text);
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    #app {
+      width: 100%; height: 100vh;
+      display: grid; grid-template-rows: auto auto 1fr;
+      overflow: hidden;
+    }
+    #header {
+      padding: 10px 14px; border-bottom: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-size: 13px; min-height: 54px;
+    }
+    #header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    #header small { color: var(--muted); display: block; margin-top: 2px; }
+    #legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    #toolbar {
+      padding: 8px 14px; background: rgba(9, 16, 42, 0.92);
+      border-bottom: 1px solid var(--panel-border);
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    }
+    button {
+      background: var(--button-bg); color: var(--text);
+      border: 1px solid var(--panel-border); border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; cursor: pointer;
+    }
+    button:hover { background: var(--button-hover); }
+    #graph { width: 100%; height: 100%; min-height: 0; background: var(--page-bg); }
+    .badge {
+      background: rgba(33, 58, 134, 0.4); border: 1px solid var(--panel-border);
+      color: var(--muted); padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div>
+        <h1>Demo Checkout Flow - Actual Flow Preview <span class="badge">Synthetic demo example</span></h1>
+        <small>Sanitized public preview. Fictional product (Acme Demo Store). No private code, selectors, or workflows.</small>
+      </div>
+      <div id="legend">
+        <span class="legend-item"><span class="dot" style="background:#4f8dff"></span>Sign in</span>
+        <span class="legend-item"><span class="dot" style="background:#6cd1c4"></span>Page</span>
+        <span class="legend-item"><span class="dot" style="background:#f1c873"></span>Sub-flow</span>
+        <span class="legend-item"><span class="dot" style="background:#d97e7e"></span>Assertion</span>
+        <span class="legend-item"><span class="dot" style="background:#a37cf0"></span>Evidence</span>
+      </div>
+    </div>
+    <div id="toolbar">
+      <button onclick="fitGraph()">Fit</button>
+      <button onclick="togglePhysics()">Toggle physics</button>
+      <button onclick="resetGraph()">Reset</button>
+      <span style="color: var(--muted); font-size: 12px;">Click a node to inspect. Drag to rearrange. Scroll to zoom.</span>
+    </div>
+    <div id="graph"></div>
+  </div>
+
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script>
+    const COLORS = {
+      signIn: '#4f8dff',
+      page: '#6cd1c4',
+      subflow: '#f1c873',
+      assertion: '#d97e7e',
+      evidence: '#a37cf0'
+    };
+
+    const nodes = new vis.DataSet([
+      { id: 'signIn', label: 'Sign in\n(demo user)', color: COLORS.signIn, shape: 'dot', size: 24 },
+
+      { id: 'home', label: 'Home Page', color: COLORS.page },
+      { id: 'products', label: 'Products Page', color: COLORS.page },
+      { id: 'cart', label: 'Cart Page', color: COLORS.page },
+      { id: 'shipping', label: 'Shipping Page', color: COLORS.page },
+      { id: 'coupon', label: 'Coupon Step', color: COLORS.page },
+      { id: 'payment', label: 'Payment Page', color: COLORS.page },
+      { id: 'confirm', label: 'Order Confirmation', color: COLORS.page },
+      { id: 'account', label: 'Account Orders', color: COLORS.page },
+
+      { id: 'flow_addItems', label: 'addItemsToCart()', color: COLORS.subflow, shape: 'box' },
+      { id: 'flow_enterShipping', label: 'enterShipping()', color: COLORS.subflow, shape: 'box' },
+      { id: 'flow_applyCoupon', label: 'applyCoupon()', color: COLORS.subflow, shape: 'box' },
+      { id: 'flow_payment', label: 'completePayment()', color: COLORS.subflow, shape: 'box' },
+      { id: 'flow_history', label: 'verifyOrderInHistory()', color: COLORS.subflow, shape: 'box' },
+
+      { id: 'a_status', label: 'status = Confirmed', color: COLORS.assertion, shape: 'diamond' },
+      { id: 'a_orderRef', label: 'orderRef ~ ORD-DEMO-*', color: COLORS.assertion, shape: 'diamond' },
+      { id: 'a_history', label: 'visible in history', color: COLORS.assertion, shape: 'diamond' },
+      { id: 'a_discount', label: 'discount = -10%', color: COLORS.assertion, shape: 'diamond' },
+
+      { id: 'e_trace', label: 'Trace + screenshot', color: COLORS.evidence, shape: 'star', size: 22 },
+      { id: 'e_video', label: 'Video on failure', color: COLORS.evidence, shape: 'star', size: 22 },
+      { id: 'e_report', label: 'HTML report', color: COLORS.evidence, shape: 'star', size: 22 }
+    ]);
+
+    const edges = new vis.DataSet([
+      { from: 'signIn', to: 'home', label: 'lands on', arrows: 'to' },
+      { from: 'home', to: 'products', label: 'open shop', arrows: 'to' },
+      { from: 'products', to: 'flow_addItems', label: 'add SKUs', arrows: 'to' },
+      { from: 'flow_addItems', to: 'cart', arrows: 'to' },
+      { from: 'cart', to: 'shipping', label: 'checkout', arrows: 'to' },
+      { from: 'shipping', to: 'flow_enterShipping', arrows: 'to' },
+      { from: 'flow_enterShipping', to: 'coupon', arrows: 'to' },
+      { from: 'coupon', to: 'flow_applyCoupon', arrows: 'to' },
+      { from: 'flow_applyCoupon', to: 'a_discount', arrows: 'to', dashes: true },
+      { from: 'coupon', to: 'payment', label: 'continue', arrows: 'to' },
+      { from: 'payment', to: 'flow_payment', arrows: 'to' },
+      { from: 'flow_payment', to: 'confirm', arrows: 'to' },
+      { from: 'confirm', to: 'a_status', arrows: 'to', dashes: true },
+      { from: 'confirm', to: 'a_orderRef', arrows: 'to', dashes: true },
+      { from: 'confirm', to: 'flow_history', arrows: 'to' },
+      { from: 'flow_history', to: 'account', arrows: 'to' },
+      { from: 'account', to: 'a_history', arrows: 'to', dashes: true },
+
+      { from: 'flow_payment', to: 'e_trace', dashes: true, color: { color: '#5b6796' } },
+      { from: 'flow_payment', to: 'e_video', dashes: true, color: { color: '#5b6796' } },
+      { from: 'flow_history', to: 'e_report', dashes: true, color: { color: '#5b6796' } }
+    ]);
+
+    const container = document.getElementById('graph');
+    const data = { nodes, edges };
+    const options = {
+      nodes: {
+        font: { color: '#e6ecff', size: 13, face: 'Inter, Segoe UI, Arial' },
+        borderWidth: 1
+      },
+      edges: {
+        color: { color: '#3a4f95', highlight: '#7fa6ff' },
+        font: { color: '#93a4d8', size: 11, strokeWidth: 0, align: 'middle' },
+        smooth: { type: 'continuous' },
+        arrows: { to: { scaleFactor: 0.6 } }
+      },
+      physics: {
+        forceAtlas2Based: { gravitationalConstant: -45, springLength: 110, springConstant: 0.08 },
+        solver: 'forceAtlas2Based',
+        stabilization: { iterations: 220 }
+      },
+      interaction: { hover: true, navigationButtons: false, zoomView: true }
+    };
+    const network = new vis.Network(container, data, options);
+
+    function fitGraph() { network.fit({ animation: { duration: 400 } }); }
+    function togglePhysics() {
+      const enabled = network.physics.physicsEnabled;
+      network.setOptions({ physics: { enabled: !enabled } });
+    }
+    function resetGraph() { network.setData(data); network.fit(); }
+  </script>
+</body>
+</html>

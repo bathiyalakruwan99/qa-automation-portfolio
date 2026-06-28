@@ -1,0 +1,6 @@
+Job ID,Trip Type,Planned Stops: Qty,Load ID,Status,Invoice Status,Payment Schedule Status,GPS Status
+JOB-1001,FTL-DISTRIBUTION,9,LOAD-2001,Completed,Pending,Scheduled,Available
+JOB-1002,FTL-DISTRIBUTION,12,LOAD-2002,In Progress,Not Created,Pending,Missing
+JOB-1003,FTL,1,LOAD-2003,Completed,Created,Paid,Available
+JOB-1004,LTL,5,LOAD-2004,Cancelled,Not Created,Not Scheduled,Missing
+JOB-1005,FTL-DISTRIBUTION,16,LOAD-2005,Completed,Pending,Scheduled,Available

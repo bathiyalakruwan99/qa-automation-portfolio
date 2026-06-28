@@ -1,17 +1,45 @@
-# Jira QA Automation Tools
+# Jira QA Tools
 
-Python tools for syncing Jira tickets, generating reports, and managing QA workflows. Uses the Jira REST API to fetch tickets from epics, build manifests, and produce markdown reports.
+Python utilities for syncing Jira tickets, building manifests, exporting ticket history, generating ready-for-release reports, and a curated set of 76+ QA prompts for API, security, and automation testing.
 
-## Features
+---
 
-- **Ticket sync** — Fetch tickets from Jira epics into local JSON
-- **Ticket history** — Export ticket data and status changes to Excel (10+ sample tickets)
-- **Manifest builder** — Build a JSON manifest of all synced tickets
-- **Data gathering & updates** — Scripts to update ticket JSONs and refresh manifests
-- **Report generation** — Ready-for-release lists, regression test cases
-- **QA prompt library** — 76+ prompts for API testing, contract testing, and more
+## Business Problem
 
-## Setup
+QA teams spend meaningful time pulling Jira data into a shape that supports release decisions: which tickets are ready for release, which need regression tests, and what each ticket's status history looks like. Doing that by hand across many epics is slow and error-prone.
+
+## QA Challenge
+
+- Aggregate tickets from multiple epics into one consistent dataset
+- Track ready-for-release status and status-change history
+- Generate regression test cases from bug/task tickets
+- Reuse a library of high-quality QA prompts across releases
+
+## Solution
+
+A small collection of focused Python scripts that:
+
+- Sync Jira tickets to local JSON
+- Build a manifest for quick lookup
+- Export ticket data and status history to Excel
+- Generate ready-for-release and regression-test-case reports
+- Provide 76+ QA prompts under `qa_prompts/`
+
+## Key Capabilities
+
+- **Ticket sync** from configured Jira epics into local JSON
+- **Ticket history** Excel export (sample dataset of 10+ tickets and 14+ status rows)
+- **Manifest builder** for fast indexing of all synced tickets
+- **Report generators** — ready-for-release list and regression test cases
+- **QA prompt library** — 76+ prompts for API, security, automation, and more
+
+## Tech Stack
+
+Python 3.8+, Jira REST API, Requests, OpenPyXL
+
+## How It Works
+
+### Setup
 
 ```bash
 pip install -r requirements.txt
@@ -19,9 +47,7 @@ cp .env.example .env
 # Edit .env with your Jira credentials and epic keys
 ```
 
-## Configuration
-
-Set these environment variables (or use `.env`):
+### Configuration
 
 | Variable | Description |
 |----------|-------------|
@@ -30,7 +56,7 @@ Set these environment variables (or use `.env`):
 | `JIRA_API_TOKEN` | API token from Jira account settings |
 | `JIRA_EPICS` | Comma-separated epic keys (e.g. `EPIC-1,EPIC-2`) |
 
-## Scripts
+### Scripts
 
 | Script | Purpose |
 |--------|---------|
@@ -41,53 +67,39 @@ Set these environment variables (or use `.env`):
 | `gen_ready_for_release.py` | Generate markdown list of tickets in "Ready for Release" |
 | `gen_regression_test_cases.py` | Generate regression test cases from bug/task tickets |
 
-## Project Structure
+### Project structure
 
 ```
 jira-tools/
-├── scripts/           # Python automation scripts
-├── qa_prompts/         # QA prompt templates (76+ prompts)
-├── samples/            # Sample Excel outputs
-│   ├── ticket_history_sample.xlsx   # 10+ rows: ticket data + status history
-│   ├── regression_test_cases_sample.xlsx
-│   └── tickets_ready_for_release_sample.xlsx
+├── scripts/                       # Python automation scripts
+├── qa_prompts/                    # 76+ QA prompt templates
+├── samples/                       # Sample Excel outputs
 ├── ticket_history/
-│   ├── ticket_data/   # 10 sample ticket JSONs (SAMPLE-001 … SAMPLE-010)
+│   ├── ticket_data/               # 10 sample ticket JSONs
 │   └── jira_ticket_manifest.json
-└── reports/            # Generated markdown reports
+└── reports/                       # Generated markdown reports
 ```
 
-## Sample Files
+## Sample Evidence / Screenshots
 
-The `samples/` folder contains example Excel outputs:
+- `samples/ticket_history_sample.xlsx` — ticket data + status history
+- `samples/regression_test_cases_sample.xlsx` — example regression test cases
+- `samples/tickets_ready_for_release_sample.xlsx` — example ready-for-release list
+- `ticket_history/ticket_data/` — 10 sample ticket JSONs (SAMPLE-001 … SAMPLE-010)
 
-- **`ticket_history_sample.xlsx`** — Ticket history with 10+ rows: Ticket ID, Summary, Type, Priority, Status, Created, Updated, Status Change Date, From Status, To Status
-- `regression_test_cases_sample.xlsx` — Example regression test cases (ID, Title, Module, Expected, Actual)
-- `tickets_ready_for_release_sample.xlsx` — Example ready-for-release list (Ticket ID, Summary, Ready Date, Previous Status)
+## QA Value
 
-The `ticket_history/ticket_data/` folder has 10 sample ticket JSONs (SAMPLE-001 through SAMPLE-010) with varied statuses, changelogs, and modules.
+- Provides repeatable, evidence-friendly views of release readiness
+- Removes manual data-shaping work from the QA workflow
+- Enables a reusable QA prompt library for consistent testing artefacts
+- Produces Excel and markdown outputs that travel cleanly into reviews
 
-## Usage
+## Limitations
 
-```bash
-# Sync tickets from Jira (requires credentials)
-python scripts/sync_from_jira.py
+- Requires valid Jira credentials to sync (sample data is included for review)
+- Reports are intentionally focused; deeper analytics belong in a BI tool
+- Status-history depth depends on what Jira's changelog API returns
 
-# Build manifest from local ticket data
-python scripts/build_ticket_manifest.py
+## Confidentiality Note
 
-# Export ticket history to Excel
-python scripts/export_ticket_history_to_excel.py
-
-# Update a ticket JSON (add status change or edit field)
-python scripts/update_ticket_json.py SAMPLE-001 --status-change "To Do" "In Progress"
-python scripts/update_ticket_json.py SAMPLE-001 --field summary --value "New summary"
-
-# Generate reports
-python scripts/gen_ready_for_release.py
-python scripts/gen_regression_test_cases.py
-```
-
-## Tech
-
-Python 3.8+, OpenPyXL, Requests, Jira REST API
+The repository ships with **sanitized sample data only** (SAMPLE-001 … SAMPLE-010). No real ticket data, customer references, internal epic keys, or credentials are included. Credentials must be supplied through environment variables that are not committed. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

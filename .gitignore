@@ -82,12 +82,20 @@ cypress/screenshots/
 jmeter.log
 *.jtl
 k6-results/
+k6-summary.json
 
 # API testing
 newman/
 postman_collection_backup/
 *.har
 rest-client.env.json
+newman-report.html
+
+# Playwright (Smart QA Agent OS demo)
+smart-qa-agent-os/playwright-demo/node_modules/
+smart-qa-agent-os/playwright-demo/playwright-report/
+smart-qa-agent-os/playwright-demo/test-results/
+smart-qa-agent-os/playwright-demo/.env
 
 # Next.js
 .next/

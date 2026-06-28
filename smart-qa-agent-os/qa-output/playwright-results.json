@@ -1,0 +1,89 @@
+{
+  "runId": "demo-checkout-2026-06-15",
+  "module": "demo-store-checkout",
+  "build": "1.0.0-demo",
+  "environment": "demo",
+  "date": "2026-06-15T14:30:00Z",
+  "duration": "11m 42s",
+  "summary": {
+    "total": 8,
+    "passed": 7,
+    "failed": 1,
+    "blocked": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "id": "TC-01",
+      "title": "Apply valid coupon updates total",
+      "status": "passed",
+      "duration": "2.1s",
+      "evidence": ["traces/tc-01.zip", "network/tc-01.har"]
+    },
+    {
+      "id": "TC-02",
+      "title": "Apply invalid coupon shows error",
+      "status": "passed",
+      "duration": "1.8s",
+      "evidence": ["screenshots/tc-02.png"]
+    },
+    {
+      "id": "TC-03",
+      "title": "Apply below-minimum coupon rejected",
+      "status": "passed",
+      "duration": "2.3s",
+      "evidence": ["network/tc-03.har"]
+    },
+    {
+      "id": "TC-04",
+      "title": "Remove applied coupon restores total",
+      "status": "passed",
+      "duration": "1.9s",
+      "evidence": ["traces/tc-04.zip"]
+    },
+    {
+      "id": "TC-05",
+      "title": "Re-apply removed coupon works",
+      "status": "passed",
+      "duration": "2.0s",
+      "evidence": ["traces/tc-05.zip"]
+    },
+    {
+      "id": "TC-06",
+      "title": "Coupon survives shipping method change",
+      "status": "passed",
+      "duration": "3.2s",
+      "evidence": ["traces/tc-06.zip"]
+    },
+    {
+      "id": "TC-07",
+      "title": "Order with applied coupon decrements usage",
+      "status": "passed",
+      "duration": "1.5s",
+      "evidence": ["network/tc-07.har"]
+    },
+    {
+      "id": "TC-08",
+      "title": "Back navigation does not allow re-submit",
+      "status": "failed",
+      "duration": "4.1s",
+      "evidence": ["defects/BUG-DEMO-002.md"],
+      "failureReason": "Stale total visible after back navigation from Confirmation page",
+      "defectId": "BUG-DEMO-002"
+    }
+  ],
+  "defects": [
+    {
+      "id": "BUG-DEMO-001",
+      "severity": "Low",
+      "status": "Triaged"
+    },
+    {
+      "id": "BUG-DEMO-002",
+      "severity": "Medium",
+      "status": "Open"
+    }
+  ],
+  "releaseRecommendation": "Conditional Go",
+  "_note": "Synthetic example for portfolio demonstration. No real test results are represented."
+}

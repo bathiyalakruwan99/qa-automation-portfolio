@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QA Memory Categories - Tabs Preview</title>
+  <style>
+    :root {
+      --page-bg: #070b1a;
+      --panel-bg: #09102a;
+      --panel-border: #1a2756;
+      --text: #d8e1ff;
+      --muted: #93a4d8;
+      --button-bg: #111b3d;
+      --button-hover: #18265a;
+      --active-tab: #213a86;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden;
+      background: var(--page-bg); color: var(--text);
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    #app {
+      width: 100%; height: 100vh;
+      display: grid; grid-template-rows: auto auto auto 1fr;
+      overflow: hidden;
+    }
+    #header {
+      padding: 10px 14px; border-bottom: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-size: 13px; min-height: 54px;
+    }
+    #header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    #header small { color: var(--muted); display: block; margin-top: 2px; }
+    .badge {
+      background: rgba(33, 58, 134, 0.4); border: 1px solid var(--panel-border);
+      color: var(--muted); padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; margin-left: 8px;
+    }
+    #tabBarWrap {
+      background: rgba(9, 16, 42, 0.92);
+      border-bottom: 1px solid var(--panel-border);
+      padding: 8px 10px; min-height: 46px; overflow-x: auto;
+    }
+    #tabBar { display: flex; gap: 6px; }
+    .tab {
+      background: var(--button-bg); color: var(--text);
+      border: 1px solid var(--panel-border); border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; cursor: pointer; white-space: nowrap;
+    }
+    .tab:hover { background: var(--button-hover); }
+    .tab.active { background: var(--active-tab); border-color: #3a5dc7; }
+    #infoBar {
+      padding: 8px 14px; color: var(--muted); font-size: 12px;
+      border-bottom: 1px solid var(--panel-border); background: rgba(9, 16, 42, 0.6);
+    }
+    #graph { width: 100%; height: 100%; min-height: 0; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div>
+        <h1>QA Memory Architecture - Category Preview <span class="badge">Synthetic demo example</span></h1>
+        <small>Sanitized public preview. Architecture-level only. No private memory entries, customer data, or proprietary content.</small>
+      </div>
+    </div>
+    <div id="tabBarWrap"><div id="tabBar"></div></div>
+    <div id="infoBar">Select a memory category. Each node is an example entry shape only; entries shown here are synthetic placeholders.</div>
+    <div id="graph"></div>
+  </div>
+
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script>
+    const COLOR_BY_CATEGORY = {
+      'Project':       '#4f8dff',
+      'Module':        '#6cd1c4',
+      'Flow':          '#f1c873',
+      'Page':          '#a37cf0',
+      'API':           '#5fb878',
+      'Validation':    '#e07ec0',
+      'Test Data':     '#7ad3e1',
+      'Automation':    '#ffb074',
+      'Locator':       '#d97e7e',
+      'Flaky Area':    '#c0c47e',
+      'Known Bug':     '#ef6b6b',
+      'Defect Pattern':'#b66bef',
+      'Error->Fix':    '#7ec9d9',
+      'Release':       '#6b8cef',
+      'Learning':      '#9ce07c',
+      'Glossary':      '#d0d5e8',
+      'Run':           '#88a3d9'
+    };
+
+    const CATEGORIES = {
+      'Project': [
+        { label: 'Acme Demo Store - QA scope' },
+        { label: 'Quality objectives' },
+        { label: 'Product boundaries' }
+      ],
+      'Module': [
+        { label: 'Checkout module' },
+        { label: 'Catalog module' },
+        { label: 'Account module' }
+      ],
+      'Flow': [
+        { label: 'End-to-end checkout' },
+        { label: 'Apply coupon at checkout' },
+        { label: 'View order history' }
+      ],
+      'Page': [
+        { label: 'Cart Page' },
+        { label: 'Shipping Page' },
+        { label: 'Payment Page' },
+        { label: 'Order Confirmation' }
+      ],
+      'API': [
+        { label: 'orders.create (demo)' },
+        { label: 'orders.status (demo)' },
+        { label: 'coupons.apply (demo)' }
+      ],
+      'Validation': [
+        { label: 'order total = sum + tax - discount' },
+        { label: 'final status = Confirmed' },
+        { label: 'history mirrors confirmation' }
+      ],
+      'Test Data': [
+        { label: 'Valid demo user' },
+        { label: 'Standard SKU set' },
+        { label: 'Boundary coupon (expired)' }
+      ],
+      'Automation': [
+        { label: 'POM: CartSummary component' },
+        { label: 'Fixture: demoFixtures' },
+        { label: 'Tag: @smoke / @regression' }
+      ],
+      'Locator': [
+        { label: 'data-testid=cart-row (stable)' },
+        { label: 'role=button[name=Place order] (stable)' },
+        { label: 'CSS .qty (avoid - brittle)' }
+      ],
+      'Flaky Area': [
+        { label: 'Coupon badge animation timing' },
+        { label: 'Cart total async update' }
+      ],
+      'Known Bug': [
+        { label: 'DEMO-BUG-204 capacity status mismatch (synthetic)' }
+      ],
+      'Defect Pattern': [
+        { label: 'UI status mirrors conflict API response (recurring)' }
+      ],
+      'Error->Fix': [
+        { label: 'Strict-mode locator -> use role/name' },
+        { label: 'Timeout -> deterministic wait on button enabled' }
+      ],
+      'Release': [
+        { label: 'Sprint 42 (demo) - Hold' },
+        { label: 'Sprint 41 (demo) - Released' }
+      ],
+      'Learning': [
+        { label: 'Hybrid UI+API check catches mismatches' },
+        { label: 'BDD readable scenarios improve review' }
+      ],
+      'Glossary': [
+        { label: 'Order ref vs cart ref' },
+        { label: 'Confirmed vs Dispatched (demo)' }
+      ],
+      'Run': [
+        { label: 'run-2026-06-28-001 (synthetic)' }
+      ]
+    };
+
+    const tabBar = document.getElementById('tabBar');
+    let activeCategory = 'Flow';
+
+    Object.keys(CATEGORIES).forEach((cat) => {
+      const btn = document.createElement('button');
+      btn.className = 'tab' + (cat === activeCategory ? ' active' : '');
+      btn.textContent = cat;
+      btn.onclick = () => switchTab(cat, btn);
+      tabBar.appendChild(btn);
+    });
+
+    let network;
+    function renderCategory(cat) {
+      const entries = CATEGORIES[cat] || [];
+      const color = COLOR_BY_CATEGORY[cat] || '#88a3d9';
+      const nodes = new vis.DataSet([
+        { id: '__root', label: cat + '\nMemory', color: color, shape: 'dot', size: 28, font: { size: 14, color: '#e6ecff' } },
+        ...entries.map((e, i) => ({ id: 'n' + i, label: e.label, color: color, shape: 'box' }))
+      ]);
+      const edges = new vis.DataSet(
+        entries.map((_, i) => ({ from: '__root', to: 'n' + i }))
+      );
+      const data = { nodes, edges };
+      const options = {
+        nodes: { font: { color: '#e6ecff', size: 12, face: 'Inter, Segoe UI, Arial' }, borderWidth: 1 },
+        edges: { color: { color: '#3a4f95', highlight: '#7fa6ff' }, smooth: { type: 'continuous' } },
+        physics: {
+          forceAtlas2Based: { gravitationalConstant: -55, springLength: 130 },
+          solver: 'forceAtlas2Based',
+          stabilization: { iterations: 220 }
+        },
+        interaction: { hover: true }
+      };
+      if (network) network.destroy();
+      network = new vis.Network(document.getElementById('graph'), data, options);
+    }
+
+    function switchTab(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderCategory(cat);
+    }
+
+    renderCategory(activeCategory);
+  </script>
+</body>
+</html>

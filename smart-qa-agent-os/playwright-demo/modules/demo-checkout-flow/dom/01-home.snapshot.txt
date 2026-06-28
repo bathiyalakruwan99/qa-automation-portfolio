@@ -1,0 +1,13 @@
+# DOM snapshot - home (synthetic demo example)
+
+## Headings
+- Acme Demo Store
+- Featured products
+
+## Interactive elements
+- button: Shop now
+- button: View cart
+
+## Test-id anchors
+- cta-shop-now
+- mini-cart

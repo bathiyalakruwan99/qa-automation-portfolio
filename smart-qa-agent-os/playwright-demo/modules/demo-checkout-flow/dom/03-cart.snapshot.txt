@@ -1,0 +1,15 @@
+# DOM snapshot - cart (synthetic demo example)
+
+## Headings
+- Your cart
+- Order summary
+
+## Interactive elements
+- button: Remove
+- button: Checkout
+
+## Test-id anchors
+- cart-row
+- cart-summary
+- cart-summary-item-count
+- cart-summary-total

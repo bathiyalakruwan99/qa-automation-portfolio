@@ -1,0 +1,11 @@
+# DOM snapshot - order confirmation (synthetic demo example)
+
+## Headings
+- Order confirmed
+
+## Interactive elements
+- button: View order history
+
+## Test-id anchors
+- confirmation-order-ref
+- confirmation-status

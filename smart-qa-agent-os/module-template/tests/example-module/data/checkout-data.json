@@ -1,0 +1,14 @@
+{
+  "products": [
+    { "sku": "ACME-SKU-001", "name": "Demo Widget", "price": 25.00 },
+    { "sku": "ACME-SKU-002", "name": "Demo Gadget", "price": 15.00 }
+  ],
+  "coupons": [
+    { "code": "WELCOME10", "type": "percent", "value": 10, "minSpend": 20, "status": "active" },
+    { "code": "EXPIRED50", "type": "percent", "value": 50, "minSpend": 0, "status": "expired" }
+  ],
+  "shipping": [
+    { "method": "Standard", "fee": 5.00, "countries": ["Demoland"] },
+    { "method": "Express", "fee": 12.00, "countries": ["Demoland"] }
+  ]
+}

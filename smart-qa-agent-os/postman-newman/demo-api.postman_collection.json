@@ -1,0 +1,129 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-0000-0000-0000-000000000001",
+    "name": "Smart QA Agent OS - Demo API",
+    "description": "Sanitized demo collection targeting https://reqres.in. Smoke + regression coverage with status, schema-style, and negative checks.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Smoke - List users page 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('response time < 2000ms', function () { pm.expect(pm.response.responseTime).to.be.below(2000); });",
+              "var body = pm.response.json();",
+              "pm.test('returns page 1', function () { pm.expect(body.page).to.eql(1); });",
+              "pm.test('data is non-empty array', function () { pm.expect(body.data).to.be.an('array').and.not.empty; });",
+              "pm.test('first user has required fields', function () {",
+              "  var u = body.data[0];",
+              "  pm.expect(u).to.have.all.keys('id', 'email', 'first_name', 'last_name', 'avatar');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users?page=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"],
+          "query": [{ "key": "page", "value": "1" }]
+        }
+      }
+    },
+    {
+      "name": "Regression - Get single user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+              "var body = pm.response.json();",
+              "pm.test('user id is 2', function () { pm.expect(body.data.id).to.eql(2); });",
+              "pm.test('email looks valid', function () { pm.expect(body.data.email).to.match(/.+@.+\\..+/); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/2",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "2"]
+        }
+      }
+    },
+    {
+      "name": "Regression - Unknown user returns 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 404', function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users/99999",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "99999"]
+        }
+      }
+    },
+    {
+      "name": "Regression - Create user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
+              "var body = pm.response.json();",
+              "pm.test('echoes back name and job', function () {",
+              "  pm.expect(body.name).to.eql('qa-demo');",
+              "  pm.expect(body.job).to.eql('qa-engineer');",
+              "});",
+              "pm.test('returns id and createdAt', function () {",
+              "  pm.expect(body).to.have.property('id');",
+              "  pm.expect(body).to.have.property('createdAt');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"qa-demo\",\n  \"job\": \"qa-engineer\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": ["{{baseUrl}}"],
+          "path": ["users"]
+        }
+      }
+    }
+  ]
+}

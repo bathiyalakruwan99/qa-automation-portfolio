@@ -1,0 +1,5 @@
+orderId,pickup,dropoff,weightKg
+ORD-001,Warehouse A,Customer Site B,2000
+ORD-002,Warehouse A,Customer Site C,3000
+ORD-003,Warehouse A,Customer Site D,4000
+ORD-004,Warehouse A,Customer Site E,1500

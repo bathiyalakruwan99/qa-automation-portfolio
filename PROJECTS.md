@@ -1,303 +1,157 @@
 # Projects
 
-Here's what I've built to solve real QA problems during my work at **Haulmatic Technologies** (Transport Management Systems) and **IFS R&D International** (ERP systems).
+Sanitized QA tools and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows. Most were built during my work at **Haulmatic Technologies** (Transport Management Systems) and **IFS R&D International** (ERP systems). This repository contains only the public, sanitized versions.
+
+Featured order — open in this sequence:
+
+1. Smart QA Agent OS / Automation Framework
+2. GPS Simulator and Path Generation Suite
+3. Route Optimizer Validation Engine
+4. Job Master Data Validation and Evidence Processor
+5. Data Quality and Test Data Utilities
+6. AI-Assisted Test Case Workflow
+7. Jira QA Tools
 
 ---
 
-## Work Projects
+## 1. Smart QA Agent OS — Automation Framework + AI QA Operating Model
 
-### GPS Testing Suite
+A sanitized public reference implementation of an enterprise-style QA automation and release-validation workflow, **plus a modular AI QA operating model with specialised QA agents, reusable skills, quality guardrails, and continuously curated QA memory**.
 
-Simulates 1000+ GPS devices without needing physical hardware. Built with JavaScript and Leaflet.js.
+Framework side:
 
-**Why I built it:** Our TMS platform needed multi-device GPS testing, but buying physical GPS devices wasn't realistic. Manual testing with a few devices took forever and didn't catch concurrency issues.
+- Layered structure: UI, API, hybrid, BDD, performance
+- Reusable Page Objects, fixtures, and API clients
+- Postman + Newman collection with CI execution
+- k6 smoke / load / stress / soak scripts
+- Documented release-gate checklist and QA knowledge memory
+- Mermaid diagrams for framework, hybrid flow, and release gate
+- GitHub Actions for smoke (push/PR) and nightly regression
 
-**What it does:**
-- Simulates GPS devices sending real-time location data
-- Visualizes paths on a map (OpenStreetMap)
-- Tests geofencing, tracking, and API integrations
-- Handles up to 1000 devices simultaneously
+AI QA Operating Model side (architecture-only, public showcase):
 
-**The challenge:** Managing hundreds of concurrent API requests without overwhelming the server or freezing the browser. Needed efficient state tracking for all active devices and real-time UI updates.
+- **34 capability-level specialised QA agents** across six categories: Orchestration/Strategy, Discovery/Understanding, Test Design/Automation, Execution/Investigation/Healing, Reporting/Documentation/Release, Learning/Memory
+- **13 shared QA skill groups** used across multiple agents
+- **14 quality rule categories** enforcing evidence-first verification and safe automation
+- **17-category continuous QA memory architecture** (Project, Module, Flow, Page/Component, API/Network, Validation Rules, Test Data, Automation, Locator Healing, Flaky Area, Known Bugs, Defect Pattern, Error-to-Solution, Release, Learning, Glossary, Run)
+- Example agent journey, sample artifacts, demo walkthrough script
 
-**Solutions:** Request queue management using Maps for tracking active API calls. Batch processing with Promise.allSettled for multiple devices. Staggered device startup with configurable delays. Throttled map updates to keep UI responsive.
+**Tech:** Playwright, TypeScript, BDD/Cucumber-style, POM, Postman, Newman, k6, GitHub Actions, AI QA Operating Model
 
-**Tech:** JavaScript, Leaflet.js, OpenStreetMap, real-time APIs
-
-**Impact:** Eliminated need for physical GPS hardware. QA team saves hours every sprint on GPS testing.
-
-[Code](gps-testing-suite/) | [Demo videos](gps-testing-suite/videos/)
-
----
-
-### Route Optimizer
-
-Next.js app that solves the Traveling Salesman Problem (TSP) for validating our route optimization module.
-
-**The problem:** Our TMS has a route optimizer that needs to handle 50+ locations efficiently. Manual validation of complex routes wasn't practical - I needed a tool to generate optimal routes and compare against our system's output.
-
-**How it works:**
-- Takes a list of addresses or coordinates
-- Solves TSP using Nearest Neighbor + 2-opt + 3-opt algorithms
-- Uses OSRM for real road distances (not straight-line)
-- Shows multiple route alternatives for comparison
-- Interactive map visualization
-
-**What I learned:** Algorithm optimization is hard. The 3-opt improvement makes a huge difference for quality but gets slow with 30+ locations, so I added Web Workers to keep the UI responsive.
-
-**Tech:** Next.js, React, TypeScript, OSRM (routing engine), Leaflet maps
-
-**Still want to add:** Time window constraints, vehicle capacity limits, live deployment
-
-[Code](route-optimizer/) | Deploy to Vercel for live demo
+- [Open project →](smart-qa-agent-os/)
+- [AI QA Operating Model overview →](smart-qa-agent-os/ai-qa-operating-model.md)
+- [Agents catalog →](smart-qa-agent-os/docs/agents-catalog.md)
+- [Sample artifacts →](smart-qa-agent-os/sample-artifacts/)
+- [Manual QA Knowledge →](smart-qa-agent-os/manual-knowledge/)
+- [Module Template →](smart-qa-agent-os/module-template/)
+- [Prompt Examples →](smart-qa-agent-os/prompts/)
+- [QA Graph Tool →](smart-qa-agent-os/qa-graph-tool/)
+- [QA Output →](smart-qa-agent-os/qa-output/)
+- [Scripts →](smart-qa-agent-os/scripts/)
 
 ---
 
-### Excel Validator (50% Error Reduction)
+## 2. GPS Simulator and Path Generation Suite
 
-Python tool that validates bulk Excel uploads before they hit our TMS database.
+Web-based tools for testing GPS and location-based features without physical hardware: multi-device simulator, road-aware path builder using OpenRouteService, coordinate visualizer, and multi-device combiner.
 
-**The pain point:** Customers would upload Excel files with wrong formats, missing data, duplicate IDs, or invalid districts. Our support team was getting flooded with tickets about failed uploads.
+Built a GPS simulation suite for high-load, multi-device GPS, route-path, vehicle-movement, and geofence testing scenarios.
 
-**My solution:**
-- Built a desktop validator with Tkinter GUI
-- Auto-corrects common mistakes (district names, status fields, formats)
-- Handles duplicates by prefixing "DUPLICATE" to email/NIC fields
-- Shows detailed error reports before upload
-- Multiple GUI implementations for different use cases
+**Tech:** JavaScript, Leaflet.js, OpenStreetMap, OpenRouteService API
 
-**Results:** Reduced customer upload errors by 50%+. Support team loves it because tickets dropped significantly.
-
-**Tech:** Python, Pandas, Tkinter, OpenPyXL
-
-**What I'd do differently:** Build a web interface for easier access. Add more customizable validation rules so users can configure their own correction templates.
-
-[Code](bulkfile-generator/excel-corrector/)
+[Open project →](gps-testing-suite/)
 
 ---
 
-### Job Master Data Processor (2+ Hours Saved Daily)
+## 3. Route Optimizer Validation Engine
 
-Desktop app for verifying job data from TMS Excel exports. Built to solve a testing bottleneck.
+Next.js application that solves multi-stop routing problems (Nearest Neighbour + 2-opt + 3-opt) using OSRM for real road distances. Used as a reference engine to validate route distance, route path, cost, and multi-stop behaviour for TMS optimizers. Result: 75% reduction in route and optimizer testing effort.
 
-**The testing problem:** Verifying job data exports was taking at least 2+ hours. Manual Excel filtering, calculating expected load counts for validation, and checking GPS/payment/invoice status across hundreds of test cases was killing productivity.
+**Tech:** Next.js, TypeScript, React, OSRM, Google Maps API
 
-**Real scenario:** "Verify that all FTL-DISTRIBUTION trips with 9-16 stops calculate loads correctly and have GPS data" meant: open Excel, create multiple filters, manually calculate expected loads, compare, document findings. Every. Single. Time.
-
-**My solution:**
-- Desktop app with real-time search across all fields (type job ID → instantly see all related data)
-- Automatically maps 30+ column variations (works with dev/staging/prod exports)
-- Calculates job and load counts with three different methods:
-  - Non FTL-DISTRIBUTION: Counts unique Load IDs
-  - FTL-DISTRIBUTION (Prorated): If stops ≤ 8 = 1 load, else: (stops // 8) + (remaining / 8)
-  - FTL-DISTRIBUTION (8x): ceil(stops / 8)
-  - FTL-DISTRIBUTION (10x): ceil(stops / 10)
-- Shows all three methods side-by-side for easy comparison and validation
-- Bulk job checker: verify GPS/payment/invoice status for 2000+ jobs in 30 seconds
-- Smart filenames: exports include filters used (e.g., `JobMaster_Export_JobID-12345_Status-Failed_20250118.xlsx`)
-
-**QA workflow improvements:**
-- **Test data verification:** 15-20 minutes → 2 minutes (upload export, filter, validate counts)
-- **Bug reporting:** Export complete job data with context embedded in filename. Developer gets exact test data, no back-and-forth.
-- **Edge case testing:** Quick "what if" queries: "Show me jobs with exactly 9 stops" for boundary testing
-- **Test evidence:** Multi-sheet exports (raw data + summary statistics + filters used) for documentation and audit trails
-
-**What I learned:** Building QA tools isn't just about automation - it's about removing repetitive manual work that slows down testing. The three calculation methods were critical because stakeholders needed to compare different approaches before deciding which to implement.
-
-**Tech:** Python, Pandas, Tkinter (background threading for large files)
-
-**What's still hard:** Handling inconsistent column names across different export types. Current column mapping works well but needs updates when business adds new fields.
-
-[Code](jobmaster/)
+[Open project →](route-optimizer/)
 
 ---
 
-### Jira QA Automation Tools
+## 4. Job Master Data Validation and Evidence Processor
 
-Python tools for syncing Jira tickets, building manifests, and generating QA reports. Uses the Jira REST API to automate ticket tracking and report generation.
+QA tool for validating large job and work-order exports from a TMS. Ingests an export, applies validation rules, highlights data quality issues, runs bulk GPS/payment/invoice status checks, and produces evidence-ready Excel outputs with filter context in the filename.
 
-**Why I built it:** Needed to sync tickets from multiple Jira epics, track ready-for-release status, and generate regression test cases from bug/task tickets. Manual tracking across epics was error-prone and time-consuming.
+- Real-time search and filter across all columns
+- Multi-method load counting (Non-distribution unique loads + distribution prorated / 8x / 10x)
+- Bulk status checking for thousands of jobs
+- Tolerant column mapping across export variants
+- Multi-sheet exports with raw data + summary + applied filters
 
-**What it does:**
-- Syncs tickets from configured Jira epics into local JSON
-- **Ticket history** — 10 sample tickets, export to Excel with status changes (14+ rows)
-- Builds a manifest of all synced tickets for quick lookup
-- Data gathering & updates — scripts to update ticket JSONs and refresh manifests
-- Generates ready-for-release reports (markdown)
-- Extracts regression test cases from bug/task tickets
-- Includes 76+ QA prompts for API testing, security, automation, and more
+**Tech:** Python, Pandas, OpenPyXL, Tkinter, Flask
+
+[Open project →](jobmaster/)
+
+---
+
+## 5. Data Quality and Test Data Utilities
+
+Grouped small utilities used for Excel validation, test-data generation, bulk-upload checks, comparisons, and color-coded review:
+
+- **Excel Validator / Corrector** — validates and auto-corrects bulk upload Excel files before TMS ingestion. Reduced customer upload errors by 50%+.
+- **Excel Diff Tool** — sheet-by-sheet comparison of two Excel files with a detailed diff report.
+- **Excel Job Highlighter** — color-codes rows by job ID to speed up large-dataset manual review.
+- **Order Data Generator** — generates realistic test order data for performance and workflow testing.
+- **Bulkfile Generator** — creates bulk upload payloads aligned to TMS schema rules.
+- **Geo Coordinate Converter** — address ↔ GPS conversion and batch processing.
+
+**Tech:** Python, Pandas, OpenPyXL, Tkinter, Faker
+
+[Bulkfile Generator](bulkfile-generator/) · [Excel Diff Tool](excel-master-diff/) · [Excel Job Highlighter](excel-job-highlighter/) · [Order Data Generator](order-data-generator/) · [Geo Coordinate Converter](geo-coordinate-converter/)
+
+---
+
+## 6. AI-Assisted Test Case Workflow
+
+A documented workflow (not a standalone tool) that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published.
+
+- Jira MCP for tickets and acceptance criteria
+- Figma MCP for design context
+- Mind map / RTM for coverage visualization
+- AI drafts test cases
+- **Mandatory** human review before publishing
+- CSV import into the test management tool
+
+**Tech:** Jira MCP, Figma MCP, ChatGPT/Claude, Python (CSV conversion)
+
+[Open workflow →](test-cases-creation-automatic/)
+
+---
+
+## 7. Jira QA Tools
+
+Python utilities for syncing Jira tickets, building manifests, exporting ticket history, generating ready-for-release reports, and a curated set of 76+ QA prompts for API, security, and automation testing.
 
 **Tech:** Python, Jira REST API, OpenPyXL, Requests
 
-**Note:** Sanitized for portfolio — uses environment variables for epic keys and credentials. No company-specific data.
-
-[Code](jira-tools/)
+[Open project →](jira-tools/)
 
 ---
 
-## AI/MCP Workflows (Not Standalone Tools)
+## Test Automation Frameworks (Reference)
 
-### AI Test Case Generation Workflow (90% Time Savings)
-
-Automated test case creation using MCP integrations, mind mapping, and AI. This is a workflow/process, not a standalone tool.
-
-**The problem:** Writing comprehensive test cases for new TMS features was taking 2-4 hours per module. Manual copy-paste from Jira and Figma, then writing 50-100 test cases in Testiny format.
-
-**My workflow:**
-1. **Jira MCP** reads tickets automatically (PB numbers, acceptance criteria)
-2. **Figma MCP** fetches design files and UI specs
-3. Create **RTMS mind maps** from ticket + Figma data for test coverage visualization
-4. **AI generates test cases** from mind map structure
-5. **Manual review:** Cross-check with actual ticket, Figma, and development implementation
-6. Refine AI output for accuracy and edge cases
-7. Convert to CSV → import to Testiny
-
-**Impact:** Reduced test case creation from 2-4 hours to ~30 minutes. That's 90% time savings. QA team now uses this workflow for every new feature.
-
-**Tech:** Jira MCP, Figma MCP, RTMS mind mapping, ChatGPT/Claude, Python (CSV conversion)
-
-**The catch:** You can't skip the review step. AI generates structure quickly, but I always verify against actual ticket, designs, and development before finalizing.
-
-**Why it's a workflow:** Uses existing platforms (Jira, Figma, AI tools) with MCP integrations rather than being a standalone application.
-
-[Workflow docs](test-cases-creation-automatic/)
+UI and API automation with Playwright, Cypress, and Selenium using Page Object Model. Public reference implementation lives in [`smart-qa-agent-os/`](smart-qa-agent-os/). Enterprise codebases used in employment are proprietary and are **not** published here.
 
 ---
 
-### Agent & MCP Works
+## Reproducible Metrics
 
-Collection of AI-powered QA workflows and automation processes.
-
-**What it includes:**
-- Invoice completion audits
-- Job progress checking
-- Platform data collection
-- Invoice validation reports
-- Job percentage analytics
-
-**Tech:** Model Context Protocol (MCP), AI Agents, Prompt Engineering
-
-**Why these are workflows:** They're automated processes using AI and MCP integrations, not standalone tools you install and run.
-
-[Workflow docs](agent-and-mcp-works/)
-
----
-
-### Test Automation Frameworks
-
-UI and API automation with Playwright and Selenium using Page Object Model (POM).
-
-**What I'm testing:**
-- Load Management module (create loads, assign routes, validate constraints)
-- Route Optimization workflows (TSP validation, constraint checking)
-- Contract Execution (pricing rules, invoice generation)
-- GPS tracking features (device management, geofencing)
-- API validations (backend consistency checks)
-
-**Framework setup:**
-- POM design pattern for maintainability
-- Playwright for modern UI testing (faster, more reliable than Selenium)
-- Selenium for legacy browser support
-- Integrated with Testiny for test management
-- Jira integration for defect tracking
-
-**Current coverage:** Managing 1000+ test cases across all modules. Run full regression before each release.
-
-**What works well:** POM pattern makes maintenance easy when UI changes. Playwright's auto-wait is a game changer.
-
-**What's hard:** Keeping tests stable across environments. Flaky tests are still a challenge with network-dependent features.
-
-**Note:** This code is proprietary (Haulmatic's codebase), so not in this public repo.
-
----
-
-## Personal/Side Tools
-
-Quick utilities I built for testing workflows:
-
-### Geo Coordinate Converter
-Batch converts addresses to GPS coordinates (and reverse). Useful when you need to generate test data with realistic locations.
-
-**Tech:** Python, Geocoding APIs, Tkinter
-
-[Code](geo-coordinate-converter/)
-
----
-
-### Excel Diff Tool
-Compares two Excel files sheet-by-sheet and generates a detailed diff report. Saved me hours when validating data migrations.
-
-**Tech:** Python, Pandas, OpenPyXL
-
-[Code](excel-master-diff/)
-
----
-
-### Excel Job Highlighter
-Color-codes Excel rows based on job IDs. Makes it easy to spot patterns in large datasets during manual review.
-
-**Tech:** Python, Pandas, OpenPyXL
-
-[Code](excel-job-highlighter/)
-
----
-
-### Order Data Generator
-Generates realistic test order data (customer info, products, dates, statuses). Built it when I needed 1000+ test orders for performance testing.
-
-**Tech:** Python, Faker library, Tkinter
-
-[Code](order-data-generator/)
-
----
-
-## Previous Work (IFS R&D International)
-
-During my time as a QA trainee at IFS, I worked on:
-
-**IFS Apps 10 Testing:** System testing across multiple releases (21R2 to 24R1) in 5+ environments. Built Cypress automation suites enhanced with Cucumber BDD for better readability.
-
-**Page Designer QA:** Created comprehensive test suite with 200+ scenarios covering conditional logic, layouts, and data binding. Built RTMs (Requirements Traceability Matrix) and mind maps for requirement visualization.
-
-**Cypress Stabilization:** Fixed 30+ flaky tests in the legacy Cypress suite. Improved wait strategies, updated selectors, and introduced a test tagging system that reduced regression filtering time.
-
-**What I learned:** Working on an enterprise ERP system taught me how to test complex business logic, handle multi-environment deployments, and write maintainable automation that lasts across releases.
-
-**Note:** IFS work is proprietary, so code isn't included here.
-
----
-
-## Stats
-
-- **9 standalone tools built** (in this repo)
-- **AI/MCP workflows implemented** (test case generation, invoice audits, job analysis)
-- **1000+ GPS devices** simulated simultaneously
-- **50% error reduction** with Excel validator
-- **2+ hours saved daily** with Job Master data processor
-- **90% time saved** with AI workflow for test case generation
-- **1000+ test cases** managed in Testiny
-- **2+ years** professional QA experience
-- **Tech stack:** Playwright, Selenium, Cypress, Python, JavaScript, TypeScript, Next.js, React
-
----
-
-## What I'm Working On Next
-
-- **Deploy Route Optimizer** to Vercel for live demo
-- **Add CI/CD integration** to test frameworks (GitHub Actions)
-- **Improve GPS suite** with better error handling at scale
-- **Explore AI for test data generation** (next evolution after test case gen)
+- 1,000+ test cases prepared and executed across TMS releases
+- 1,000+ defects identified and reported with reproduction evidence
+- 75% reduction in route and optimizer testing effort using the Route Optimizer Validation Engine
+- 50%+ reduction in customer upload errors after introducing the Excel Validator
 
 ---
 
 ## Contact
 
-Want to chat about QA automation, testing tools, or how to scale test infrastructure?
+- **Email:** bathiyalakruwan99@gmail.com
+- **Website:** [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)
+- **LinkedIn:** [linkedin.com/in/bathiyalakruwan99](https://www.linkedin.com/in/bathiyalakruwan99/)
 
-**Email:** bathiyalakruwan99@gmail.com  
-**Website:** [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)  
-**LinkedIn:** [linkedin.com/in/bathiyalakruwan](https://www.linkedin.com/in/bathiyalakruwan/)
-
----
-
-*Most of these tools were built to solve actual problems I faced in QA work. If you're dealing with similar challenges, feel free to use or adapt any of this code. That's why it's MIT licensed.*
+Sanitized QA tools and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows. MIT licensed — see [LICENSE](LICENSE).

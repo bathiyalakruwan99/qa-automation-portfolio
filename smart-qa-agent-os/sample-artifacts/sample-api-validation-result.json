@@ -1,0 +1,49 @@
+{
+  "_note": "Synthetic example for portfolio demonstration. Not from any real system.",
+  "suite": "Order Dispatch API",
+  "executedAt": "2026-06-28T14:05:00Z",
+  "environment": "demo",
+  "results": [
+    {
+      "case": "POST /demo/orders/DEMO-ORD-1001/dispatch — happy path",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "schemaValid": true,
+      "result": "pass"
+    },
+    {
+      "case": "POST dispatch with missing vehicleId",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "schemaValid": true,
+      "result": "pass"
+    },
+    {
+      "case": "POST dispatch without authorization",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "schemaValid": true,
+      "result": "pass"
+    },
+    {
+      "case": "POST dispatch with capacity-exceeded vehicle",
+      "expectedStatus": 409,
+      "actualStatus": 409,
+      "schemaValid": true,
+      "result": "pass",
+      "uiHybridCheck": {
+        "uiStatus": "Dispatched",
+        "apiStatus": "Conflict",
+        "hybridResult": "fail",
+        "evidence": "synthetic-evidence/ui-vs-api-mismatch.png"
+      }
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 0,
+    "hybridIssue": 1,
+    "recommendation": "Open defect: UI status does not reflect API conflict for capacity-exceeded dispatch."
+  }
+}

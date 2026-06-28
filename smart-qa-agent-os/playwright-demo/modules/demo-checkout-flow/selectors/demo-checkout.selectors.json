@@ -1,0 +1,48 @@
+{
+  "_note": "Synthetic demo selectors. No real selectors are exposed. Strategy prefers role/label/test-id.",
+  "login": {
+    "email": "role=textbox[name=Email]",
+    "password": "role=textbox[name=Password]",
+    "submit": "role=button[name=Sign in]"
+  },
+  "home": {
+    "shopNow": "data-testid=cta-shop-now",
+    "miniCart": "data-testid=mini-cart"
+  },
+  "products": {
+    "productCard": "data-testid=product-card",
+    "addToCart": "role=button[name=Add to cart]"
+  },
+  "cart": {
+    "cartRow": "data-testid=cart-row",
+    "removeItem": "role=button[name=Remove]",
+    "checkout": "role=button[name=Checkout]"
+  },
+  "shipping": {
+    "fullName": "data-testid=ship-full-name",
+    "line1": "data-testid=ship-line1",
+    "city": "data-testid=ship-city",
+    "postcode": "data-testid=ship-postcode",
+    "country": "data-testid=ship-country",
+    "continue": "role=button[name=Continue to payment]"
+  },
+  "coupon": {
+    "code": "data-testid=coupon-input",
+    "apply": "role=button[name=Apply coupon]",
+    "appliedBadge": "data-testid=coupon-applied"
+  },
+  "payment": {
+    "cardholder": "data-testid=card-holder",
+    "cardNumber": "data-testid=card-number",
+    "expiry": "data-testid=card-expiry",
+    "placeOrder": "role=button[name=Place order]"
+  },
+  "orderConfirmation": {
+    "orderRef": "data-testid=confirmation-order-ref",
+    "status": "data-testid=confirmation-status"
+  },
+  "accountOrders": {
+    "orderRow": "data-testid=account-order-row",
+    "statusBadge": "data-testid=account-order-status"
+  }
+}

@@ -1,32 +1,46 @@
-# Bulk File Generator
+# Excel Validator / Bulk File Generator
 
-Excel file validation and correction tools for TMS data uploads. Reduces customer upload errors by 50%+.
+Excel file validation and correction tools for TMS data uploads. Reduced customer upload errors by 50%+.
 
 ---
 
-## What's Here
+## Business Problem
 
-**Excel File Corrector** - Main tool with desktop GUI, web interface, and command-line options
+Customers uploading bulk data (organizations, vehicles, drivers, locations) to a TMS regularly hit validation errors — wrong formats, missing fields, duplicate IDs, invalid districts. The support team is then flooded with tickets that are really data-quality problems, not product defects.
+
+## QA Challenge
+
+- Catch data issues **before** they reach the platform
+- Auto-correct common, deterministic mistakes
+- Highlight errors that need human attention
+- Validate large files quickly enough to use in QA and support workflows
+
+## Solution
+
+A Python validator and corrector exposed via three interfaces:
+
+- Desktop GUI (Tkinter)
+- Web interface (Flask) with drag-and-drop upload
+- Command-line batch processing
 
 [See detailed docs →](excel-corrector/README.md)
 
 ![Excel Corrector GUI](excel-corrector/screenshots/main-gui.png)
 
----
+## Key Capabilities
 
-## Why I Built This
+- Validates organization details, divisions, HR data, vehicles, and locations
+- Auto-corrects status fields, district names, missing NICs, duplicates
+- Produces detailed correction reports and timestamped output files
+- Error highlighting for fields that need manual review
 
-Customers uploading bulk data to our TMS (organizations, vehicles, drivers, locations) kept hitting validation errors. Wrong formats, missing fields, duplicate IDs, invalid districts - the support team was flooded with tickets.
+## Tech Stack
 
-**Solution:** Build a validator that checks Excel files before upload and auto-corrects common issues.
+Python 3.7+, Pandas, OpenPyXL, Tkinter, Flask, Werkzeug
 
-**Impact:** Upload errors dropped by 50%+. Support tickets significantly reduced.
+## How It Works
 
----
-
-## Quick Start
-
-### Desktop GUI (Recommended)
+### Desktop GUI (recommended)
 
 ```bash
 cd excel-corrector
@@ -34,121 +48,63 @@ pip install -r requirements.txt
 python excel_corrector_gui.py
 ```
 
-### Web Interface
+### Web interface
 
 ```bash
 cd excel-corrector
 pip install -r requirements.txt
 python app.py
-# Open http://localhost:5000
+# open http://localhost:5000
 ```
 
-### Command Line
+### Command line
 
 ```bash
 cd excel-corrector
 python excel_corrector.py
 ```
 
----
+### Example corrections
 
-## What It Does
+- `Gampaha` → `Gampaha District`
+- Empty NIC → `DUMMYNIC001+org_name`
+- Duplicate email → `DUPLICATE1+original@email.com`
+- Empty status → `Create`
 
-**Validates and auto-corrects:**
-- Organization details (status, verticals, country/state)
-- Division information
-- Human Resources (names, NIC, email, gender)
-- Vehicle details (division, type, category)
-- Location data
-- Duplicate detection (NIC, email)
-- Format standardization
+See [excel-corrector/README.md](excel-corrector/README.md) for the full rule list.
 
-**Example corrections:**
-- "Gampaha" → "Gampaha District"
-- Empty NIC → "DUMMYNIC001+org_name"
-- Duplicate email → "DUPLICATE1+original@email.com"
-- Status fields → "Create"
-
-[See full correction rules →](excel-corrector/README.md)
-
----
-
-## Features
-
-- Desktop GUI with file browser and progress tracking
-- Web interface with drag-and-drop upload
-- Command-line batch processing
-- Detailed correction reports
-- Multiple processing options
-- Error highlighting
-- Automatic timestamped output files
-
----
-
-## Tech Stack
-
-- Python 3.7+
-- Pandas (data processing)
-- OpenPyXL (Excel manipulation)
-- Tkinter (desktop GUI)
-- Flask (web interface)
-
----
-
-## Requirements
-
-```bash
-pip install pandas openpyxl flask werkzeug
-```
-
-Or use requirements.txt:
-```bash
-pip install -r excel-corrector/requirements.txt
-```
-
----
-
-## Project Structure
+### Project structure
 
 ```
 bulkfile-generator/
 └── excel-corrector/
-    ├── excel_corrector.py          # Core engine
-    ├── excel_corrector_gui.py      # Desktop GUI
-    ├── app.py                      # Web interface
-    ├── givenFile/                  # Input files
-    ├── Created new one/            # Output files
-    ├── Error file/                 # Error logs
-    ├── screenshots/                # Tool screenshots
-    └── README.md                   # Detailed docs
+    ├── excel_corrector.py        # Core engine
+    ├── excel_corrector_gui.py    # Desktop GUI
+    ├── app.py                    # Web interface
+    ├── givenFile/                # Input files
+    ├── Created new one/          # Output files
+    ├── Error file/               # Error logs
+    ├── screenshots/              # Tool screenshots
+    └── README.md
 ```
 
----
+## Sample Evidence / Screenshots
 
-## Output
+- GUI screenshot: `excel-corrector/screenshots/main-gui.png`
+- Corrected outputs use a timestamped filename: `original_name_corrected_file_YYYYMMDD_HHMMSS.xlsx`
 
-Corrected files saved as:
-```
-original_name_corrected_file_YYYYMMDD_HHMMSS.xlsx
-```
+## QA Value
 
-Located in `Created new one/` directory
+- Removes a common class of false defects driven by bad upload data
+- Cuts support load by 50%+ for upload-related tickets
+- Provides QA with a reusable validator to harden new ingestion flows
 
----
+## Limitations
 
-## What I Learned
+- Validation rules are tuned for TMS organization, division, HR, vehicle, and location sheets
+- District mapping is currently Sri Lanka focused
+- Heavy customization belongs in a rules-config file rather than code
 
-**Challenges:**
-- Handling multiple sheet types with different validation rules
-- Detecting and preventing duplicates without breaking existing data
-- Making district name mapping comprehensive for Sri Lanka
-- Building both GUI and web interfaces
+## Confidentiality Note
 
-**What I'd do differently:**
-- Should've built web version first (most users prefer browsers)
-- Could add more customizable validation rules
-- Export validation report separately
-
----
-
-*Built to reduce TMS upload errors. Saves support team hours every week.*
+Sample inputs and outputs are sanitized or fictional. No real customer files, organization data, or PII are committed. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

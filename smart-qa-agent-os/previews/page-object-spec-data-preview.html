@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Checkout - Page Object / Spec / Data Map</title>
+  <style>
+    :root {
+      --page-bg: #070b1a;
+      --panel-bg: #09102a;
+      --panel-border: #1a2756;
+      --text: #d8e1ff;
+      --muted: #93a4d8;
+      --button-bg: #111b3d;
+      --button-hover: #18265a;
+      --active-tab: #213a86;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden;
+      background: var(--page-bg); color: var(--text);
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    #app { width: 100%; height: 100vh; display: grid; grid-template-rows: auto auto auto 1fr; overflow: hidden; }
+    #header {
+      padding: 10px 14px; border-bottom: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-size: 13px; min-height: 54px;
+    }
+    #header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    #header small { color: var(--muted); display: block; margin-top: 2px; }
+    .badge {
+      background: rgba(33, 58, 134, 0.4); border: 1px solid var(--panel-border);
+      color: var(--muted); padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; margin-left: 8px;
+    }
+    #legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; color: var(--muted); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    #toolbar {
+      padding: 8px 14px; background: rgba(9, 16, 42, 0.92);
+      border-bottom: 1px solid var(--panel-border);
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    }
+    button {
+      background: var(--button-bg); color: var(--text);
+      border: 1px solid var(--panel-border); border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; cursor: pointer;
+    }
+    button:hover { background: var(--button-hover); }
+    button.active { background: var(--active-tab); border-color: #3a5dc7; }
+    #infoBar {
+      padding: 8px 14px; color: var(--muted); font-size: 12px;
+      border-bottom: 1px solid var(--panel-border); background: rgba(9, 16, 42, 0.6);
+    }
+    #graph { width: 100%; height: 100%; min-height: 0; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div>
+        <h1>Demo Checkout - Page Object / Spec / Data Map <span class="badge">Synthetic demo example</span></h1>
+        <small>Sanitized public preview. Pages, specs, selectors, data, and components from the public demo-checkout-flow module.</small>
+      </div>
+      <div id="legend">
+        <span class="legend-item"><span class="dot" style="background:#6cd1c4"></span>Page Object</span>
+        <span class="legend-item"><span class="dot" style="background:#a37cf0"></span>Component</span>
+        <span class="legend-item"><span class="dot" style="background:#f1c873"></span>Spec</span>
+        <span class="legend-item"><span class="dot" style="background:#7ec9d9"></span>Data</span>
+        <span class="legend-item"><span class="dot" style="background:#d97e7e"></span>Selector</span>
+        <span class="legend-item"><span class="dot" style="background:#9ce07c"></span>Flow / Fixture</span>
+      </div>
+    </div>
+    <div id="toolbar">
+      <button id="filter-all" class="active" onclick="setFilter('all', event.target)">All</button>
+      <button onclick="setFilter('pages', event.target)">Pages</button>
+      <button onclick="setFilter('specs', event.target)">Specs</button>
+      <button onclick="setFilter('data', event.target)">Data</button>
+      <button onclick="setFilter('selectors', event.target)">Selectors</button>
+      <button onclick="setFilter('flows', event.target)">Flows / Fixtures</button>
+      <button onclick="fitGraph()">Fit</button>
+    </div>
+    <div id="infoBar">Drag nodes to rearrange. Scroll to zoom. Click a spec to see which pages, data, and selectors it touches.</div>
+    <div id="graph"></div>
+  </div>
+
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script>
+    const C = {
+      page: '#6cd1c4', component: '#a37cf0', spec: '#f1c873',
+      data: '#7ec9d9', selector: '#d97e7e', flow: '#9ce07c'
+    };
+
+    const allNodes = [
+      // Pages
+      { id: 'p_login', group: 'pages', label: 'LoginPage', color: C.page, shape: 'box' },
+      { id: 'p_home', group: 'pages', label: 'HomePage', color: C.page, shape: 'box' },
+      { id: 'p_products', group: 'pages', label: 'ProductsPage', color: C.page, shape: 'box' },
+      { id: 'p_cart', group: 'pages', label: 'CartPage', color: C.page, shape: 'box' },
+      { id: 'p_shipping', group: 'pages', label: 'ShippingPage', color: C.page, shape: 'box' },
+      { id: 'p_coupon', group: 'pages', label: 'CouponPage', color: C.page, shape: 'box' },
+      { id: 'p_payment', group: 'pages', label: 'PaymentPage', color: C.page, shape: 'box' },
+      { id: 'p_confirm', group: 'pages', label: 'OrderConfirmationPage', color: C.page, shape: 'box' },
+      { id: 'p_account', group: 'pages', label: 'AccountOrdersPage', color: C.page, shape: 'box' },
+
+      // Components
+      { id: 'c_cartSummary', group: 'pages', label: 'CartSummary', color: C.component, shape: 'ellipse' },
+
+      // Specs
+      { id: 's_e2e', group: 'specs', label: 'e2e.spec', color: C.spec, shape: 'dot', size: 22 },
+      { id: 's_addCart', group: 'specs', label: 'add-to-cart.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_shipping', group: 'specs', label: 'shipping.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_coupon', group: 'specs', label: 'coupon.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_payment', group: 'specs', label: 'payment.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_history', group: 'specs', label: 'order-history.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_multi', group: 'specs', label: 'multi-item.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_neg', group: 'specs', label: 'negative.spec', color: C.spec, shape: 'dot', size: 18 },
+      { id: 's_diag', group: 'specs', label: 'diagnostic.spec', color: C.spec, shape: 'dot', size: 18 },
+
+      // Data
+      { id: 'd_demo', group: 'data', label: 'demo-checkout.test-data.json', color: C.data, shape: 'database' },
+      { id: 'd_types', group: 'data', label: 'data/types.ts', color: C.data, shape: 'database' },
+
+      // Selectors (catalog)
+      { id: 'l_login', group: 'selectors', label: 'selectors: login.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_cart', group: 'selectors', label: 'selectors: cart.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_shipping', group: 'selectors', label: 'selectors: shipping.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_coupon', group: 'selectors', label: 'selectors: coupon.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_payment', group: 'selectors', label: 'selectors: payment.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_confirm', group: 'selectors', label: 'selectors: orderConfirmation.*', color: C.selector, shape: 'triangle' },
+      { id: 'l_account', group: 'selectors', label: 'selectors: accountOrders.*', color: C.selector, shape: 'triangle' },
+
+      // Flow / Fixture
+      { id: 'f_flow', group: 'flows', label: 'demo-checkout.flow.ts', color: C.flow, shape: 'star', size: 20 },
+      { id: 'f_fix', group: 'flows', label: 'demoFixtures.ts', color: C.flow, shape: 'star', size: 20 },
+      { id: 'f_bdd', group: 'flows', label: 'bddFixtures.ts', color: C.flow, shape: 'star', size: 18 }
+    ];
+
+    const allEdges = [
+      // flow composes pages
+      { from: 'f_flow', to: 'p_login' }, { from: 'f_flow', to: 'p_home' },
+      { from: 'f_flow', to: 'p_products' }, { from: 'f_flow', to: 'p_cart' },
+      { from: 'f_flow', to: 'p_shipping' }, { from: 'f_flow', to: 'p_coupon' },
+      { from: 'f_flow', to: 'p_payment' }, { from: 'f_flow', to: 'p_confirm' },
+      { from: 'f_flow', to: 'p_account' },
+
+      // fixtures expose pages
+      { from: 'f_fix', to: 'p_login', dashes: true }, { from: 'f_fix', to: 'p_cart', dashes: true },
+      { from: 'f_fix', to: 'p_shipping', dashes: true }, { from: 'f_fix', to: 'p_payment', dashes: true },
+      { from: 'f_bdd', to: 'f_fix', dashes: true },
+
+      // cart uses component
+      { from: 'p_cart', to: 'c_cartSummary', label: 'uses' },
+
+      // selectors per page
+      { from: 'p_login', to: 'l_login', dashes: true },
+      { from: 'p_cart', to: 'l_cart', dashes: true },
+      { from: 'p_shipping', to: 'l_shipping', dashes: true },
+      { from: 'p_coupon', to: 'l_coupon', dashes: true },
+      { from: 'p_payment', to: 'l_payment', dashes: true },
+      { from: 'p_confirm', to: 'l_confirm', dashes: true },
+      { from: 'p_account', to: 'l_account', dashes: true },
+
+      // data feeds fixtures
+      { from: 'd_demo', to: 'f_fix' },
+      { from: 'd_types', to: 'd_demo', dashes: true, label: 'typed by' },
+
+      // specs use flow + selected pages
+      { from: 's_e2e', to: 'f_flow' },
+      { from: 's_addCart', to: 'p_products' }, { from: 's_addCart', to: 'p_cart' },
+      { from: 's_shipping', to: 'p_shipping' },
+      { from: 's_coupon', to: 'p_coupon' },
+      { from: 's_payment', to: 'p_payment' }, { from: 's_payment', to: 'p_confirm' },
+      { from: 's_history', to: 'p_account' }, { from: 's_history', to: 'p_confirm' },
+      { from: 's_multi', to: 'p_products' }, { from: 's_multi', to: 'p_cart' },
+      { from: 's_neg', to: 'p_shipping' }, { from: 's_neg', to: 'p_coupon' }, { from: 's_neg', to: 'p_payment' },
+      { from: 's_diag', to: 'p_home' }, { from: 's_diag', to: 'p_products' }
+    ];
+
+    const nodes = new vis.DataSet(allNodes);
+    const edges = new vis.DataSet(allEdges);
+    const data = { nodes, edges };
+    const container = document.getElementById('graph');
+    const options = {
+      nodes: { font: { color: '#e6ecff', size: 12, face: 'Inter, Segoe UI, Arial' }, borderWidth: 1 },
+      edges: {
+        color: { color: '#3a4f95', highlight: '#7fa6ff' },
+        font: { color: '#93a4d8', size: 10, strokeWidth: 0, align: 'middle' },
+        smooth: { type: 'continuous' }
+      },
+      physics: {
+        forceAtlas2Based: { gravitationalConstant: -50, springLength: 120, springConstant: 0.07 },
+        solver: 'forceAtlas2Based',
+        stabilization: { iterations: 260 }
+      },
+      interaction: { hover: true }
+    };
+    const network = new vis.Network(container, data, options);
+
+    function setFilter(filter, btn) {
+      document.querySelectorAll('#toolbar button').forEach((b) => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (filter === 'all') {
+        nodes.update(allNodes.map((n) => ({ id: n.id, hidden: false })));
+      } else {
+        nodes.update(allNodes.map((n) => ({ id: n.id, hidden: n.group !== filter })));
+      }
+      network.fit({ animation: { duration: 300 } });
+    }
+    function fitGraph() { network.fit({ animation: { duration: 400 } }); }
+  </script>
+</body>
+</html>

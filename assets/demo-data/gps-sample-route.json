@@ -1,0 +1,9 @@
+{
+  "deviceId": "Vehicle-001",
+  "route": "Warehouse A -> Customer Site B -> Zone Alpha",
+  "points": [
+    { "lat": 0.0001, "lng": 0.0001, "speed": 20, "ts": "2026-01-01T08:00:00Z" },
+    { "lat": 0.0002, "lng": 0.0002, "speed": 22, "ts": "2026-01-01T08:00:05Z" },
+    { "lat": 0.0003, "lng": 0.0003, "speed": 24, "ts": "2026-01-01T08:00:10Z" }
+  ]
+}

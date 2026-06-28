@@ -1,281 +1,96 @@
-# AI-Powered Test Case Generation
+# AI-Assisted Test Case Workflow
 
-Automated test case generation using ChatGPT/Claude with custom prompts. Reduces test case creation from 2-4 hours to 15-30 minutes (90% time savings).
+A documented QA workflow (not a standalone tool) that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a **mandatory QA review step** before any test case is published.
 
 ---
 
-## What This Does
+## Business Problem
 
-Uses AI (ChatGPT, Claude) with specialized prompts to automatically generate comprehensive test cases from requirements.
+Writing comprehensive test cases for new TMS features is slow and repetitive: read the Jira ticket, open Figma, walk the acceptance criteria, capture happy paths and edge cases, and produce 50–100 test cases per module in the test-management format. This work is high-volume but low-novelty per ticket and slows the release cycle.
 
-**Workflow:**
+## QA Challenge
+
+- Consistently cover acceptance criteria, edge cases, and negative paths
+- Keep test cases in sync with Jira and Figma changes
+- Avoid AI hallucinations finding their way into the test suite
+- Keep a defensible audit trail of how each test case was authored
+
+## Solution
+
+A documented workflow with four stages:
+
+1. **Gather context** via Jira MCP (tickets, acceptance criteria) and Figma MCP (designs, UI specs).
+2. **Structure coverage** in an RTMS-style mind map (modules, flows, edge cases).
+3. **Draft test cases with AI** (ChatGPT / Claude / Cursor) using specialized prompts.
+4. **Mandatory human review** before anything is converted to CSV and imported into the test-management tool.
+
 ```
-Jira MCP → Figma MCP → RTMS Mind Maps → AI Test Cases → Manual Review → CSV → Testiny Import
-```
-
-**Impact:** 90% time reduction in test case creation for new features
-
----
-
-## Why I Built This
-
-Writing test cases for new TMS features was taking 2-4 hours per module. Get a Jira ticket with requirements, manually write 50-100 test cases in Testiny format. Repeat every sprint.
-
-**The pain:** Slow, repetitive, boring work that AI could handle better.
-
-**Solution:** Create specialized prompts that generate test cases matching our format, then auto-convert to CSV for Testiny import.
-
-**Result:** Test case creation now takes 15-30 minutes instead of hours. QA team uses this for every new feature.
-
----
-
-## How It Works
-
-### Step 1: Gather Requirements with MCPs
-- **Jira MCP:** Read tickets directly (PB numbers, acceptance criteria, user stories)
-- **Figma MCP:** Fetch design files and UI specs automatically
-- **Context:** Get complete picture without manual copy-paste
-
-### Step 2: Create RTMS Mind Maps
-- Build mind maps using ticket + Figma data
-- Structure test scenarios visually
-- Map user flows and edge cases
-- Create test coverage matrix
-
-### Step 3: AI Test Case Generation
-- Feed mind maps to AI (ChatGPT, Claude, Cursor AI)
-- AI generates structured test cases from mind map nodes
-- Uses specialized prompts for different test types
-- Outputs in Markdown format
-
-### Step 4: Manual Review & Refinement
-- Read actual Jira ticket thoroughly
-- Check Figma files for UI details
-- Review actual development implementation
-- Refine AI-generated test cases for accuracy
-- Add domain-specific edge cases AI might miss
-
-### Step 5: Format & Import
-- Convert refined Markdown to CSV
-- Apply Testiny character limits
-- Import to Testiny and link to Jira
-- Assign and execute
-
----
-
-## What's Included
-
-### `contract-testcase-automation/`
-Generate test cases for contract verification, billing, invoice calculations.
-
-**Use case:** Contract rules, pricing validation, invoice workflows
-
-### `manual-routing-guides/`
-Comprehensive test documentation for routing and load planning.
-
-**Use case:** Transport planning features, route optimization
-
-### `test-case-remapper/`
-Transform and optimize test cases between formats.
-
-**Use case:** Cleaning up exported test cases, applying character limits
-
-### `testini-jira-sync/`
-Synchronize test cases between Testiny and Jira.
-
-**Use case:** Bidirectional sync, test execution tracking
-
----
-
-## Quick Example
-
-### Input (Jira Ticket):
-```
-Feature: GPS Device Management
-- Add new GPS device
-- View device list
-- Edit device details
-- Delete device
+Jira MCP → Figma MCP → RTMS Mind Map → AI Draft → Human Review → CSV → Test Management Tool
 ```
 
-### AI Prompt Used:
-```
-Generate test cases for GPS device management with CRUD operations.
-Include positive, negative, and edge cases.
-Format for Testiny with these fields: Title, Description, Steps, Expected Result, Priority.
-```
+## Key Capabilities
 
-### Output Generated:
-- 20-30 test cases covering all scenarios
-- Positive cases (happy path)
-- Negative cases (validation errors)
-- Edge cases (boundary conditions)
-- Already formatted for Testiny import
-
-**Time:** 15-20 minutes (vs 3-4 hours manually)
-
----
-
-## Test Case Standards
-
-### Naming Convention:
-```
-[Module][Feature]Verify that User can [Action] successfully
-```
-
-**Examples:**
-- `[GPS Manager][Device List]Verify that User can view all devices successfully`
-- `[Route Planning][Load Assignment]Verify that User can assign load to route successfully`
-
-### Required Fields:
-- Module
-- Title
-- Description (max 500 chars)
-- Precondition (max 1000 chars)
-- Steps (max 2000 chars, use semicolons)
-- Expected Result (max 1000 chars)
-- Priority (Critical/High/Medium/Low)
-- Type (Functional/UI-UX/Data Validation)
-
----
-
-## Character Limits (Testiny)
-
-The prompts automatically enforce these:
-- **Actual Result:** 255 characters (strict)
-- **Description:** 500 characters
-- **Precondition:** 1000 characters
-- **Steps:** 2000 characters (use `;` not line breaks)
-- **Expected Result:** 1000 characters
-- **Test Data:** 500 characters
-
----
-
-## Benefits
-
-### Time Savings
-- Traditional: 2-4 hours for 20 test cases
-- AI-powered: 15-30 minutes for 50+ test cases
-- **90% reduction** in creation time
-
-### Quality Improvements
-- Consistent structure across all test cases
-- Complete requirement coverage
-- Professional formatting
-- Platform-ready (Testiny/Jira)
-
-### Scalability
-- Generate test cases for multiple features simultaneously
-- Process large test suites quickly
-- Maintain standards across projects
-- Reusable templates
-
----
+- Jira and Figma context pulled through MCP integrations
+- Mind-map driven coverage structure
+- Reusable prompt set for different test types (functional, negative, API, regression)
+- Hard gate: **no test case is published without QA review**
+- CSV-based import path into the test-management tool
 
 ## Tech Stack
 
-- **MCPs:** Jira MCP (ticket reading), Figma MCP (design access)
-- **Mind Mapping:** RTMS for visual test planning
-- **AI Assistants:** ChatGPT, Claude, Cursor AI
-- **Format:** Markdown → CSV
-- **Test Management:** Testiny
-- **Issue Tracking:** Jira
-- **Automation:** Python scripts for CSV conversion
+Jira MCP, Figma MCP, ChatGPT / Claude / Cursor, mind-mapping tools, Python (CSV conversion)
 
----
+## How It Works
 
-## Best Practices
+### Step 1 — Gather requirements (MCPs)
 
-1. **Start with Markdown** - Easier to read and edit
-2. **Use specific prompts** - Different prompts for different test types
-3. **Review AI output** - AI is great but not perfect, always review
-4. **Test with small batch first** - Verify format before bulk import
-5. **Iterate prompts** - Improve prompts based on results
+- Jira MCP returns ticket metadata, acceptance criteria, and links.
+- Figma MCP returns design file context for the affected screens.
 
----
+### Step 2 — Build a mind map
 
-## Common Workflows
+- Map user flows, data conditions, and edge cases.
+- Group by module / feature / screen.
 
-### New Feature Testing:
-```
-1. Use Jira MCP to read ticket (PB number)
-2. Use Figma MCP to fetch design files
-3. Create RTMS mind map from ticket + Figma
-4. AI generates test cases from mind map
-5. Manually review ticket, Figma, and actual dev implementation
-6. Refine AI test cases for accuracy
-7. Convert to CSV and import to Testiny
-8. Assign and execute
-```
+### Step 3 — Draft with AI
 
-### Contract Testing:
-```
-1. Get contract document
-2. Use contract-testcase-automation prompts
-3. Generate calculation test cases
-4. Export CSV
-5. Import to Testiny
-```
+- Feed structured mind-map content to the AI with a specialized prompt.
+- AI produces a draft test-case list in a defined format.
 
-### Test Case Cleanup:
-```
-1. Export existing test cases
-2. Use test-case-remapper prompts
-3. AI optimizes and formats
-4. Import cleaned version
-```
+### Step 4 — Human review (mandatory)
 
----
+- Verify each draft against the ticket, design, and dev implementation.
+- Reject or rewrite anything that the AI invented.
+- Confirm naming, expected results, and tags.
 
-## What I Learned
+### Step 5 — Import
 
-**What works well:**
-- MCP integration eliminates manual copy-paste from Jira/Figma
-- Mind maps provide better structure than raw requirements
-- AI generates comprehensive test cases from structured input
-- Saves massive amounts of time (90% reduction)
+- Convert reviewed test cases to CSV.
+- Import into the test-management tool.
 
-**What needs attention:**
-- AI sometimes misses domain-specific edge cases
-- Manual refinement is essential (10-15 min review)
-- Must verify against actual development, not just specs
-- Character limits need careful prompt engineering
+## Sample Evidence / Screenshots
 
-**The process:**
-1. MCPs gather data automatically (saves 5-10 min)
-2. Mind mapping helps visualize test coverage (10 min)
-3. AI generates 50+ test cases (5 min)
-4. Manual review and refinement (10-15 min)
-5. Total: ~30 min vs 3-4 hours manually
+Workflow examples and supporting subprojects live in:
 
-**The catch:** 
-You can't just blindly use AI output. Always cross-check with actual ticket, Figma designs, and development implementation. But even with this review, it's still 90% faster than manual writing.
+- `contract-testcase-automation/` — contract-test case scaffolding
+- `manual-routing-guides/` — guides used by manual testers
+- `test-case-remapper/` — remap utilities
+- `testini-jira-sync/` — sync helpers between Jira and the test-management tool
 
----
+## QA Value
 
-## Folder Structure
+- Cuts time-to-first-draft from hours to minutes per module
+- Improves coverage consistency through reusable prompts and templates
+- Keeps a defensible authoring trail (mind map + reviewed draft + CSV)
+- Frees QA time for exploratory and risk-based testing
 
-```
-test-cases-creation-automatic/
-├── contract-testcase-automation/   # Contract test generation
-├── manual-routing-guides/          # Routing test docs
-├── test-case-remapper/             # Format optimization
-├── testini-jira-sync/              # Platform sync
-└── README.md                       # This file
-```
+## Limitations
 
-Each subfolder has its own README with specific instructions.
+- This is a **workflow**, not a single installable product
+- AI drafts must be reviewed; unreviewed output is not allowed in the test suite
+- Quality of output depends on the quality of the ticket, design, and prompt
+- MCP integrations require their own setup and access tokens
 
----
+## Confidentiality Note
 
-## Future Improvements
-
-- Add more specialized prompts (API testing, performance testing)
-- Automate CSV conversion completely
-- Direct Testiny API integration (skip manual import)
-- Test data generation with AI
-- Intelligent test selection based on code changes
-
----
-
-*Built to eliminate repetitive test case writing. Now the QA team can focus on actual testing instead of documentation.*
+No real Jira ticket data, real Figma files, real prompts referencing customer data, or real screenshots are included. Examples are sanitized or fictional. Credentials live in environment variables that are not committed. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

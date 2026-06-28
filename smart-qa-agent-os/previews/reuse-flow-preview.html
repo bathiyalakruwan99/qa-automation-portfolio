@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Checkout - Reuse Force Graph</title>
+  <style>
+    :root {
+      --page-bg: #070b1a;
+      --panel-bg: #09102a;
+      --panel-border: #1a2756;
+      --text: #d8e1ff;
+      --muted: #93a4d8;
+      --button-bg: #111b3d;
+      --button-hover: #18265a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden;
+      background: var(--page-bg); color: var(--text);
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    #app { width: 100%; height: 100vh; display: grid; grid-template-rows: auto auto 1fr; overflow: hidden; }
+    #header {
+      padding: 10px 14px; border-bottom: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; font-size: 13px; min-height: 54px;
+    }
+    #header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    #header small { color: var(--muted); display: block; margin-top: 2px; }
+    .badge {
+      background: rgba(33, 58, 134, 0.4); border: 1px solid var(--panel-border);
+      color: var(--muted); padding: 2px 8px; border-radius: 999px;
+      font-size: 11px; margin-left: 8px;
+    }
+    #legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; color: var(--muted); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    #toolbar {
+      padding: 8px 14px; background: rgba(9, 16, 42, 0.92);
+      border-bottom: 1px solid var(--panel-border);
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    }
+    button {
+      background: var(--button-bg); color: var(--text);
+      border: 1px solid var(--panel-border); border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; cursor: pointer;
+    }
+    button:hover { background: var(--button-hover); }
+    #graph { width: 100%; height: 100%; min-height: 0; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div>
+        <h1>Demo Checkout - Reuse Force Graph <span class="badge">Synthetic demo example</span></h1>
+        <small>Shows which sub-flows, fixtures, and components are reused across specs in the public demo-checkout-flow module.</small>
+      </div>
+      <div id="legend">
+        <span class="legend-item"><span class="dot" style="background:#9ce07c"></span>Sub-flow</span>
+        <span class="legend-item"><span class="dot" style="background:#a37cf0"></span>Fixture / Component</span>
+        <span class="legend-item"><span class="dot" style="background:#f1c873"></span>Spec</span>
+      </div>
+    </div>
+    <div id="toolbar">
+      <button onclick="fitGraph()">Fit</button>
+      <button onclick="togglePhysics()">Toggle physics</button>
+      <span style="color: var(--muted); font-size: 12px;">Edge thickness indicates relative reuse frequency in the demo module.</span>
+    </div>
+    <div id="graph"></div>
+  </div>
+
+  <script src="https://unpkg.com/vis-network@9.1.9/dist/vis-network.min.js"></script>
+  <script>
+    const C = { sub: '#9ce07c', fix: '#a37cf0', spec: '#f1c873' };
+
+    const nodes = new vis.DataSet([
+      { id: 'sf_signIn', label: 'signIn()', color: C.sub, shape: 'box' },
+      { id: 'sf_addItems', label: 'addItemsToCart()', color: C.sub, shape: 'box' },
+      { id: 'sf_enterShip', label: 'enterShipping()', color: C.sub, shape: 'box' },
+      { id: 'sf_coupon', label: 'applyCoupon()', color: C.sub, shape: 'box' },
+      { id: 'sf_pay', label: 'completePayment()', color: C.sub, shape: 'box' },
+      { id: 'sf_hist', label: 'verifyOrderInHistory()', color: C.sub, shape: 'box' },
+      { id: 'sf_e2e', label: 'runEndToEnd()', color: C.sub, shape: 'box', size: 24 },
+
+      { id: 'fx_demo', label: 'demoFixtures', color: C.fix, shape: 'ellipse' },
+      { id: 'fx_bdd', label: 'bddFixtures', color: C.fix, shape: 'ellipse' },
+      { id: 'cm_cart', label: 'CartSummary', color: C.fix, shape: 'ellipse' },
+      { id: 'ut_dom', label: 'utils/domCapture', color: C.fix, shape: 'ellipse' },
+      { id: 'ut_ids', label: 'utils/demoIds', color: C.fix, shape: 'ellipse' },
+
+      { id: 'sp_e2e', label: 'e2e.spec', color: C.spec, shape: 'dot', size: 22 },
+      { id: 'sp_add', label: 'add-to-cart.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_ship', label: 'shipping.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_coup', label: 'coupon.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_pay', label: 'payment.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_hist', label: 'order-history.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_multi', label: 'multi-item.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_neg', label: 'negative.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_diag', label: 'diagnostic.spec', color: C.spec, shape: 'dot' },
+      { id: 'sp_bddE2E', label: 'steps/demo-checkout.steps', color: C.spec, shape: 'dot' },
+      { id: 'sp_bddCoupon', label: 'steps/demo-checkout-coupons.steps', color: C.spec, shape: 'dot' }
+    ]);
+
+    // weight roughly proportional to reuse count
+    function edge(from, to, weight) {
+      return { from, to, width: 1 + weight, color: { color: '#3a4f95', highlight: '#7fa6ff' } };
+    }
+
+    const edges = new vis.DataSet([
+      edge('sf_e2e', 'sf_signIn', 1), edge('sf_e2e', 'sf_addItems', 1),
+      edge('sf_e2e', 'sf_enterShip', 1), edge('sf_e2e', 'sf_coupon', 1),
+      edge('sf_e2e', 'sf_pay', 1), edge('sf_e2e', 'sf_hist', 1),
+
+      edge('sp_e2e', 'sf_e2e', 4),
+      edge('sp_add', 'sf_signIn', 1), edge('sp_add', 'sf_addItems', 1),
+      edge('sp_ship', 'sf_signIn', 1), edge('sp_ship', 'sf_addItems', 1), edge('sp_ship', 'sf_enterShip', 1),
+      edge('sp_coup', 'sf_signIn', 1), edge('sp_coup', 'sf_addItems', 1), edge('sp_coup', 'sf_enterShip', 1), edge('sp_coup', 'sf_coupon', 2),
+      edge('sp_pay', 'sf_signIn', 1), edge('sp_pay', 'sf_addItems', 1), edge('sp_pay', 'sf_enterShip', 1), edge('sp_pay', 'sf_coupon', 1), edge('sp_pay', 'sf_pay', 2),
+      edge('sp_hist', 'sf_e2e', 0), edge('sp_hist', 'sf_pay', 1), edge('sp_hist', 'sf_hist', 2),
+      edge('sp_multi', 'sf_signIn', 1),
+      edge('sp_neg', 'sf_signIn', 1), edge('sp_neg', 'sf_addItems', 1), edge('sp_neg', 'sf_enterShip', 1),
+      edge('sp_diag', 'sf_signIn', 1),
+
+      edge('sp_bddE2E', 'sf_e2e', 3),
+      edge('sp_bddCoupon', 'sf_coupon', 2),
+
+      // shared fixtures and utilities
+      edge('sp_e2e', 'fx_demo', 1), edge('sp_add', 'fx_demo', 1),
+      edge('sp_ship', 'fx_demo', 1), edge('sp_coup', 'fx_demo', 1),
+      edge('sp_pay', 'fx_demo', 1), edge('sp_hist', 'fx_demo', 1),
+      edge('sp_multi', 'fx_demo', 1), edge('sp_neg', 'fx_demo', 1), edge('sp_diag', 'fx_demo', 1),
+      edge('sp_bddE2E', 'fx_bdd', 1), edge('sp_bddCoupon', 'fx_bdd', 1),
+      edge('fx_bdd', 'fx_demo', 1),
+
+      edge('sp_add', 'cm_cart', 1), edge('sp_multi', 'cm_cart', 1),
+      edge('sp_diag', 'ut_dom', 1),
+      edge('sf_e2e', 'ut_ids', 1)
+    ]);
+
+    const container = document.getElementById('graph');
+    const data = { nodes, edges };
+    const options = {
+      nodes: { font: { color: '#e6ecff', size: 12, face: 'Inter, Segoe UI, Arial' }, borderWidth: 1 },
+      edges: { smooth: { type: 'continuous' } },
+      physics: {
+        forceAtlas2Based: { gravitationalConstant: -55, springLength: 130, springConstant: 0.08 },
+        solver: 'forceAtlas2Based',
+        stabilization: { iterations: 260 }
+      },
+      interaction: { hover: true }
+    };
+    const network = new vis.Network(container, data, options);
+
+    function fitGraph() { network.fit({ animation: { duration: 400 } }); }
+    function togglePhysics() {
+      const enabled = network.physics.physicsEnabled;
+      network.setOptions({ physics: { enabled: !enabled } });
+    }
+  </script>
+</body>
+</html>

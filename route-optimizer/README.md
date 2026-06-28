@@ -1,218 +1,123 @@
-# Route Optimizer (TSP Solver)
+# Route Optimizer Validation Engine
 
-Next.js web app that solves the Traveling Salesman Problem for testing route optimization algorithms. Built for validating TMS route optimization features.
+## Overview
 
-**Scale:** Handles 50+ locations with real road distances
+A QA reference engine for validating order-allocation and route-optimization output produced by an enterprise TMS. The engine accepts a set of orders and vehicles, computes its own expected route and cost using a transparent algorithm and real road distances, and compares the result with the product's optimizer output.
 
-![Route Optimizer](screenshots/route%20optimizer.png)
+## QA Challenge
 
----
+Optimizer features are easy to ship and hard to verify:
 
-## Why I Built This
+- Manual validation of multi-stop routes is impractical beyond a few stops.
+- Real road distances differ from straight-line distances, and small differences compound across long routes.
+- Lower total distance does not always mean lower operating cost. Cost validation must consider vehicle selection, cost per kilometre, capacity, route feasibility, and load allocation.
+- QA needs a defensible, repeatable expected result per scenario.
 
-Our TMS has a route optimizer that needed validation against real-world scenarios. Manual validation of complex multi-location routes wasn't practical - I needed a tool to:
-- Generate optimal routes using standard TSP algorithms
-- Use real road distances (not straight-line)
-- Compare multiple route alternatives
-- Validate our system's routing logic
+## Solution Approach
 
-**Demo Video:** [See it in action](videos/Free%20Route%20Optimizer%20-%20TSP%20Solver.mp4)
+A standalone Next.js engine that:
 
----
+1. Accepts addresses, coordinates, or a CSV / JSON file.
+2. Builds a distance matrix using a public road-routing service.
+3. Solves the routing problem using Nearest Neighbour + 2-opt + 3-opt with a multi-start strategy.
+4. Returns the optimized order, total distance, duration, and alternative routes.
+5. Visualises the route on a Leaflet map for evidence and attachment.
 
-## Features
-
-- No API keys required (uses free OSRM routing)
-- Real road distances from OpenStreetMap
-- Multiple optimization algorithms (Nearest Neighbor + 2-opt + 3-opt)
-- Shows top alternative routes for comparison
-- Interactive map visualization
-- CSV import/export for test data
-- Web Workers for performance (doesn't freeze on large routes)
-- Mobile responsive
-
----
-
-## Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Open browser
-http://localhost:3000
+```mermaid
+flowchart LR
+    A[Sample orders + sample vehicles<br/>CSV / JSON] --> B[Optimizer output<br/>order, distance, cost]
+    B --> C[Validation checks<br/>route / cost / capacity / feasibility]
+    C --> D[QA comparison report<br/>expected vs actual]
 ```
 
----
+## Key Capabilities
 
-## How It Works
+- Independent recomputation of routes for validation, not for production planning.
+- Real road distances via a public routing service, with a Haversine fallback.
+- Multiple algorithms (Nearest Neighbour, 2-opt, 3-opt, multi-start).
+- Alternative routes ranked by distance for comparison.
+- CSV import / export so test scenarios are repeatable.
+- LRU cache for routing-service calls.
+- Web Workers to keep the UI responsive on larger inputs.
+- Documented support for a local OSRM instance to remove public-API rate limits.
 
-### Input
-- Add locations by address or coordinates (lat,lng)
-- Or import CSV file with multiple locations
-- Choose route options (round trip, number of alternatives)
+## Example Workflow
 
-### Optimization
-1. **Nearest Neighbor** - Quick initial solution
-2. **2-opt** - Local search improvement
-3. **3-opt** - Advanced optimization (for ≤30 locations)
-4. **Multi-start** - Try different starting points for better results
+A fictional QA scenario, using generic names and values only:
 
-### Output
-- Optimal route with turn-by-turn directions
-- Multiple alternative routes sorted by distance
-- Total distance and estimated duration
-- Interactive map with route visualization
-- CSV export or Google Maps link
+| Entity     | Capacity   | Cost per km |
+| ---------- | ---------- | ----------- |
+| Vehicle A  | 5,000 kg   | 120 / km    |
+| Vehicle B  | 10,000 kg  | 190 / km    |
 
----
+| Order   | Weight   |
+| ------- | -------- |
+| Order 1 | 2,000 kg |
+| Order 2 | 3,000 kg |
 
-## Technical Details
+1. Load the synthetic orders and vehicles.
+2. Run the reference engine to produce an expected route, distance, and total cost.
+3. Run the product's optimizer with the same inputs.
+4. Compare the two outputs across distance, total cost, vehicle selection, capacity usage, and stop order.
+5. Document any difference, classify it (e.g. wrong vehicle selected, infeasible route, higher cost despite lower distance), and attach the comparison as evidence.
 
-**Algorithms:**
-- TSP solver with Nearest Neighbor heuristic
-- 2-opt improvement (always)
-- 3-opt improvement (when ≤30 locations)
-- Uses real road distances from OSRM
+A safe sanitized location example:
 
-**Distance Calculation:**
-- OSRM Matrix API for TSP optimization (fast)
-- OSRM Route API for final accurate distances
-- LRU cache (80 entries) for performance
-- Haversine fallback if OSRM unavailable
-
-**Performance:**
-- Small routes (≤10 locations): Near-instant
-- Medium routes (11-30): 1-3 seconds
-- Large routes (31-50): 3-10 seconds with Web Worker
-
-**Tech Stack:**
-- Next.js 15, React 18, TypeScript
-- Tailwind CSS for styling
-- Leaflet for maps
-- OSRM for routing
-- Web Workers for performance
-
----
-
-## Supported Input Formats
-
-**Addresses:**
-```
-Colombo, Sri Lanka
-Times Square, New York
-```
-
-**Coordinates:**
-```
-6.9271,79.8612
-40.7589,-73.9851
-```
-
-**CSV Import:**
 ```csv
 name,address
-Location A,6.9271,79.8612
-Location B,Colombo Fort
+Warehouse A,0.0001,0.0001
+Customer Site B,0.0002,0.0002
+Customer Site C,0.0003,0.0003
 ```
 
----
+## QA Scenarios Supported
+
+- Multi-stop routing correctness up to 50 locations
+- Vehicle allocation validation: capacity, cost per km, and feasibility
+- Cost vs distance trade-off (lower distance is not always lower cost)
+- Round-trip and one-way variants
+- Boundary cases: overlapping locations, single-stop routes, capacity-tight allocations
+- Negative cases: infeasible orders, missing coordinates, malformed CSV
+
+## Technology Approach
+
+- Next.js, React, TypeScript, Tailwind CSS
+- Leaflet for map visualisation
+- OSRM (public service or local Docker instance) for real road distances
+- Web Workers for non-blocking optimization
+- LRU cache for routing-service calls
+
+## Evidence and Outputs
+
+Safe public artefacts:
+
+- [`../assets/demo-data/route-orders.csv`](../assets/demo-data/route-orders.csv) — synthetic order list
+- [`../assets/demo-data/route-vehicles.csv`](../assets/demo-data/route-vehicles.csv) — synthetic vehicle list
+- [`../assets/sample-reports/route-comparison-example.md`](../assets/sample-reports/route-comparison-example.md) — synthetic expected-vs-actual comparison
+- Screenshots in `screenshots/`, demo video in `videos/`
+- CSV / JSON export of any computed route for use as a test-case attachment
+
+## QA Value
+
+- Provides an independent reference for validating optimizer output.
+- Detects defects in distance calculation, stop ordering, vehicle allocation, and cost computation.
+- Catches the **cost-vs-distance trap**: optimizer output that minimises kilometres but increases total cost via wrong vehicle selection.
+- Reduces route and optimizer testing effort significantly compared with manual validation.
 
 ## Limitations
 
-- **Maximum 50 locations** (OSRM server limits)
-- **No real-time traffic** (uses static road network)
-- **Geocoding accuracy** depends on OpenStreetMap data
-- **Public OSRM rate limits** (use local OSRM for production - see [ENV_SETUP.md](ENV_SETUP.md))
+- Practical limit of around 50 locations per run (public OSRM rate limits).
+- No real-time traffic; static road network.
+- Geocoding accuracy depends on the underlying map data.
+- Time windows and complex multi-vehicle constraints are not yet modelled in the public reference.
 
----
+## Confidentiality Note
 
-## What I Learned
-
-**Challenges:**
-- TSP optimization gets slow with 30+ locations
-- Browser freezes during computation without Web Workers
-- OSRM public API has rate limits
-- 3-opt is powerful but computationally expensive
-
-**Solutions:**
-- Web Workers keep UI responsive during optimization
-- LRU cache reduces duplicate API calls
-- Fallback to 2-opt only for large routes
-- Local OSRM setup for production use
-
-**Future improvements:**
-- Time window constraints
-- Vehicle capacity limits
-- Multiple vehicle support
-- Deploy to Vercel for live demo
-
----
-
-## Project Structure
-
-```
-route-optimizer/
-├── src/
-│   ├── app/          # Next.js app directory
-│   ├── components/   # React components
-│   └── lib/          # Core logic (TSP, OSRM, utils)
-├── public/
-│   └── screenshots/  # Demo screenshots
-├── screenshots/      # Main screenshots
-├── videos/           # Demo videos
-└── README.md
-```
-
----
+This is a sanitized portfolio case study. Production code, real system data, confidential workflows, credentials, internal cost models, customer addresses, real vehicle data, and proprietary scoring formulas are not included. Sample identifiers such as `Vehicle A`, `Vehicle B`, `Order 1`, `Warehouse A`, and `Customer Site B` are fictional.
 
 ## Additional Documentation
 
-- [ENV_SETUP.md](ENV_SETUP.md) - Local OSRM server setup
-- [OSRM_METRICS_GUIDE.md](OSRM_METRICS_GUIDE.md) - Technical details on distance calculation
-- [QUICK_START.md](QUICK_START.md) - Quick start guide
-- [CSV_FORMAT_GUIDE.md](CSV_FORMAT_GUIDE.md) - CSV import format
-
----
-
-## Use Cases
-
-**What I use this for:**
-1. Validate TMS route optimizer output
-2. Generate test routes for QA scenarios
-3. Compare algorithm performance
-4. Test edge cases (overlapping locations, constraints)
-5. Generate realistic route test data
-
----
-
-## Browser Support
-
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
-
----
-
-## Changelog
-
-### v2.0.0 (Current)
-- Real OSRM route metrics (accurate distances)
-- LRU cache for API calls
-- Local OSRM server support
-- Removed Google Maps scraping (CORS issues)
-- Better error handling
-
-### v1.0.0
-- Initial release
-- Basic TSP solver
-- Map visualization
-- CSV import/export
-
----
-
-*Built to validate route optimization in Transport Management Systems. Free and open-source (MIT License).*
+- [ENV_SETUP.md](ENV_SETUP.md) — local OSRM setup
+- [OSRM_METRICS_GUIDE.md](OSRM_METRICS_GUIDE.md) — distance calculation details
+- [QUICK_START.md](QUICK_START.md) — quick start
+- [CSV_FORMAT_GUIDE.md](CSV_FORMAT_GUIDE.md) — CSV import format
