@@ -36,7 +36,7 @@ Contact: bathiyalakruwan99@gmail.com · [Portfolio site](https://bathiya-qa.verc
 
 ## How to Review This Portfolio
 
-Start with the **Smart QA Agent OS** for automation-framework and release-quality work.
+Start with the **Smart QA Agent OS** for the flagship automation framework and AI QA operating model.
 Then review the **GPS Suite** and **Route Optimizer Validation Engine** for domain-specific testing tools.
 Use the **Data Quality Utilities** and **Job Master Processor** to review Python, Excel, reporting, and data-validation capability.
 
@@ -62,11 +62,86 @@ Sanitized QA tools and automation examples designed from real-world web, mobile,
 
 ### 1. Smart QA Agent OS — Automation Framework + AI QA Operating Model
 
-A sanitized public reference implementation of an enterprise-style QA automation and release-validation workflow, **plus a modular AI QA operating model**. Demonstrates:
+> **Flagship project** — the highlight of this portfolio.
 
-- Reusable Playwright + TypeScript architecture with BDD/POM, API + UI hybrid validation, Postman/Newman execution, k6 performance-test structure, evidence reporting, and regression-release planning.
-- An **AI QA Operating Model** with **34 capability-level specialised QA agents** across six categories (Orchestration/Strategy, Discovery/Understanding, Test Design/Automation, Execution/Investigation/Healing, Reporting/Documentation/Release, Learning/Memory), **13 shared QA skill groups**, **14 quality rule categories**, and a **17-category continuous QA memory architecture**.
-- Evidence-first validation, controlled continuous learning, a release-gate decision flow, and sanitized sample artifacts.
+A sanitized public reference implementation of an enterprise-style QA automation and release-validation workflow, **plus a modular AI QA operating model**. This is the most comprehensive project in the portfolio, combining a working automation framework with a structured AI-assisted QA architecture.
+
+#### What makes this the flagship
+
+This project demonstrates the full breadth of modern QA engineering in one place:
+
+- **Automation framework** with runnable Playwright + TypeScript code (POM, BDD, API, hybrid tests, fixtures, test data)
+- **AI QA Operating Model** with 34 specialised agents, 13 shared skill groups, 14 quality rule categories, and 17 memory categories
+- **Evidence-first methodology** where every test result, defect, and memory update requires traceable evidence
+- **End-to-end workflow** from requirement intake through release-gate decision, with continuous learning feedback loops
+- **Supporting tooling** including a module template, prompt templates, QA graph visualizer, utility scripts, and sample QA output
+
+#### Automation framework side
+
+| Layer | What it demonstrates |
+|---|---|
+| Playwright + TypeScript | POM, BDD/Cucumber-style, fixtures, reusable test flows |
+| UI testing | Page Objects, component objects, locator strategy, DOM capture |
+| API testing | API client wrappers, contract validation, auth handling |
+| Hybrid testing | API + UI combined workflows (create via API, verify via UI) |
+| Performance | k6 smoke, load, stress, and soak test scripts |
+| Postman/Newman | Collection-based API regression with CI execution |
+| CI/CD | GitHub Actions for smoke (push/PR) and nightly regression |
+| Evidence | Traces, screenshots, network logs, structured reports |
+| Release gate | Evidence-based go/no-go decision flow with risk summary |
+
+#### AI QA Operating Model side
+
+| Component | Count | What it covers |
+|---|---|---|
+| Specialised QA agents | 34 | Orchestration, discovery, test design, execution, healing, reporting, release, and learning |
+| Shared QA skill groups | 13 | Requirement-to-test, Playwright/BDD/POM, API/hybrid, Postman, performance, investigation, test data, evidence, memory, release gate, security, accessibility, documentation |
+| Quality rule categories | 14 | Evidence-first, no-imagined-behaviour, safe automation, bug separation, memory quality, locator guardrails, and more |
+| QA memory categories | 17 | Project, module, flow, page, API, validation rules, test data, automation, locator healing, flaky areas, known bugs, defect patterns, error-to-solution, release, learning, glossary, run |
+
+#### End-to-end QA workflow
+
+```
+Requirement → QA Router → Discovery (browser, flow, DOM)
+  → Test Planning (risk-based, test cases, BDD, POM)
+  → Automation (Playwright, API, hybrid)
+  → Execution → Healing (guided, human-reviewed)
+  → Investigation (failure classification, defect files)
+  → Reporting (evidence, release gate)
+  → Memory Curation (verified learnings only, human-approved)
+  → Continuous Learning (next regression is smarter)
+```
+
+#### Supporting directories
+
+| Directory | What it contains |
+|---|---|
+| `manual-knowledge/` | Sanitized manual QA notes (flow, test plan, test data, locators, selectors, coupon rules) that seed agent memory |
+| `module-template/` | Reusable scaffold for adding a new business workflow with parallel `tests/` and `qa-output/` trees |
+| `prompts/` | 6 sanitized prompt templates for master orchestration, test planning, BDD/POM, execution/healing, memory update, and manual bug hunt |
+| `qa-graph-tool/` | Architecture overview of a local visualization tool that renders the operating model as an interactive graph |
+| `qa-output/` | Sample module-level QA outputs: setup, blockers, analysis, test plan, exploratory results, final report, 2 defects, run notes, skill-agent report, DOM captures, sanitized Playwright results |
+| `sample-artifacts/` | 7 synthetic artifacts: test plan, BDD scenario, API validation result, release gate report, failure classification, memory update, evidence summary |
+| `scripts/` | 5 utility scripts: secret scanner, evidence cleaner, Newman runner, memory-triggered test runner, skill-agent report generator |
+| `previews/` | HTML preview pages for operating model concepts |
+
+#### Key principles
+
+- **No imagined behaviour**: every test, assertion, and conclusion must be backed by browser evidence, executed tests, or approved requirement docs
+- **Human QA at the center**: agents support QA work, they do not replace QA judgement
+- **Evidence-first**: no evidence = not verified, no execution = not passed, no browser = not tested
+- **Controlled continuous learning**: memory is updated only after human review, with status and evidence for every entry
+- **Safe healing**: locator changes for monetary or critical fields always require human QA review
+
+#### Why this matters for hiring teams
+
+This project shows the ability to:
+- Design and maintain a structured, reusable automation framework
+- Think in terms of QA architecture, not just individual tests
+- Apply AI-assisted QA responsibly (guardrails, human review, evidence-first)
+- Build for scalability (module templates, shared skills, memory that compounds)
+- Plan for release quality (evidence-based go/no-go, risk summaries, defect classification)
+- Document and communicate QA processes clearly (Mermaid diagrams, catalogs, sample artifacts)
 
 Architecture-only public showcase — no private prompts, source files, customer data, rule wording, or memory content are exposed.
 
