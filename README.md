@@ -10,7 +10,6 @@ I build reusable QA automation structures using Playwright, TypeScript, Cypress,
 
 This repository contains sanitized QA tools, automation-framework examples, test-data utilities, validation workflows, and case studies created from real enterprise-testing challenges.
 
-[![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg)](.github/workflows/playwright-smoke.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
@@ -86,7 +85,6 @@ This project demonstrates the full breadth of modern QA engineering in one place
 | Hybrid testing | API + UI combined workflows (create via API, verify via UI) |
 | Performance | k6 smoke, load, stress, and soak test scripts |
 | Postman/Newman | Collection-based API regression with CI execution |
-| CI/CD | GitHub Actions for smoke (push/PR) and nightly regression |
 | Evidence | Traces, screenshots, network logs, structured reports |
 | Release gate | Evidence-based go/no-go decision flow with risk summary |
 

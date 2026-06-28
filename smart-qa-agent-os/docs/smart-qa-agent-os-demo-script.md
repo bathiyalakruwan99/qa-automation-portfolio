@@ -23,7 +23,7 @@ Voice-over:
 Visual: Side-by-side - `smart-qa-agent-os/playwright-demo/` tree on the left, `playwright.config.ts` and a POM file on the right. Briefly highlight `tests/ui`, `tests/api`, `tests/hybrid`, `tests/bdd`.
 
 Voice-over:
-> "The framework layer is Playwright with TypeScript, Page Object Model, BDD scenarios, API and hybrid flows, Postman/Newman regression, and k6 performance. Everything is wired into GitHub Actions for push, PR, and nightly runs."
+> "The framework layer is Playwright with TypeScript, Page Object Model, BDD scenarios, API and hybrid flows, Postman/Newman regression, and k6 performance."
 
 ---
 

@@ -26,10 +26,6 @@ newman run demo-api.postman_collection.json \
 - Resource creation (`POST /users`)
 - Schema-style assertions: response time, status code, response shape
 
-## CI
-
-The collection is also runnable in GitHub Actions. See the nightly regression workflow.
-
 ## Notes
 
 - This collection points at a **public demo API**. Do not point it at production systems.

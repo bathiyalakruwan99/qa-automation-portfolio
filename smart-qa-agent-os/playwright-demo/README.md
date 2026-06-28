@@ -79,7 +79,6 @@ Set `DEMO_BASE_URL` in `.env` (or your CI secrets) to point the demo at an envir
 
 - HTML report under `playwright-report/`
 - Traces, screenshots, and videos on failure under `test-results/`
-- Uploaded as CI artifacts by `.github/workflows/playwright-smoke.yml` and `.github/workflows/nightly-regression.yml`
 
 ## Confidentiality
 

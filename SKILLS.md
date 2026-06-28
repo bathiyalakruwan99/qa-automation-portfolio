@@ -44,7 +44,6 @@ Skills breakdown aligned to Software QA Engineer, Automation QA Engineer, Senior
 
 ## CI & Tooling
 
-- **GitHub Actions** — smoke on push/PR, nightly regression, manual dispatch
 - **Reporting & evidence** — Playwright HTML report, Newman HTML report, k6 summary
 - Artifact upload for traces, screenshots, video on failure
 - Jira, Testiny, Git/GitHub, Bitbucket, VS Code, Cursor AI

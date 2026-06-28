@@ -25,8 +25,6 @@ Framework side:
 - Postman + Newman collection with CI execution
 - k6 smoke / load / stress / soak scripts
 - Documented release-gate checklist and QA knowledge memory
-- Mermaid diagrams for framework, hybrid flow, and release gate
-- GitHub Actions for smoke (push/PR) and nightly regression
 
 AI QA Operating Model side (architecture-only, public showcase):
 
@@ -36,7 +34,7 @@ AI QA Operating Model side (architecture-only, public showcase):
 - **17-category continuous QA memory architecture** (Project, Module, Flow, Page/Component, API/Network, Validation Rules, Test Data, Automation, Locator Healing, Flaky Area, Known Bugs, Defect Pattern, Error-to-Solution, Release, Learning, Glossary, Run)
 - Example agent journey, sample artifacts, demo walkthrough script
 
-**Tech:** Playwright, TypeScript, BDD/Cucumber-style, POM, Postman, Newman, k6, GitHub Actions, AI QA Operating Model
+**Tech:** Playwright, TypeScript, BDD/Cucumber-style, POM, Postman, Newman, k6, AI QA Operating Model
 
 - [Open project →](smart-qa-agent-os/)
 - [AI QA Operating Model overview →](smart-qa-agent-os/ai-qa-operating-model.md)
