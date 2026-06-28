@@ -29,6 +29,18 @@ Inside [`smart-qa-agent-os/`](../smart-qa-agent-os/) the documentation shows the
 
 See [`assets/sample-artifacts/`](../assets/sample-artifacts/) for synthetic, non-runnable QA artifact examples (BDD scenarios, POM responsibilities, hybrid flow, failure classification, locator-healing flow, memory update, release-gate summary, performance test plan). All examples use fictional identifiers only.
 
+## Coverage at a glance
+
+| Case study | QA focus | Key skill demonstrated |
+| --- | --- | --- |
+| Smart QA Agent OS | AI-assisted QA operating model | Architecture thinking, human-in-the-loop QA |
+| GPS Simulator and Geofence Validation | Location and time-based testing | Deterministic test data for hard scenarios |
+| Route Optimizer Validation | Algorithmic output validation | Independent oracle, risk-based comparison |
+| Job Master Data Validation | Data validation and reconciliation | Turning large exports into actionable exceptions |
+| Bulk Upload Data Quality | Shift-left data validation | Separating data issues from product defects |
+| AI-Assisted Test Design | Requirement-to-test workflow | Human review gate over AI drafts |
+| Jira QA Workflow | Release-readiness reporting | Evidence-based go/hold decisions |
+
 ## Skim path (60 seconds)
 
 - Read the root `README.md` first.

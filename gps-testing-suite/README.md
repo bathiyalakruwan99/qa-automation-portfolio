@@ -4,7 +4,7 @@
 
 ## Business Problem
 
-GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware. The hardest scenarios, off-route drivers, GPS jumps, rejoin behaviour, and multi-vehicle scenario coverage, must be reproducible on demand.
+GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware. The hardest scenarios, off-route drivers, GPS jumps, rejoin behaviour, and multi-vehicle scenario coverage, must be reproducible on demand. Relying on real devices makes these tests slow, expensive, and impossible to repeat exactly.
 
 ## QA Challenge
 
@@ -12,36 +12,33 @@ GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet s
 - Reproduce off-route, detour, geofence-edge, and rejoin scenarios deterministically
 - Generate realistic, road-aware vehicle movement paths
 - Create scenario-specific movement data (short stops, return early, out of sequence, unplanned stops)
-- Validate geofence entry/exit behaviour
+- Validate geofence entry/exit behaviour at the edges, not just the centre
 - Produce QA evidence that travels cleanly into defect reports
 
 ## Approach
 
-A web-based QA toolkit concept that supports the following capabilities:
+A web-based QA toolkit concept that turns GPS testing from a hardware problem into a repeatable data problem. Each capability supports a specific class of GPS scenario.
 
-### GPS stream simulation
+### Capabilities
 
-Generate GPS streams for one or many vehicles so live-map and tracking features can be exercised without real devices.
+| Capability | What it supports | QA use |
+| --- | --- | --- |
+| GPS stream simulation | Generate streams for one or many vehicles | Exercise live-map and tracking without devices |
+| Vehicle movement patterns | Road-aware paths, configurable speed, interpolation | Make movement resemble real driving |
+| Route and path testing | Build and replay planned routes | Compare planned vs actual movement |
+| Geofence entry/exit | Define zones and verify entry, exit, dwell, and edge events | Validate geofence triggers reliably |
+| Multi-vehicle scenarios | Run several vehicles concurrently | Test concurrent tracking and live-map load |
+| Live-map QA evidence | Capture path data and map snapshots | Attach evidence to defect reports |
 
-### Vehicle movement patterns
+### Scenario types
 
-Author realistic movement, including road-aware paths, configurable speed, and interpolation between points, so paths resemble real driving rather than straight lines.
-
-### Route and path testing
-
-Build and replay planned routes, then compare planned versus actual movement to validate tracking and route adherence.
-
-### Geofence entry/exit validation
-
-Define geofence zones and verify entry, exit, dwell, and edge behaviour as a vehicle moves through them.
-
-### Multi-vehicle test scenarios
-
-Run several vehicles together, each following a different scenario, to exercise concurrent tracking and live-map behaviour.
-
-### Live-map QA evidence
-
-Capture path data and map snapshots as evidence for defect reports and release reviews.
+- Planned route (baseline)
+- Short stop
+- Return early
+- Out of sequence
+- Unplanned stop
+- Off-route then rejoin
+- Geofence edge (enter, dwell, exit near the boundary)
 
 ## Fictional Scenario Example
 
@@ -53,16 +50,27 @@ Capture path data and map snapshots as evidence for defect reports and release r
 | Geofence zone | Zone Gamma |
 | Scenario | Off-route then rejoin |
 
-A QA run with this fictional setup would send `Vehicle-001` from `Warehouse Alpha` toward `Customer Site Beta`, drive it off-route, verify the live map reflects the deviation, then rejoin the planned route and confirm `Zone Gamma` entry/exit events fire correctly.
+A QA run with this fictional setup sends `Vehicle-001` from `Warehouse Alpha` toward `Customer Site Beta`, drives it off-route, verifies the live map reflects the deviation, then rejoins the planned route and confirms `Zone Gamma` entry and exit events fire correctly.
 
-## Supported Scenario Types
+### Example multi-vehicle scenario (fictional)
 
-- Planned route (baseline)
-- Short stop
-- Return early
-- Out of sequence
-- Unplanned stop
-- Off-route then rejoin
+| Vehicle | Scenario | Expected behaviour |
+| --- | --- | --- |
+| Vehicle-001 | Planned route | Clean entry/exit at Zone Gamma |
+| Vehicle-002 | Off-route then rejoin | Deviation visible, then rejoin |
+| Vehicle-003 | Unplanned stop | Dwell event inside Zone Gamma |
+
+Running all three together checks that concurrent tracking, live-map rendering, and geofence events stay correct under load.
+
+### Sample evidence (shape only)
+
+```
+Scenario: Off-route then rejoin (Vehicle-001)
+Geofence Zone Gamma: ENTER ok, EXIT ok
+Deviation detected: yes (reflected on live map)
+Rejoin: yes
+Evidence: path data + map snapshot attached
+```
 
 ## QA Value
 
@@ -71,6 +79,13 @@ A QA run with this fictional setup would send `Vehicle-001` from `Warehouse Alph
 - Supports high-load, multi-vehicle testing without real devices
 - Produces path data and map evidence that travels cleanly into defect reports
 - Enables testing of specific GPS behaviours without manual path editing
+
+## QA Skills Demonstrated
+
+- Designing deterministic test data for hard-to-reproduce, real-world scenarios
+- Edge-focused testing (geofence boundaries, rejoin, out-of-sequence)
+- Concurrent, multi-entity test design
+- Evidence capture for time-and-location-based features
 
 ## Limitations
 
