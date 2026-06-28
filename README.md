@@ -8,7 +8,7 @@ My current work focuses on Transport and Supply Chain TMS workflows, including J
 
 I build reusable QA automation structures using Playwright, TypeScript, Cypress, Selenium, BDD/Cucumber, Page Object Model, API clients, Postman/Newman, k6, Python, SQL, and MongoDB validation.
 
-This repository contains sanitized QA case studies, automation-framework examples, AI-assisted QA operating models, synthetic examples, and high-level QA documentation. It does not include proprietary code, production data, customer information, credentials, internal endpoints, confidential business logic, private prompts, private QA memory, or private implementation details.
+This repository showcases QA tools, automation utilities, and AI-assisted QA workflows that I designed and built. Public content is sanitized to protect confidential employer systems, production data, customer information, credentials, and proprietary logic. Each project clearly states its public availability: either a sanitized technical overview, a public-safe reference implementation, or a documented QA workflow.
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
@@ -35,8 +35,8 @@ Contact: bathiyalakruwan99@gmail.com · [Portfolio site](https://bathiya-qa.verc
 ## How to Review This Portfolio
 
 Start with the **Smart QA Agent OS** for the flagship automation framework and AI QA operating model.
-Then review the **GPS Suite** and **Route Optimizer Validation Engine** for domain-specific testing tools.
-Use the **Data Quality Utilities** and **Job Master Processor** to review reporting and data-validation capability.
+Then review the **GPS Simulator & Geofence Validation Suite** and **Route Optimizer Validation Workbench** for domain-specific testing tools.
+Use the **Bulk Upload Validator** and **Job Master Data Validation & Release Evidence Tool** to review reporting and data-validation capability.
 
 For a guided tour, see [`docs/portfolio-overview.md`](docs/portfolio-overview.md). For my testing approach see [`docs/qa-approach.md`](docs/qa-approach.md). For the confidentiality boundaries used in this repo see [`docs/confidentiality.md`](docs/confidentiality.md).
 
@@ -44,17 +44,17 @@ For a guided tour, see [`docs/portfolio-overview.md`](docs/portfolio-overview.md
 
 ## Featured QA Projects
 
-| # | Project | What It Demonstrates | Core Stack |
+| Project | What I Built | Status | Public Availability |
 |---|---|---|---|
-| 1 | [Smart QA Agent OS / Automation Framework + AI QA Operating Model](smart-qa-agent-os/) | Reusable UI, API, hybrid, performance, evidence, and release-gate QA workflow plus a modular AI QA operating model (agents, skills, rules, memory) | Playwright, TypeScript, BDD, POM, Postman/Newman, k6, AI QA Operating Model |
-| 2 | [GPS Simulator and Geofence Validation Suite](gps-testing-suite/) | GPS stream simulation, road-aware vehicle movement, geofence entry/exit validation, and multi-vehicle scenario coverage | JavaScript, Leaflet, OpenStreetMap, OpenRouteService, React/Vite |
-| 3 | [Route Optimizer Validation Engine](route-optimizer/) | Independent optimizer validation across cost, vehicle suitability, capacity, feasibility, and order allocation, beyond raw distance | Next.js, TypeScript, public routing/map APIs, Web Workers |
-| 4 | [Job Master Data Validation and Evidence Processor](jobmaster/) | Job/work-order data validation, status consistency, missing-data detection, and evidence-ready outputs | Python, Pandas, data validation |
-| 5 | [Bulk Upload Data Quality Utilities](bulkfile-generator/) | Bulk upload validation, error highlighting, and synthetic test-data generation | Python, Pandas, data validation |
-| 6 | [AI-Assisted Test Design Workflow](case-studies/ai-assisted-test-design.md) | Requirement to approved test case with mandatory human QA review | AI-assisted drafting, MCP, human review |
-| 7 | [Jira QA Workflow and Evidence Reporting](case-studies/jira-qa-workflow-automation.md) | Release-readiness and evidence reporting workflow from a ticketing system | QA workflow, evidence reporting |
+| [Smart QA Agent OS — QA Automation & AI-Assisted Testing Prototype](smart-qa-agent-os/) | A QA automation framework plus a modular AI-assisted QA operating model (agents, skills, rules, memory) with a human QA engineer responsible for every decision | Prototype + actively used practices | Reference architecture + public-safe examples |
+| [GPS Simulator & Geofence Validation Suite](gps-simulation-validation-suite/) | A web-based QA toolkit to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle scenarios | Internal QA Tool | Sanitized public overview |
+| [Route Optimizer Validation Workbench](route-optimizer-validation-workbench/) | An independent QA comparison tool that validates route-optimizer output across distance, capacity, cost, allocation, suitability, and feasibility | Internal QA Tool | Sanitized public overview |
+| [Job Master Data Validation & Release Evidence Tool](job-master-validation-tool/) | A data-validation tool that processes job/work-order exports, flags exceptions, and produces release-evidence summaries | Internal QA Tool | Sanitized public overview |
+| [Bulk Upload Validator & Synthetic Test Data Generator](bulk-upload-validator/) | A QA utility that validates bulk-upload data, classifies issues, and generates safe synthetic test datasets | Internal QA Tool | Sanitized public overview |
+| [AI-Assisted Test Design Pipeline](ai-assisted-test-design/) | A pipeline that drafts structured test cases with AI, then requires QA review and approval before they enter the suite | Human-Reviewed QA Workflow | Sanitized public overview |
+| [Jira QA Evidence & Release Readiness Tools](jira-tools/) | Python tools that collect Jira ticket data, build release-readiness views, track status history, and generate QA evidence | Public-Safe Utility | Public-safe utility collection |
 
-Each project is presented as a case study with the business problem, QA challenge, approach, capabilities, and QA value. No runnable source code, production data, or confidential implementation details are included.
+Each project states what I built, its status, and what is publicly available. Source code for internal tools is not public because it contains confidential implementation details and employer-owned logic; the public pages document the capability, QA approach, and fictional examples only.
 
 ---
 
@@ -118,79 +118,83 @@ Requirement → QA Router → Discovery (browser, flow, DOM)
 
 ---
 
-### 2. GPS Simulator and Geofence Validation Suite
+### 2. GPS Simulator & Geofence Validation Suite — Internal QA Tool
 
 **Problem:** GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware, and the hardest scenarios, off-route drivers, GPS jumps, rejoin behaviour, and multi-vehicle scenario coverage, must be reproducible on demand.
 
-**Solution:** A web-based QA toolkit concept for GPS stream simulation, road-aware vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle test scenarios, and live-map QA evidence.
+**What I built:** A web-based QA toolkit for GPS stream simulation, road-aware vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle test scenarios, and live-map QA evidence.
 
-**QA value:** Makes off-route, detour, geofence-edge, rejoin, and scenario-based testing deterministic and repeatable; supports high-load, multi-vehicle testing without real hardware; produces path data and map evidence that travels cleanly into defect reports.
+**QA value:** Makes off-route, detour, geofence-edge, rejoin, and scenario-based testing deterministic and repeatable; produces path data and map evidence that travels cleanly into defect reports.
 
-**Approach:** Web-based simulation with map rendering, road-aware pathing, and scenario generation. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
+**Scale:** Designed and tested for multi-device simulation, including controlled runs at up to 1,000 simulated device streams in QA scenarios.
 
-[Open case study →](gps-testing-suite/)
+**Public scope:** Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`). Source code, real map data, and endpoint structures are not public.
+
+[Open sanitized overview →](gps-simulation-validation-suite/)
 
 ---
 
-### 3. Route Optimizer Validation Engine
+### 3. Route Optimizer Validation Workbench — Internal QA Tool
 
 **Problem:** Optimizer output is easy to ship and hard to verify. Lower distance does not always mean lower cost. A route with the shortest distance might pick the wrong vehicle, exceed capacity, miss a delivery window, or split a single drop across multiple loads.
 
-**Solution:** A QA reference approach that takes the same inputs as the product optimizer and produces an independent comparison view across route comparison, vehicle suitability, capacity validation, cost-per-kilometre comparison, multi-stop behaviour, order allocation, and route feasibility.
+**What I built:** An independent QA comparison tool that takes the same inputs as the product optimizer and compares output across distance, vehicle suitability, capacity validation, cost-per-kilometre, multi-stop behaviour, order allocation, and route feasibility.
 
-**QA value:** Provides a defensible, explainable expected result per scenario; catches the cost-vs-distance trap; surfaces capacity and vehicle-suitability issues; produces a comparison summary that travels cleanly into defect reports; reduces route/optimizer validation effort by 75%.
+This workbench does not replace a product optimizer. It provides an independent QA comparison layer for verifying that optimizer output is operationally sensible and internally consistent.
+
+**QA value:** Provides a defensible, explainable expected result per scenario; catches the cost-vs-distance trap; surfaces capacity and vehicle-suitability issues; creates a repeatable and explainable comparison process for route-optimizer validation.
 
 > Lower total distance does not always mean lower operating cost. QA validation must consider vehicle suitability, capacity, cost per kilometre, load allocation, route feasibility, and operational constraints.
 
-[Open case study →](route-optimizer/)
+[Open sanitized overview →](route-optimizer-validation-workbench/)
 
 ---
 
-### 4. Job Master Data Validation and Evidence Processor
+### 4. Job Master Data Validation & Release Evidence Tool — Internal QA Tool
 
 **Problem:** Releases must be validated against large job and work-order exports covering jobs, loads, GPS, invoices, and payments. Manual reconciliation is slow and error-prone.
 
-**Solution:** A data-validation workflow that ingests an export, normalises it into a consistent internal view, and runs QA checks for status consistency, missing/incomplete data detection, and GPS/invoice/payment/workflow-readiness, producing evidence-ready outputs.
+**What I built:** A data-validation tool that processes job and work-order exports, normalizes records, runs QA checks for status consistency, missing/incomplete data detection, and readiness, and produces an actionable exception summary.
 
-**QA value:** Cuts data verification from minutes per check to seconds; detects inconsistencies and missing data that manual review would miss; produces clean evidence for defect reports and release reviews. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
+**QA value:** Automates repeated consistency, completeness, and readiness checks across large exports; surfaces exceptions that manual review would miss; produces clean evidence for release reviews. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
 
-[Open case study →](jobmaster/)
+[Open sanitized overview →](job-master-validation-tool/)
 
 ---
 
-### 5. Bulk Upload Data Quality Utilities
+### 5. Bulk Upload Validator & Synthetic Test Data Generator — Internal QA Tool
 
 **Problem:** Customers uploading bulk data to a platform regularly hit validation errors. Support gets flooded with tickets that are really data-quality problems, not product defects.
 
-**Solution:** A data-quality and validation workflow that validates required fields, formats, and duplicates, highlights fields that need human attention, and generates fictional synthetic test data for QA workflows.
+**What I built:** A QA utility that validates upload files, classifies data-quality issues (auto-correctable vs needs review), and generates safe synthetic test datasets for regression, negative, workflow, and performance testing.
 
-**QA value:** Removes a common class of false defects, cuts support load by 50%+ for upload-related tickets, and provides QA with a reusable validation approach to harden new ingestion flows.
+**QA value:** Removes a common class of false defects; designed to reduce upload-related support effort by identifying data-quality issues before platform submission; provides QA with a reusable validation approach and production-data-free test data.
 
-[Open case study →](bulkfile-generator/)
+[Open sanitized overview →](bulk-upload-validator/)
 
 ---
 
-### 6. AI-Assisted Test Design Workflow
+### 6. AI-Assisted Test Design Pipeline — Human-Reviewed QA Workflow
 
 **Problem:** Writing comprehensive test cases for new features is slow and repetitive, which slows the release cycle.
 
-**Solution:** A documented workflow that moves from requirement to risk analysis to a test scenario draft, through mandatory human QA review, to an approved test case and a test-management import concept. AI-assisted drafting supports first-pass test design; a QA engineer reviews, corrects, expands, prioritises, and approves all final test cases.
+**What I built:** A pipeline that drafts structured test cases with AI, then requires QA review and approval before they enter the suite: AI Draft → QA Review and Refinement → QA Approval → Test Management Import. A QA engineer reviews, corrects, expands, prioritises, and approves all final test cases. QA approval is mandatory.
 
-**QA value:** Cuts time-to-first-draft from hours to minutes per module, improves coverage consistency, and keeps a defensible authoring trail.
+**QA value:** Faster first-pass drafting, more consistent structure, and more QA time available for risk analysis and exploratory testing, while keeping a defensible authoring trail.
 
-[Open case study →](case-studies/ai-assisted-test-design.md) · [Test data and spreadsheet validation →](test-cases-creation-automatic/)
+[Open sanitized overview →](ai-assisted-test-design/) · [Detailed case study →](case-studies/ai-assisted-test-design.md)
 
 ---
 
-### 7. Jira QA Workflow and Evidence Reporting
+### 7. Jira QA Evidence & Release Readiness Tools — Public-Safe Utility
 
 **Problem:** QA teams spend meaningful time turning ticketing-system data into a shape that supports release decisions. Doing that by hand across many work streams is slow and error-prone.
 
-**Solution:** A high-level workflow that organises ticketing-system data into release-readiness and evidence views, tracks status history, and maps items to required regression coverage, without exposing any ticket data, project keys, or credentials.
+**What I built:** Python tools that collect Jira ticket data into sanitized local structures, build release-readiness views, track status history, and map items to required regression coverage, without exposing any real ticket data, project keys, or credentials.
 
 **QA value:** Provides repeatable, evidence-friendly views of release readiness and keeps a defensible audit trail for go/hold decisions.
 
-[Open case study →](case-studies/jira-qa-workflow-automation.md) · [Jira QA tools overview →](jira-tools/)
+[Open public-safe utility →](jira-tools/) · [Detailed case study →](case-studies/jira-qa-workflow-automation.md)
 
 ---
 
@@ -314,10 +318,10 @@ Fictional, non-runnable examples that show the shape of QA evidence:
 - Perform REST API validation using Postman and Playwright/Cypress, including negative testing and authentication scenarios.
 - Validate GPS, live map, geofence, and route workflows using simulation datasets to reproduce production edge cases.
 - Prepared and executed 1,000+ test cases and identified 1,000+ defects across continuous release cycles.
-- Built a GPS simulation suite for high-load, multi-vehicle GPS, route-path, vehicle-movement, and geofence testing scenarios.
-- Developed Python and Excel validation utilities, reducing customer upload errors by over 50%.
+- Built a GPS simulation suite for multi-vehicle GPS, route-path, vehicle-movement, and geofence testing scenarios, tested at up to 1,000 simulated device streams.
+- Developed Python and Excel validation utilities to catch customer upload data-quality issues before platform submission, reducing upload-related support effort.
 - Automated key UI and API workflows using Playwright and Selenium (POM structure).
-- Built route and optimization validation, reducing route and optimizer testing effort by 75%.
+- Built a route-optimizer validation workbench that created a repeatable, explainable comparison process for optimizer output.
 
 **Tech:** Jira, Postman, Testiny, Playwright, Selenium, Cypress, k6, Git, Bitbucket, Excel, SQL, MongoDB
 
@@ -373,13 +377,13 @@ Fictional, non-runnable examples that show the shape of QA evidence:
 
 ## Reproducible Metrics
 
-Numbers below are explainable and tied to evidence in this repository:
+Numbers below reflect my professional QA work and are explainable in an interview:
 
 - 1,000+ test cases prepared and executed across TMS releases
 - 1,000+ defects identified and reported with reproduction evidence
-- 75% reduction in route/optimizer validation effort
-- 50%+ reduction in customer upload errors
-- High-load GPS testing scenarios validated without physical hardware
+- Built a route-optimizer validation workbench that created a repeatable, explainable comparison process for optimizer output
+- Built a bulk-upload validator designed to reduce upload-related support effort by catching data-quality issues before platform submission
+- GPS simulation tested at multi-device scale, including up to 1,000 simulated device streams in controlled QA scenarios, without physical hardware
 
 ---
 

@@ -1,101 +1,108 @@
-# Projects
+# QA Tools & Portfolio Project Directory
 
-Sanitized QA case studies designed from real-world web, mobile, API, data, and logistics-testing workflows. This repository contains only public, sanitized case studies. No runnable source code, production data, or confidential implementation details are included.
+This directory summarizes QA tools, automation utilities, and human-reviewed AI-assisted workflows that I designed and built. Each entry gives a one-paragraph overview, the project status, the stack, and a link to the detailed README. Public content is sanitized; source code for internal tools is not public.
 
-Featured order — open in this sequence:
-
-1. Smart QA Agent OS — Evolving AI-Assisted QA Operating Model
-2. GPS Simulator and Geofence Validation Suite
-3. Route Optimizer Validation Engine
-4. Job Master Data Validation and Evidence Processor
-5. Data Quality and Test Data Utilities
-6. AI-Assisted Test Design Workflow
-7. Jira QA Workflow and Evidence Reporting
-
-Additional: AI and MCP QA Workflows (case study)
+| Project | Status | Public Availability |
+|---|---|---|
+| Smart QA Agent OS | Prototype + actively used practices | Reference architecture + public-safe examples |
+| GPS Simulator & Geofence Validation Suite | Internal QA Tool | Sanitized public overview |
+| Route Optimizer Validation Workbench | Internal QA Tool | Sanitized public overview |
+| Job Master Data Validation & Release Evidence Tool | Internal QA Tool | Sanitized public overview |
+| Bulk Upload Validator & Synthetic Test Data Generator | Internal QA Tool | Sanitized public overview |
+| AI-Assisted Test Design Pipeline | Human-Reviewed QA Workflow | Sanitized public overview |
+| Jira QA Evidence & Release Readiness Tools | Public-Safe Utility | Public-safe utility collection |
 
 ---
 
-## 1. Smart QA Agent OS — Evolving AI-Assisted QA Operating Model
+## Smart QA Agent OS — QA Automation & AI-Assisted Testing Prototype
 
-An evolving, AI-assisted QA operating model that supports QA work without replacing QA judgement. Capability areas are clearly separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned) so nothing is overstated, and a human QA engineer remains responsible for every final decision.
+A QA automation framework plus a modular AI-assisted QA operating model. Capability areas are separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned), and a human QA engineer remains responsible for requirement interpretation, test approval, defect decisions, release recommendations, and memory updates.
 
-Public showcase coverage:
+- **Status:** Prototype + actively used practices
+- **Stack:** Playwright, TypeScript, BDD, POM, Postman/Newman, k6, AI QA operating model
+- **QA value:** A structured, evidence-driven, reusable approach that keeps human QA judgement at the centre.
 
-- Exploratory QA support and risk-based thinking
-- Requirement-to-test planning (acceptance criteria, risks, edge cases, coverage ideas)
-- Browser and flow discovery (screens, journeys, dependencies, automation candidates)
-- QA knowledge capture (reusable flows, validation rules, defects, lessons learned)
-- Playwright test design (planning, BDD scenario drafting, Page Object Model design)
-- Locator-healing investigation as a guided, human-reviewed workflow
-- Growing execution, API/hybrid, performance, and release-gate workflows
-
-[Open project →](smart-qa-agent-os/)
+[Open reference implementation →](smart-qa-agent-os/)
 
 ---
 
-## 2. GPS Simulator and Geofence Validation Suite
+## GPS Simulator & Geofence Validation Suite — Internal QA Tool
 
-A sanitized showcase of GPS stream simulation, vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle test scenarios, and GPS/live-map QA evidence. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
+A web-based QA toolkit I built to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
 
-[Open case study →](gps-testing-suite/)
+- **Status:** Internal QA Tool
+- **Stack:** JavaScript, web-based map rendering, road-aware pathing
+- **QA value:** Enables repeatable multi-device GPS scenarios without depending on physical hardware.
 
----
-
-## 3. Route Optimizer Validation Engine
-
-A QA reference approach for validating optimizer output: route comparison, vehicle suitability, capacity validation, cost-per-kilometre comparison, multi-stop behaviour, order allocation validation, route feasibility, and QA comparison reporting. Key QA insight: lower total distance does not always mean lower operating cost.
-
-[Open case study →](route-optimizer/)
+[Open sanitized overview →](gps-simulation-validation-suite/)
 
 ---
 
-## 4. Job Master Data Validation and Evidence Processor
+## Route Optimizer Validation Workbench — Internal QA Tool
 
-A sanitized case study on job/work-order data validation: status consistency checks, missing/incomplete data detection, GPS/invoice/payment/workflow-readiness validation, QA evidence generation, and regression/UAT/reconciliation support. Uses fictional records (`Job ID: DEMO-JOB-1001`, `Load ID: DEMO-LOAD-2001`).
+An independent QA comparison tool I built to validate route-optimizer output across distance, vehicle suitability, capacity, cost, allocation, and operational feasibility. It does not replace a product optimizer; it provides an independent QA comparison layer. Key QA insight: lower total distance does not always mean lower operating cost.
 
-[Open case study →](jobmaster/)
+- **Status:** Internal QA Tool
+- **Stack:** TypeScript, public routing/map APIs
+- **QA value:** Creates a repeatable, explainable comparison process and catches silent failures (dropped orders, overloads, infeasible routes).
 
----
-
-## 5. Data Quality and Test Data Utilities
-
-A sanitized case study on bulk upload data quality and validation workflows: catching data issues before they reach the platform, highlighting fields that need human attention, and generating synthetic test data for QA workflows.
-
-[Open case study →](bulkfile-generator/)
+[Open sanitized overview →](route-optimizer-validation-workbench/)
 
 ---
 
-## 6. AI-Assisted Test Design Workflow
+## Job Master Data Validation & Release Evidence Tool — Internal QA Tool
 
-A high-level workflow showing how requirements move from risk analysis to a test scenario draft, through human QA review, to an approved test case and a test-management import concept. AI-assisted drafting supports first-pass test design; a QA engineer reviews, corrects, expands, prioritises, and approves all final test cases.
+A data-validation tool I built to process job and work-order exports, run completeness/consistency/reconciliation checks, and produce an actionable exception summary for release evidence. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
 
-[Open case study →](case-studies/ai-assisted-test-design.md) · [Test data and spreadsheet validation →](test-cases-creation-automatic/)
+- **Status:** Internal QA Tool
+- **Stack:** Python, Pandas, data validation
+- **QA value:** Automates repeated checks across large exports and surfaces exceptions manual review would miss.
+
+[Open sanitized overview →](job-master-validation-tool/)
 
 ---
 
-## 7. Jira QA Workflow and Evidence Reporting
+## Bulk Upload Validator & Synthetic Test Data Generator — Internal QA Tool
 
-A high-level workflow showing how QA evidence and release-readiness views are organised from a ticketing workflow, without exposing any ticket data, project keys, or credentials.
+A QA utility I built to validate bulk-upload files, classify data-quality issues (auto-correctable vs needs review), and generate safe synthetic test datasets for regression, negative, workflow, and performance testing.
 
-[Open case study →](case-studies/jira-qa-workflow-automation.md) · [Jira QA tools overview →](jira-tools/)
+- **Status:** Internal QA Tool
+- **Stack:** Python, Pandas, data validation
+- **QA value:** Removes a common class of false defects and reduces dependence on production data through synthetic test data.
+
+[Open sanitized overview →](bulk-upload-validator/)
+
+---
+
+## AI-Assisted Test Design Pipeline — Human-Reviewed QA Workflow
+
+A pipeline I built and use to draft structured test cases with AI, then review, refine, and approve them before they enter the test suite: AI Draft → QA Review and Refinement → QA Approval → Test Management Import. QA approval is mandatory.
+
+- **Status:** Human-Reviewed QA Workflow
+- **Stack:** AI-assisted drafting, human review gate
+- **QA value:** Faster first-pass drafting and more consistent coverage, with QA judgement preserved.
+
+[Open sanitized overview →](ai-assisted-test-design/) · [Detailed case study →](case-studies/ai-assisted-test-design.md)
+
+---
+
+## Jira QA Evidence & Release Readiness Tools — Public-Safe Utility
+
+Python tools I built to collect Jira ticket data into sanitized local structures, build release-readiness views, track status history, and generate QA evidence reports. No real ticket data, project keys, or credentials are included.
+
+- **Status:** Public-Safe Utility
+- **Stack:** Python, JSON reporting
+- **QA value:** Repeatable, evidence-friendly views of release readiness with a defensible audit trail.
+
+[Open public-safe utility →](jira-tools/) · [Detailed case study →](case-studies/jira-qa-workflow-automation.md)
 
 ---
 
 ## Additional: AI and MCP QA Workflows
 
-A high-level case study on AI-assisted QA workflows for structured data analysis, validation, and cross-system reconciliation concepts, with human QA review at every decision point.
+A high-level case study on AI-assisted QA workflows for structured data analysis, validation, and cross-system reconciliation, with human QA review at every decision point.
 
 [Open case study →](case-studies/ai-mcp-qa-workflows.md)
-
----
-
-## Reproducible Metrics
-
-- 1,000+ test cases prepared and executed
-- 1,000+ defects identified and reported
-- 75% reduction in route/optimizer validation effort
-- 50%+ reduction in customer upload errors
 
 ---
 
@@ -105,4 +112,4 @@ A high-level case study on AI-assisted QA workflows for structured data analysis
 - **Website:** [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)
 - **LinkedIn:** [linkedin.com/in/bathiyalakruwan99](https://www.linkedin.com/in/bathiyalakruwan99/)
 
-Sanitized QA case studies designed from real-world web, mobile, API, data, and logistics-testing workflows. See [`NOTICE.md`](NOTICE.md) for portfolio-use terms.
+See [`NOTICE.md`](NOTICE.md) for portfolio-use terms.

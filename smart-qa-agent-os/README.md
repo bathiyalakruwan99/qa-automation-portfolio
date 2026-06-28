@@ -1,6 +1,8 @@
-# Smart QA Agent OS â€” Evolving AI-Assisted QA Operating Model
+# Smart QA Agent OS — QA Automation & AI-Assisted Testing Prototype
 
-A private, actively evolving QA-assistance system designed to make exploratory testing, workflow understanding, test design, automation planning, locator investigation, and QA knowledge management more structured, reusable, and evidence-driven.
+A public-safe reference architecture for my evolving QA-assistance system, designed to make exploratory testing, workflow understanding, test design, automation planning, locator investigation, and QA knowledge management more structured, reusable, and evidence-driven.
+
+> **Human QA stays in control.** Human QA remains responsible for requirement interpretation, test approval, defect decisions, release recommendations, and memory updates. The system assists; it does not decide.
 
 The system currently focuses on exploratory testing support, browser and workflow discovery, requirement analysis, QA risk planning, knowledge capture, Playwright test-design assistance, BDD scenario drafting, Page Object Model planning, and locator-healing investigation.
 
@@ -37,11 +39,15 @@ The public version uses fictional examples, synthetic artifacts, and high-level 
 
 ---
 
+## Maturity Statement
+
+This repository contains a mix of actively used QA practices, implemented prototypes, public-safe examples, learning experiments, and planned capabilities. Each section is labelled by maturity. Current working and reference material comes first; planned capabilities appear later in the README.
+
 ## Current Maturity Snapshot
 
 | Capability Area | Current Status | Public Description |
 |---|---|---|
-| Exploratory QA Support | Actively Used | Supports structured exploration, risk thinking, workflow discovery, QA investigation, and exploratory testing notes. |
+| Exploratory QA Support | Actively Used — applied in my QA work; public repository may include only sanitized examples or documentation. | Supports structured exploration, risk thinking, workflow discovery, QA investigation, and exploratory testing notes. |
 | Requirement and Test Planning | Actively Used | Helps convert requirements into acceptance criteria, risks, test conditions, edge cases, and QA coverage ideas. |
 | Browser and Flow Discovery | Actively Used | Supports understanding of screens, user journeys, dependencies, workflow states, and automation candidates. |
 | QA Knowledge Capture | Implemented Prototype | Organises reusable QA knowledge such as flows, risks, validation rules, test-data dependencies, defects, and lessons learned. |

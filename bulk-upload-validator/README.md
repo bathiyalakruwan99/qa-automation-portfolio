@@ -1,6 +1,7 @@
-# Bulk Upload Data Quality and Validation Workflow (Case Study)
+# Bulk Upload Validator & Synthetic Test Data Generator
 
-> Sanitized example for portfolio demonstration. No real code, Excel templates, validation logic, or sample uploads are included. All examples are fictional.
+> **Internal QA Tool — Sanitized Public Overview**
+> Built by me to validate bulk-upload data and generate safe synthetic datasets for QA testing. The public repository contains fictional examples only.
 
 ## Business Problem
 
@@ -13,9 +14,9 @@ Customers uploading bulk data (organizations, vehicles, drivers, locations) to a
 - Validate large files quickly enough to use in QA and support workflows
 - Generate safe, synthetic test data for QA without using production data
 
-## Approach
+## What the Tool Does
 
-A data-quality and validation workflow that checks an upload file, separates real problems from noise, and produces a clear report. It also generates fictional test data so QA can exercise ingestion flows without touching production data.
+A QA utility that validates upload files, classifies data-quality issues, and generates review-ready validation summaries. The tool also generates synthetic test datasets for regression, negative, workflow, and performance testing without using production data.
 
 ### Validation checks
 
@@ -37,19 +38,17 @@ Upload file
   -> QA or support confirms and returns a clean file
 ```
 
-### Test data generation
+### Synthetic test data generation
 
-A complementary capability produces fictional, synthetic datasets (for example `Customer Alpha`, `Vehicle-001`, `Order DEMO-1001`) for performance and workflow testing, so QA never depends on real customer data.
+A built-in capability produces fictional, synthetic datasets (for example `Customer Alpha`, `Vehicle-001`, `Order DEMO-1001`) for regression, negative, workflow, and performance testing, so QA never depends on real customer data.
 
-## Fictional Example
+## Fictional Example Output
 
 | Record | Field | Result |
 |---|---|---|
 | Customer Alpha | Required fields | Pass |
 | Vehicle-001 | Duplicate ID | Flagged for review |
 | Vehicle-002 | Date format | Auto-correctable |
-
-### Sample validation summary (shape only)
 
 ```
 Rows checked: 3
@@ -62,7 +61,7 @@ Action: fix flagged rows, re-upload clean file
 ## QA Value
 
 - Removes a common class of false defects driven by bad upload data
-- Cuts support load by 50%+ for upload-related tickets
+- Designed to reduce upload-related support effort by identifying data-quality issues before platform submission
 - Separates auto-correctable issues from those needing human attention
 - Provides QA with a reusable validation approach to harden new ingestion flows
 - Removes dependence on production data through synthetic test-data generation
@@ -74,12 +73,11 @@ Action: fix flagged rows, re-upload clean file
 - Safe synthetic test-data generation
 - Reducing defect noise through shift-left validation
 
-## Limitations
+## Public Portfolio Scope
 
-- No source code is included in this public portfolio
-- The approach is described at a workflow level only
-- Templates and sample uploads are not included
+- The production/internal source code is not public because it includes confidential implementation details and employer-owned logic.
+- The public documentation describes functionality at a high level; implementation details and validation rules remain private.
 
 ## Confidentiality Note
 
-No real code, templates, validation logic, correction rules, or sample uploads are included. This case study describes the approach at a high level with fictional examples only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+The original tool is real. This public page intentionally excludes its source code, customer templates, correction rules, and sample uploads. All names and records shown here are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

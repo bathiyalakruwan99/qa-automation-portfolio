@@ -1,31 +1,32 @@
-# Jira QA Workflow and Evidence Reporting (Case Study)
+# Jira QA Evidence & Release Readiness Tools
 
-> Sanitized example for portfolio demonstration. No real ticket data, project keys, ticket IDs, credentials, Jira URLs, or proprietary prompts are included. All examples are fictional.
+> **Public-Safe QA Utility Collection**
+> Python tools for collecting Jira ticket data, building release-readiness views, tracking status history, and generating QA evidence reports.
+
+## Security and Data Handling
+
+No real Jira URL, user account, API token, project key, ticket content, customer data, or internal release information is included in this repository. Never commit `.env`, Jira tokens, project keys, real issue exports, or customer data. Use `.env.example` as a configuration template only.
 
 ## Business Problem
 
-QA teams spend meaningful time turning ticketing-system data into a shape that supports release decisions: which items are ready for release, which need regression coverage, and how status has changed over time. Doing that by hand across many work streams is slow, inconsistent, and easy to get wrong right before a release.
+QA needs a repeatable, evidence-friendly view of release readiness from a ticketing system: which items are ready, which need regression coverage, and how status has changed, without manually re-shaping data every release. Done by hand, this view is slow to build and easy to get wrong right before a release.
 
 ## QA Challenge
 
-- Aggregate work items into one consistent, review-ready view
-- Track ready-for-release status and status-change history
+- Consolidate work items into one consistent, review-ready view
+- Track readiness status and status-change history
 - Connect items to the regression coverage they require
-- Keep a repeatable, evidence-friendly release-readiness picture
-- Make the go/hold decision defensible with traceable evidence
+- Keep a defensible, evidence-friendly release-readiness picture
+- Make the go/hold decision explainable and traceable
 
-## Approach
+## What the Tools Do
 
-A high-level QA workflow that organises ticketing-system data into release-readiness and evidence views. The focus is on producing a short, trustworthy picture of "are we ready?" rather than browsing tickets one by one.
+- Fetch configured Jira ticket data into local sanitized JSON structures for reporting and analysis
+- Track readiness status and status-change history
+- Map work items to the regression coverage they require
+- Generate QA evidence and release-readiness summaries
 
-### What the workflow produces
-
-| View | What it shows | QA use |
-| --- | --- | --- |
-| Readiness list | Each work item's readiness against acceptance criteria | Decide what can ship |
-| Status history | How an item moved through states | Traceability and audit |
-| Regression mapping | Which items need regression coverage | Plan regression scope |
-| Evidence summary | Risks, blockers, and supporting evidence | Support the release decision |
+Fictional sample tickets are included for demonstration and report-generation testing.
 
 ### Release-readiness flow
 
@@ -38,15 +39,32 @@ Ticketing workflow
   -> Human QA review and release decision
 ```
 
+### What QA reviews
+
+| View | What it shows | QA use |
+| --- | --- | --- |
+| Readiness list | Each work item's readiness against acceptance criteria | Decide what can ship |
+| Status history | How an item moved through states | Traceability and audit |
+| Regression mapping | Which items need regression coverage | Plan regression scope |
+| Evidence summary | Risks, blockers, and supporting evidence | Support the release decision |
+
 For the detailed workflow, see [`../case-studies/jira-qa-workflow-automation.md`](../case-studies/jira-qa-workflow-automation.md).
 
-### Fictional readiness snapshot
+## Fictional Readiness Snapshot
 
 | Item | State | Regression needed | Readiness |
 | --- | --- | --- | --- |
 | DEMO-101 | Verified | No | Ready |
 | DEMO-102 | In QA | Yes | Not ready |
 | DEMO-103 | Verified with known issue | Yes | Ready with risk |
+
+```
+Items in scope: 3
+Ready: 1
+Ready with known risk: 1 (DEMO-103)
+Not ready: 1 (DEMO-102 still in QA)
+Recommendation: HOLD until DEMO-102 completes QA
+```
 
 ## QA Value
 
@@ -62,11 +80,6 @@ For the detailed workflow, see [`../case-studies/jira-qa-workflow-automation.md`
 - Evidence-based reporting and traceability
 - Turning scattered ticket data into a single decision view
 
-## Limitations
-
-- This is a workflow concept, not a published tool
-- Depth of status history depends on the source ticketing system
-
 ## Confidentiality Note
 
-No real ticket data, customer references, project keys, ticket IDs, Jira URLs, credentials, or proprietary prompts are included. This case study describes the approach at a high level only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+No real ticket data, customer references, project keys, ticket IDs, Jira URLs, credentials, or proprietary prompts are included. All sample tickets are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

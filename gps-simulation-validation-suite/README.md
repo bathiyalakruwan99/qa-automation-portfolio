@@ -1,6 +1,7 @@
-# GPS Simulator and Geofence Validation Suite (Case Study)
+# GPS Simulator & Geofence Validation Suite
 
-> Sanitized example for portfolio demonstration. No real source code, map data, coordinates, routes, vehicle registrations, geofence names, API config, tokens, or screenshots with real locations are included. All examples below are fictional.
+> **Internal QA Tool — Sanitized Public Overview**
+> A web-based QA toolkit I designed to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios.
 
 ## Business Problem
 
@@ -15,9 +16,9 @@ GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet s
 - Validate geofence entry/exit behaviour at the edges, not just the centre
 - Produce QA evidence that travels cleanly into defect reports
 
-## Approach
+## What the Tool Does
 
-A web-based QA toolkit concept that turns GPS testing from a hardware problem into a repeatable data problem. Each capability supports a specific class of GPS scenario.
+A web-based QA toolkit that turns GPS testing from a hardware-dependent activity into repeatable scenario-based validation. Built to support Transport Management System QA workflows.
 
 ### Capabilities
 
@@ -62,7 +63,7 @@ A QA run with this fictional setup sends `Vehicle-001` from `Warehouse Alpha` to
 
 Running all three together checks that concurrent tracking, live-map rendering, and geofence events stay correct under load.
 
-### Sample evidence (shape only)
+### Fictional evidence output
 
 ```
 Scenario: Off-route then rejoin (Vehicle-001)
@@ -72,13 +73,20 @@ Rejoin: yes
 Evidence: path data + map snapshot attached
 ```
 
+## Scale
+
+Designed and tested for multi-device simulation scenarios, including controlled runs at up to 1,000 simulated device streams in QA scenarios.
+
+## Integration Boundary
+
+The internal version sends simulated GPS data to configured non-public test environments. Real endpoint structures, tokens, payloads, and integration settings are intentionally excluded from this public overview.
+
 ## QA Value
 
-- Makes off-route, detour, geofence-edge, rejoin, and scenario-based testing deterministic and repeatable
-- Removes physical hardware from the test plan
-- Supports high-load, multi-vehicle testing without real devices
+- Enables repeatable GPS, geofence, off-route, rejoin, and multi-device scenarios without relying on physical hardware
+- Makes hard-to-reproduce, time-and-location-based scenarios deterministic
 - Produces path data and map evidence that travels cleanly into defect reports
-- Enables testing of specific GPS behaviours without manual path editing
+- Supports concurrent multi-vehicle testing
 
 ## QA Skills Demonstrated
 
@@ -87,12 +95,10 @@ Evidence: path data + map snapshot attached
 - Concurrent, multi-entity test design
 - Evidence capture for time-and-location-based features
 
-## Limitations
+## Public Portfolio Scope
 
-- No source code is included in this public portfolio
-- Real location data, coordinates, routes, and screenshots are not included
-- API configuration and tokens are not included
+The public repository contains documentation, fictional scenarios, and safe artifacts only. The internal tool's source code, real map data, endpoint structures, and screenshots with real locations are not public.
 
 ## Confidentiality Note
 
-No real source code, map data, coordinates, routes, vehicle registrations, geofence names, customer locations, GPS payloads, API URLs, tokens, route polylines, or internal GPS workflow rules are included. This case study describes the QA approach and capabilities at a high level with fictional examples only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+The original tool is real. No real source code, map data, coordinates, routes, vehicle registrations, geofence names, customer locations, GPS payloads, API URLs, tokens, route polylines, or internal GPS workflow rules are included. All examples are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
