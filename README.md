@@ -133,16 +133,6 @@ Requirement → QA Router → Discovery (browser, flow, DOM)
 - **Controlled continuous learning**: memory is updated only after human review, with status and evidence for every entry
 - **Safe healing**: locator changes for monetary or critical fields always require human QA review
 
-#### Why this matters for hiring teams
-
-This project shows the ability to:
-- Design and maintain a structured, reusable automation framework
-- Think in terms of QA architecture, not just individual tests
-- Apply AI-assisted QA responsibly (guardrails, human review, evidence-first)
-- Build for scalability (module templates, shared skills, memory that compounds)
-- Plan for release quality (evidence-based go/no-go, risk summaries, defect classification)
-- Document and communicate QA processes clearly (Mermaid diagrams, catalogs, sample artifacts)
-
 Architecture-only public showcase — no private prompts, source files, customer data, rule wording, or memory content are exposed.
 
 - [Open project →](smart-qa-agent-os/)
