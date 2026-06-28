@@ -44,7 +44,7 @@ A sanitized showcase of GPS stream simulation, vehicle movement patterns, route/
 
 ## 3. Route Optimizer Validation Engine
 
-A QA reference approach for validating optimizer output: route comparison, vehicle suitability, capacity validation, cost-per-kilometre comparison, multi-stop behaviour, order allocation validation, route feasibility, and QA comparison reporting. Public-safe insight: lower total distance does not always mean lower operating cost.
+A QA reference approach for validating optimizer output: route comparison, vehicle suitability, capacity validation, cost-per-kilometre comparison, multi-stop behaviour, order allocation validation, route feasibility, and QA comparison reporting. Key QA insight: lower total distance does not always mean lower operating cost.
 
 [Open case study →](route-optimizer/)
 

@@ -202,9 +202,9 @@ AI-assisted QA workflows for structured data analysis, validation, and cross-sys
 
 ---
 
-## QA Workflow Diagrams (Public-Safe Visuals)
+## QA Workflow Diagrams
 
-Public-safe diagrams and synthetic reports only. No source code, real data, endpoints, or screenshots. All names are fictional (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`, `Order DEMO-1001`, `DEMO-JOB-1001`).
+Diagrams and synthetic reports only. No source code, real data, endpoints, or screenshots. All names are fictional (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`, `Order DEMO-1001`, `DEMO-JOB-1001`).
 
 ### Smart QA Agent OS Architecture
 
