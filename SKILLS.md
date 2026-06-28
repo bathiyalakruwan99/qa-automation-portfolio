@@ -39,7 +39,7 @@ Skills breakdown aligned to Software QA Engineer, Automation QA Engineer, Senior
 
 - GPS simulation for high-load, multi-device scenarios
 - Live map, route-path, vehicle-movement, and geofence validation
-- Route optimization validation using OSRM and Google Maps APIs
+- Route optimization validation using public routing and map APIs
 - TMS workflows: Job Master, Optimizer, Control Tower, Work Orders, Contracts, Invoicing
 
 ## CI & Tooling

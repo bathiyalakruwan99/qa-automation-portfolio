@@ -1,53 +1,40 @@
-# Jira QA Tools (Case Study)
+# Jira QA Workflow and Evidence Reporting (Case Study)
 
-> Synthetic example for portfolio demonstration. No real ticket data, credentials, or internal epic keys are included.
+> Sanitized example for portfolio demonstration. No real ticket data, project keys, ticket IDs, credentials, Jira URLs, or proprietary prompts are included.
 
 ## Business Problem
 
-QA teams spend meaningful time pulling Jira data into a shape that supports release decisions: which tickets are ready for release, which need regression tests, and what each ticket's status history looks like. Doing that by hand across many epics is slow and error-prone.
+QA teams spend meaningful time turning ticketing-system data into a shape that supports release decisions: which items are ready for release, which need regression coverage, and how status has changed over time. Doing that by hand across many work streams is slow and error-prone.
 
 ## QA Challenge
 
-- Aggregate tickets from multiple epics into one consistent dataset
+- Aggregate work items into one consistent, review-friendly view
 - Track ready-for-release status and status-change history
-- Generate regression test cases from bug/task tickets
-- Reuse a library of high-quality QA prompts across releases
+- Connect tickets to regression coverage
+- Keep a repeatable, evidence-friendly release-readiness picture
 
-## Solution
+## Approach
 
-A small collection of focused Python scripts that:
+A high-level QA workflow that organises ticketing-system data into release-readiness and evidence views:
 
-- Sync Jira tickets to local JSON via the Jira REST API
-- Build a manifest for quick lookup
-- Export ticket data and status history to Excel
-- Generate ready-for-release and regression-test-case reports
-- Provide a curated library of 76+ QA prompts for API, security, and automation testing
+- Consolidate work items into a single review view
+- Track readiness status and status-change history
+- Connect items to the regression coverage they require
+- Produce clean, evidence-friendly summaries for release reviews
 
-## Key Capabilities
-
-- **Ticket sync** from configured Jira epics into local JSON
-- **Ticket history** Excel export with status changelog
-- **Manifest builder** for fast indexing of all synced tickets
-- **Report generators** for ready-for-release lists and regression test cases
-- **QA prompt library** covering API, security, automation, and more
-
-## Tech Stack
-
-Python 3.8+, Jira REST API, Requests, OpenPyXL
+For the detailed workflow, see [`../case-studies/jira-qa-workflow-automation.md`](../case-studies/jira-qa-workflow-automation.md).
 
 ## QA Value
 
 - Provides repeatable, evidence-friendly views of release readiness
 - Removes manual data-shaping work from the QA workflow
-- Enables a reusable QA prompt library for consistent testing artefacts
-- Produces Excel and markdown outputs that travel cleanly into reviews
+- Produces summaries that travel cleanly into release reviews
 
 ## Limitations
 
-- Requires valid Jira credentials to sync
-- Reports are intentionally focused; deeper analytics belong in a BI tool
-- Status-history depth depends on what Jira's changelog API returns
+- This is a workflow concept, not a published tool
+- Depth of status history depends on the source ticketing system
 
 ## Confidentiality Note
 
-No real ticket data, customer references, internal epic keys, credentials, or proprietary prompts are included. This case study describes the approach at a high level only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+No real ticket data, customer references, project keys, ticket IDs, Jira URLs, credentials, or proprietary prompts are included. This case study describes the approach at a high level only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

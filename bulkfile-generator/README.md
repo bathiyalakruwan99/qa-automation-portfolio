@@ -1,58 +1,46 @@
-# Bulk Upload Data Quality (Case Study)
+# Bulk Upload Data Quality and Validation Workflow (Case Study)
 
-> Synthetic example for portfolio demonstration. No real code, Excel templates, validation logic, or sample uploads are included.
+> Sanitized example for portfolio demonstration. No real code, templates, validation logic, or sample uploads are included. All examples are fictional.
 
 ## Business Problem
 
-Customers uploading bulk data (organizations, vehicles, drivers, locations) to a TMS regularly hit validation errors: wrong formats, missing fields, duplicate IDs, invalid districts. The support team is then flooded with tickets that are really data-quality problems, not product defects.
+Customers uploading bulk data (organizations, vehicles, drivers, locations) to a platform regularly hit validation errors: wrong formats, missing fields, duplicate IDs. Support is then flooded with tickets that are really data-quality problems, not product defects.
 
 ## QA Challenge
 
 - Catch data issues before they reach the platform
-- Auto-correct common, deterministic mistakes
 - Highlight errors that need human attention
 - Validate large files quickly enough to use in QA and support workflows
+- Generate safe, synthetic test data for QA without using production data
 
-## Solution
+## Approach
 
-A Python validator and corrector exposed via three interfaces:
+A data-quality and validation workflow that:
 
-- Desktop GUI (Tkinter)
-- Web interface (Flask) with drag-and-drop upload
-- Command-line batch processing
+- Validates required fields, formats, and duplicates in bulk upload files
+- Highlights fields that need manual review
+- Produces clean, review-ready validation summaries
+- Generates fictional, synthetic test data (for example `Customer Alpha`, `Vehicle-001`) for QA and workflow testing
 
-## Key Capabilities
+## Fictional Example
 
-- Validates organization details, divisions, HR data, vehicles, and locations
-- Auto-corrects status fields, district names, missing NICs, and duplicates
-- Produces detailed correction reports and timestamped output files
-- Error highlighting for fields that need manual review
-
-## Tech Stack
-
-Python 3.7+, Pandas, OpenPyXL, Tkinter, Flask, Werkzeug
+| Record | Field | Result |
+|---|---|---|
+| Customer Alpha | Required fields | Pass |
+| Vehicle-001 | Duplicate ID | Flagged for review |
 
 ## QA Value
 
 - Removes a common class of false defects driven by bad upload data
 - Cuts support load by 50%+ for upload-related tickets
-- Provides QA with a reusable validator to harden new ingestion flows
-
-## Related Data Quality Utilities
-
-Two additional Excel utilities were built for QA data workflows:
-
-- **Excel Diff Tool**: Sheet-by-sheet comparison of two Excel files with cell-level difference detection, markdown report generation, and side-by-side Excel export with highlighted differences. Useful for data migration validation and regression testing.
-- **Excel Job Highlighter**: Colour-codes Excel rows by job ID categories for visual analysis of large datasets during manual review. Handles large files and preserves original data.
-
-A **test-data generator** was also built to produce realistic synthetic order data (1,000+ records) using Faker for performance and workflow testing, with multiple export formats (Excel, JSON, CSV).
+- Provides QA with a reusable validation approach for new ingestion flows
 
 ## Limitations
 
-- Source code is not included in this public portfolio
-- Validation rules are tuned for specific TMS schemas
-- District mapping is Sri Lanka focused
+- No source code is included in this public portfolio
+- The approach is described at a workflow level only
+- Templates and sample uploads are not included
 
 ## Confidentiality Note
 
-No real code, Excel templates, validation logic, correction rules, or sample uploads are included. This case study describes the approach at a high level only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+No real code, templates, validation logic, correction rules, or sample uploads are included. This case study describes the approach at a high level with fictional examples only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

@@ -1,164 +1,43 @@
-# ================================
-# QA/Testing Project .gitignore
-# ================================
-# This file excludes common test artifacts, 
-# sensitive data, and generated files from version control
-
-# Dependencies
-node_modules/
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-.venv
-
-# Build outputs
-dist/
-build/
-*.egg-info/
-.eggs/
-
-# Environment variables & Secrets
-.env
-.env.local
-.env.*.local
-*.env
-secrets/
-credentials/
-*.pem
-*.key
-*.p12
-*.pfx
-config/local.json
-config/secrets.json
-auth.json
-tokens.json
-
-# IDE
+# Editor and OS files
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-.DS_Store
 
-# Logs
+# Local working files
+temp/
+tmp/
+*.tmp
 *.log
-logs/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Testing
-coverage/
-.nyc_output/
-*.coverage
-.pytest_cache/
-htmlcov/
-.tox/
-junit.xml
+# Never commit private source or confidential material
+private/
+internal/
+source/
+working-code/
+*.env
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Generated reports and raw test artifacts
+reports/
 test-results/
-test-report.html
-
-# Test automation artifacts
-# screenshots/    # PORTFOLIO: Allow screenshots for documentation
-# videos/         # PORTFOLIO: Allow demo videos
 traces/
+videos/
 downloads/
-test-artifacts/
+playwright-report/
 allure-results/
 allure-report/
-mochawesome-report/
-playwright-report/
-cypress/videos/
-cypress/screenshots/
-.browsers/
-
-# Performance testing
-jmeter.log
-*.jtl
 k6-results/
-k6-summary.json
-
-# API testing
 newman/
-postman_collection_backup/
-*.har
-rest-client.env.json
-newman-report.html
 
-# Playwright (Smart QA Agent OS demo)
-smart-qa-agent-os/playwright-demo/node_modules/
-smart-qa-agent-os/playwright-demo/playwright-report/
-smart-qa-agent-os/playwright-demo/test-results/
-smart-qa-agent-os/playwright-demo/.env
-
-# Next.js
-.next/
-out/
-.vercel
-
-# Excel temporary files
-~$*.xlsx
-~$*.xls
-
-# OS
-Thumbs.db
-
-# Cache
-.cache/
-.parcel-cache/
-
-# Output directories (keep structure, ignore contents)
-outputs/*
-!outputs/.gitkeep
-reports/*
-!reports/.gitkeep
-Created file/*
-!Created file/.gitkeep
-uploaded order file/*
-!uploaded order file/.gitkeep
-
-# Large test files
+# Raw client data and internal exports
 *.xlsx
 *.xls
-!sample*.xlsx
-!sample*.xls
-!**/samples/*.xlsx
-!**/samples/*.xls
-
-# Database files
+*.csv
 *.sqlite
 *.sqlite3
 *.db
-*.sql
-!schema.sql
-!migrations/*.sql
-
-# Personal notes & documents
-New Text Document.txt
-*New Text Document*.txt
-test.txt
-*.bak
-*.backup
-
-# Personal documents (CV, Resume) - only in root
-/Purple and White Clean and Professional Resume.pdf
-/bathiya lakruwan.pdf
-/*Resume*.pdf
-/*CV*.pdf
-/*.pdf
-
-# Temporary files
-*.tmp
-*.temp
-temp/
-tmp/
-
-# Misc tools (docs moved to root)
-misc-tools/
-
+*.har

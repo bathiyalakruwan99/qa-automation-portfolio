@@ -1,0 +1,54 @@
+# AI-Assisted Test Design Workflow (Case Study)
+
+> Sanitized example for portfolio demonstration. No real ticket data, designs, prompts, or screenshots are included. All examples are fictional.
+
+## Business Problem
+
+Writing comprehensive test cases for new features is slow and repetitive: read the requirement, walk the acceptance criteria, capture happy paths and edge cases, and produce a structured set of test cases per module. This work is high-volume but low-novelty per item and slows the release cycle.
+
+## QA Challenge
+
+- Consistently cover acceptance criteria, edge cases, and negative paths
+- Keep AI drafts from leaking into the test suite unreviewed
+- Maintain a defensible audit trail of how each test case was authored
+
+## High-Level Workflow
+
+```
+Requirement
+  -> Risk analysis
+  -> Test scenario draft
+  -> Human QA review
+  -> Approved test case
+  -> Test management import concept
+```
+
+AI-assisted drafting supports first-pass test design. A QA engineer reviews, corrects, expands, prioritises, and approves all final test cases.
+
+## What AI Supports vs What QA Owns
+
+| Step | AI support | Human QA ownership |
+|---|---|---|
+| Risk analysis | Suggests risks and areas to cover | Confirms and prioritises risk |
+| Scenario draft | Drafts scenarios and edge cases | Reviews coverage and accuracy |
+| Test case wording | Drafts structured test cases | Corrects, expands, and approves |
+| Import | Prepares an import-ready draft | Approves what enters the suite |
+
+## Fictional Example
+
+For a fictional checkout feature, AI drafts scenarios such as "apply a valid coupon", "apply an expired coupon", and "apply a coupon below the minimum order value" for `Customer Alpha` with `Order DEMO-1001`. The QA engineer then reviews, removes anything unsupported by the requirement, adds missing edge cases, and approves the final set.
+
+## QA Value
+
+- Cuts time-to-first-draft from hours to minutes per module
+- Improves coverage consistency through reusable structure
+- Keeps a defensible authoring trail
+- Frees QA time for exploratory and risk-based testing
+
+## Human QA Ownership
+
+No test case is published without QA review. Unreviewed AI output is never allowed in the test suite. Quality of output depends on the quality of the requirement and the review.
+
+## Confidentiality Note
+
+No real ticket data, designs, prompts referencing customer data, or screenshots are included. This case study describes the workflow at a high level with fictional examples only. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

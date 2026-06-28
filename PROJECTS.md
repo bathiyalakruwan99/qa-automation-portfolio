@@ -1,61 +1,42 @@
 # Projects
 
-Sanitized QA tools and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows. Most were built during my work at **Haulmatic Technologies** (Transport Management Systems) and **IFS R&D International** (ERP systems). This repository contains only the public, sanitized versions.
+Sanitized QA case studies designed from real-world web, mobile, API, data, and logistics-testing workflows. This repository contains only public, sanitized case studies. No runnable source code, production data, or confidential implementation details are included.
 
 Featured order — open in this sequence:
 
-1. Smart QA Agent OS / Automation Framework
-2. GPS Simulator and Path Generation Suite
+1. Smart QA Agent OS — Evolving AI-Assisted QA Operating Model
+2. GPS Simulator and Geofence Validation Suite
 3. Route Optimizer Validation Engine
 4. Job Master Data Validation and Evidence Processor
-5. Bulk Upload Data Quality Utilities
-6. AI-Assisted Test Case Workflow
-7. Jira QA Tools
+5. Data Quality and Test Data Utilities
+6. AI-Assisted Test Design Workflow
+7. Jira QA Workflow and Evidence Reporting
 
 Additional: AI and MCP QA Workflows (case study)
 
 ---
 
-## 1. Smart QA Agent OS — Automation Framework + AI QA Operating Model
+## 1. Smart QA Agent OS — Evolving AI-Assisted QA Operating Model
 
-A sanitized public reference implementation of an enterprise-style QA automation and release-validation workflow, **plus a modular AI QA operating model with specialised QA agents, reusable skills, quality guardrails, and continuously curated QA memory**.
+An evolving, AI-assisted QA operating model that supports QA work without replacing QA judgement. Capability areas are clearly separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned) so nothing is overstated, and a human QA engineer remains responsible for every final decision.
 
-Framework side:
+Public showcase coverage:
 
-- Layered structure: UI, API, hybrid, BDD, performance
-- Reusable Page Objects, fixtures, and API clients
-- Postman + Newman collection with CI execution
-- k6 smoke / load / stress / soak scripts
-- Documented release-gate checklist and QA knowledge memory
+- Exploratory QA support and risk-based thinking
+- Requirement-to-test planning (acceptance criteria, risks, edge cases, coverage ideas)
+- Browser and flow discovery (screens, journeys, dependencies, automation candidates)
+- QA knowledge capture (reusable flows, validation rules, defects, lessons learned)
+- Playwright test design (planning, BDD scenario drafting, Page Object Model design)
+- Locator-healing investigation as a guided, human-reviewed workflow
+- Growing execution, API/hybrid, performance, and release-gate workflows
 
-AI QA Operating Model side (architecture-only, public showcase):
-
-- **34 capability-level specialised QA agents** across six categories: Orchestration/Strategy, Discovery/Understanding, Test Design/Automation, Execution/Investigation/Healing, Reporting/Documentation/Release, Learning/Memory
-- **13 shared QA skill groups** used across multiple agents
-- **14 quality rule categories** enforcing evidence-first verification and safe automation
-- **17-category continuous QA memory architecture** (Project, Module, Flow, Page/Component, API/Network, Validation Rules, Test Data, Automation, Locator Healing, Flaky Area, Known Bugs, Defect Pattern, Error-to-Solution, Release, Learning, Glossary, Run)
-- Example agent journey, sample artifacts, demo walkthrough script
-
-**Tech:** Playwright, TypeScript, BDD/Cucumber-style, POM, Postman, Newman, k6, AI QA Operating Model
-
-- [Open project →](smart-qa-agent-os/)
-- [AI QA Operating Model overview →](smart-qa-agent-os/ai-qa-operating-model.md)
-- [Agents catalog →](smart-qa-agent-os/docs/agents-catalog.md)
-- [Sample artifacts →](smart-qa-agent-os/sample-artifacts/)
-- [Manual QA Knowledge →](smart-qa-agent-os/manual-knowledge/)
-- [Module Template →](smart-qa-agent-os/module-template/)
-- [Prompt Examples →](smart-qa-agent-os/prompts/)
-- [QA Graph Tool →](smart-qa-agent-os/qa-graph-tool/)
-- [QA Output →](smart-qa-agent-os/qa-output/)
-- [Scripts →](smart-qa-agent-os/scripts/)
+[Open project →](smart-qa-agent-os/)
 
 ---
 
-## 2. GPS Simulator and Path Generation Suite
+## 2. GPS Simulator and Geofence Validation Suite
 
-Web-based toolkit with 8 specialised GPS testing tools: vehicle simulator, live simulator (up to 1000 devices), road-aware path builder, live manual simulator with pause/drag/rejoin and 4 path layers, unified scenario JSON generator (short stop, return early, out of sequence, unplanned stop, reassignment split), path visualizer, and multi-device combiner. Includes data-testid attributes for automation.
-
-**Tech:** JavaScript, Leaflet.js, OpenStreetMap, OpenRouteService, React + Vite + TypeScript, Google Maps
+A sanitized showcase of GPS stream simulation, vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle test scenarios, and GPS/live-map QA evidence. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
 
 [Open case study →](gps-testing-suite/)
 
@@ -63,9 +44,7 @@ Web-based toolkit with 8 specialised GPS testing tools: vehicle simulator, live 
 
 ## 3. Route Optimizer Validation Engine
 
-Standalone Next.js reference engine that runs a full 6-stage load optimization pipeline (validate, group shipments, OSRM road matrix, corridor construction, rebalance, finalize) with hard reconciliation guarantees (order, SKU, weight/CBM conservation), unassigned reason codes, vehicle accessibility rules, penalty-based optimization objective, and a 7-section Validation Summary export. Result: 75% reduction in route and optimizer testing effort.
-
-**Tech:** Next.js 15, React 18, TypeScript, Tailwind CSS, OSRM, Leaflet, Web Workers, LRU cache
+A QA reference approach for validating optimizer output: route comparison, vehicle suitability, capacity validation, cost-per-kilometre comparison, multi-stop behaviour, order allocation validation, route feasibility, and QA comparison reporting. Public-safe insight: lower total distance does not always mean lower operating cost.
 
 [Open case study →](route-optimizer/)
 
@@ -73,64 +52,50 @@ Standalone Next.js reference engine that runs a full 6-stage load optimization p
 
 ## 4. Job Master Data Validation and Evidence Processor
 
-Python application suite (desktop, web, CLI, bulk checker) for validating TMS job/work-order exports. Core capability is a multi-method load counting system: 3 categories (Non FTL-DISTRIBUTION, FTL-DISTRIBUTION, FTL-DOMESTIC Route Optimiser) x 3 calculation methods (Current/Prorated, 8x, 10x), with Route Optimiser exclusion logic, tolerant column mapping, bulk GPS/payment/invoice status checks, and evidence-ready Excel exports.
-
-**Tech:** Python 3.8+, Pandas, OpenPyXL, Tkinter, Flask
+A sanitized case study on job/work-order data validation: status consistency checks, missing/incomplete data detection, GPS/invoice/payment/workflow-readiness validation, QA evidence generation, and regression/UAT/reconciliation support. Uses fictional records (`Job ID: DEMO-JOB-1001`, `Load ID: DEMO-LOAD-2001`).
 
 [Open case study →](jobmaster/)
 
 ---
 
-## 5. Bulk Upload Data Quality Utilities
+## 5. Data Quality and Test Data Utilities
 
-Python validator and corrector for TMS bulk uploads (desktop GUI, web, CLI). Validates organization, vehicle, driver, and location data, auto-corrects common mistakes, and produces evidence-ready outputs. Includes complementary utilities for Excel diff comparison, job-row highlighting, and synthetic test-data generation. Reduced customer upload errors by 50%+.
-
-**Tech:** Python, Pandas, OpenPyXL, Tkinter, Flask, Faker
+A sanitized case study on bulk upload data quality and validation workflows: catching data issues before they reach the platform, highlighting fields that need human attention, and generating synthetic test data for QA workflows.
 
 [Open case study →](bulkfile-generator/)
 
 ---
 
-## 6. AI-Assisted Test Case Workflow
+## 6. AI-Assisted Test Design Workflow
 
-A documented workflow that turns Jira tickets and Figma designs into draft test cases through MCP integrations and mind-map structuring, with a mandatory QA review step before any test case is published. Includes RTM traceability and CSV import into the test management tool.
+A high-level workflow showing how requirements move from risk analysis to a test scenario draft, through human QA review, to an approved test case and a test-management import concept. AI-assisted drafting supports first-pass test design; a QA engineer reviews, corrects, expands, prioritises, and approves all final test cases.
 
-**Tech:** Jira MCP, Figma MCP, ChatGPT/Claude, Python (CSV conversion)
-
-[Open case study →](test-cases-creation-automatic/)
+[Open case study →](case-studies/ai-assisted-test-design.md) · [Test data and spreadsheet validation →](test-cases-creation-automatic/)
 
 ---
 
-## 7. Jira QA Tools
+## 7. Jira QA Workflow and Evidence Reporting
 
-Python utilities for syncing Jira tickets, building manifests, exporting ticket history, generating ready-for-release reports, and a curated set of 76+ QA prompts for API, security, and automation testing.
+A high-level workflow showing how QA evidence and release-readiness views are organised from a ticketing workflow, without exposing any ticket data, project keys, or credentials.
 
-**Tech:** Python, Jira REST API, OpenPyXL, Requests
-
-[Open case study →](jira-tools/)
+[Open case study →](case-studies/jira-qa-workflow-automation.md) · [Jira QA tools overview →](jira-tools/)
 
 ---
 
 ## Additional: AI and MCP QA Workflows
 
-AI-powered QA workflows using Model Context Protocol (MCP) for automated data analysis, invoice validation, job progress tracking, and cross-system reconciliation.
+A high-level case study on AI-assisted QA workflows for structured data analysis, validation, and cross-system reconciliation concepts, with human QA review at every decision point.
 
 [Open case study →](case-studies/ai-mcp-qa-workflows.md)
 
 ---
 
-## Test Automation Frameworks (Reference)
-
-UI and API automation with Playwright, Cypress, and Selenium using Page Object Model. Public reference implementation lives in [`smart-qa-agent-os/`](smart-qa-agent-os/). Enterprise codebases used in employment are proprietary and are **not** published here.
-
----
-
 ## Reproducible Metrics
 
-- 1,000+ test cases prepared and executed across TMS releases
-- 1,000+ defects identified and reported with reproduction evidence
-- 75% reduction in route and optimizer testing effort using the Route Optimizer Validation Engine
-- 50%+ reduction in customer upload errors after introducing the Excel Validator
+- 1,000+ test cases prepared and executed
+- 1,000+ defects identified and reported
+- 75% reduction in route/optimizer validation effort
+- 50%+ reduction in customer upload errors
 
 ---
 
@@ -140,4 +105,4 @@ UI and API automation with Playwright, Cypress, and Selenium using Page Object M
 - **Website:** [bathiya-qa.vercel.app](https://bathiya-qa.vercel.app/)
 - **LinkedIn:** [linkedin.com/in/bathiyalakruwan99](https://www.linkedin.com/in/bathiyalakruwan99/)
 
-Sanitized QA tools and automation examples designed from real-world web, mobile, API, data, and logistics-testing workflows. MIT licensed — see [LICENSE](LICENSE).
+Sanitized QA case studies designed from real-world web, mobile, API, data, and logistics-testing workflows. See [`NOTICE.md`](NOTICE.md) for portfolio-use terms.
