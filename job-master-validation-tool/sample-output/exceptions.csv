@@ -1,0 +1,15 @@
+severity,code,file,line,ref,message
+ERROR,COMPLETED_JOB_BELOW_100,jobs,6,DEMO-JOB-1005,COMPLETED but progress is 80%
+ERROR,COMPLETED_JOB_OPEN_LOADS,jobs,7,DEMO-JOB-1006,COMPLETED but loads not delivered: DEMO-LOAD-2007
+ERROR,DELIVERED_LOAD_PENDING_ACTIVITIES,loads,14,DEMO-LOAD-2013,DELIVERED but activities pending: DEMO-ACT-0035
+ERROR,DUPLICATE_JOB_REF,jobs,12,DEMO-JOB-1002,DEMO-JOB-1002 already appears on line 3
+ERROR,DUPLICATE_SEQUENCE,activities,30,DEMO-ACT-0029,sequence 1 used twice
+ERROR,ORPHAN_ACTIVITY,activities,37,DEMO-ACT-9999,parent load DEMO-LOAD-9999 not found
+ERROR,ORPHAN_LOAD,loads,13,DEMO-LOAD-2012,parent job DEMO-JOB-9999 not found
+ERROR,PROGRESS_OUT_OF_RANGE,jobs,10,DEMO-JOB-1009,"progress_pct ""140"" must be a number from 0 to 100"
+ERROR,STATE_CONFLICT,jobs,9,DEMO-JOB-1008,job is PLANNED but loads have moved: DEMO-LOAD-2009
+ERROR,UNKNOWN_STATUS,jobs,13,DEMO-JOB-1011,"status ""ON_HOLD"" is not one of PLANNED, IN_PROGRESS, COMPLETED, CANCELLED"
+WARNING,ACTIVITY_DONE_OUT_OF_ORDER,activities,33,DEMO-ACT-0032,DONE while an earlier activity is still PENDING
+WARNING,JOB_WITHOUT_LOADS,jobs,11,DEMO-JOB-1010,active job has no loads
+WARNING,PROGRESS_100_NOT_COMPLETED,jobs,8,DEMO-JOB-1007,progress is 100% but status is IN_PROGRESS
+WARNING,SEQUENCE_GAP,loads,9,DEMO-LOAD-2008,"activity sequence is 1, 2, 4; expected 1..3"
