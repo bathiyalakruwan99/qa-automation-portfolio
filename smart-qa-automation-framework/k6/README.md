@@ -33,8 +33,8 @@ The numbers are starting points for a local demo. For a real system they come fr
 ## Run
 
 ```bash
-# terminal 1
-npm run demo:start
+# terminal 1 (test mode, so a later `npm test` can reuse this server)
+npm run demo:start:test
 
 # terminal 2 (k6 installed from https://k6.io/)
 k6 run k6/smoke.js

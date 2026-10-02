@@ -27,8 +27,8 @@ The run creates one shipment and deletes it, so it leaves no data behind.
 ## Run
 
 ```bash
-# terminal 1: start the demo app
-npm run demo:start
+# terminal 1: start the demo app (test mode, so a later `npm test` can reuse this server)
+npm run demo:start:test
 
 # terminal 2
 npm run test:postman
