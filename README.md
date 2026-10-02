@@ -5,7 +5,7 @@
 Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Validation · AI-Assisted QA
 
 [![CI](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml)
-[![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
+[![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
 [![QA Tools](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
@@ -121,22 +121,22 @@ The Python folders are `bulk-upload-validator`, `job-data-validation-tool`, `jir
 
 ## Project Maturity
 
-What is publicly verifiable in this repository **today**. Labels are updated as each runnable demo lands.
+What is publicly verifiable in this repository today.
 
-| Area | Public code today | Professional relevance | Public maturity |
-| --- | --- | --- | --- |
-| Playwright framework (POM, fixtures, flows, local demo app) | Yes | High | Runnable demo |
-| API automation (typed clients, schemas, Newman) | Yes | High | Runnable demo |
-| UI + API hybrid testing | Yes | High | Runnable demo |
-| GPS simulation and validation | Yes | High | Runnable demo |
-| Route-output validation | Yes | High | Runnable demo |
-| Bulk upload / data validation | Yes | High | Runnable demo |
-| Job / load reconciliation | Yes | High | Runnable demo |
-| Jira release-readiness tools | Yes (offline) | Medium | Runnable demo |
-| AI-assisted QA workflow | Templates, schema, governance validator | High | Prototype (human-reviewed) |
-| State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
-| k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
-| CI/CD | Checks, smoke, API regression, QA tools and secret scan (verified on GitHub Actions); nightly regression (scheduled, first run pending) | Developing | Working knowledge |
+| Area | Public evidence | Status |
+| --- | --- | --- |
+| Playwright automation | UI, API, hybrid tests, POM, fixtures, local demo app | Runnable |
+| API testing | Typed API clients, schema validation, Newman | Runnable |
+| State-driven workflow testing | Workflow engine, guardrails, diagnostic tests | Runnable |
+| GPS simulation | Simulator, validators, scenarios, CLI, automated tests | Runnable |
+| Route-output validation | Validation rules, sample plans, CLI, tests | Runnable |
+| Data validation | CSV/XLSX validators, reconciliation tools, tests | Runnable |
+| Jira release-readiness | Offline reports over fictional tickets | Runnable |
+| AI-assisted test design | Prompt templates, schema, governance validator | Prototype |
+| k6 performance testing | Smoke scripts against local demo app | Learning |
+| CI/CD | GitHub Actions for CI, smoke, API and QA tools | Working knowledge |
+
+
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 
