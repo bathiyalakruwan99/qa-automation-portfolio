@@ -11,6 +11,17 @@ Shared, sanitized visual and documentation assets used by the root README, the c
 - `sample-artifacts/` — synthetic, non-runnable QA artifact examples (Markdown only)
 - `demo-gifs/` — short demo GIFs
 
+## Current images
+
+All captured from repository-owned demos with fictional data (never from internal applications):
+
+| File | Shows |
+| --- | --- |
+| `demo-gifs/shipment-journey.gif` | One shipment driven from CREATED to DELIVERED in the demo app |
+| `screenshots/demo-app-login.png`, `demo-app-shipments.png`, `demo-app-shipment-in-transit.png` | The Northstar Logistics demo app |
+| `screenshots/playwright-report.png` | The Playwright HTML report of a local run (31/31 passed) |
+| `screenshots/gps-simulator-off-route.png` | The GPS map viewer for the `off-route-rejoin` scenario, 5 vehicles |
+
 ## Rules
 
 - Only sanitized, fictional, or synthetic content.

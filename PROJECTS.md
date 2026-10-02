@@ -4,8 +4,8 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 
 | Project | Public implementation today | Next |
 |---|---|---|
-| Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests, 116 unit tests, CI workflows | Nightly regression |
-| GPS Simulator & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, 29 tests | Optional map viewer |
+| Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 31 Playwright tests, 116 unit tests, CI + nightly workflows | — |
+| GPS Simulator & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, map viewer, 32 tests | Road snapping |
 | Route Optimizer Validation Workbench | Runnable demo: 6 validators, sample plans, CLI, 19 tests | Road-network distances |
 | Job Master Data Validation & Release Evidence Tool | Runnable demo: reconciliation checks, CLI, 21 tests | Time-based checks |
 | Bulk Upload Validator & Synthetic Test Data Generator | Runnable demo: CSV/XLSX validator, generator oracle, CLI, 36 tests | Multi-sheet workbooks |

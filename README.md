@@ -7,6 +7,7 @@ Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Valida
 [![CI](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
+[![QA Tools](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
@@ -41,18 +42,22 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 
 Runnable Playwright + TypeScript framework with its own fictional logistics app: Page Object Model, components, fixtures, seeded typed data, business flows, typed API clients with contract schemas, UI + API hybrid tests, a state-driven workflow engine with guardrails, and failure classification. A human-governed AI QA operating model sits alongside it.
 
-- **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
+- **Public today:** `npm test` runs 31 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
 - **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); mutation checks show the suites catch deliberate defects.
 
 [View project →](smart-qa-automation-framework/)
+
+<img src="assets/demo-gifs/shipment-journey.gif" alt="A shipment driven from CREATED to DELIVERED in the demo app" width="640"/>
 
 ### 2. GPS Simulation & Validation Suite
 
 Approach for testing GPS, live-map and geofence features without hardware: route playback, multi-device simulation, geofence enter/exit and boundary cases, off-route and rejoin scenarios.
 
-- **Public today:** TypeScript simulator + validators, 5 JSON scenarios on synthetic coordinates, CLI with PASS/FAIL exit codes, 29 tests (GPS-001…010). 1000 vehicles in about 1.7 s; same seed, byte-identical output.
+- **Public today:** TypeScript simulator + validators, 5 JSON scenarios on synthetic coordinates, CLI with PASS/FAIL exit codes, offline map viewer, 32 tests (GPS-001…010). 1000 vehicles in about 1.7 s; same seed, byte-identical output.
 
 [View project →](gps-simulation-validation-suite/)
+
+<img src="assets/screenshots/gps-simulator-off-route.png" alt="GPS map viewer: off-route detour that skips the Zone Gamma checkpoint" width="640"/>
 
 ### 3. Route Optimizer Validation Workbench
 
@@ -77,6 +82,30 @@ Bulk-upload and job/load reconciliation validation: required fields, duplicates,
 | [AI-Assisted Test Design](ai-assisted-test-design/) | Prompt templates, test-case schema, and a validator that rejects invented criteria and self-approved AI drafts | Prototype with runnable tooling (17 tests) |
 | [Jira Release-Readiness Tools](jira-tools/) | Offline release readiness, regression mapping, status history over fictional tickets | Runnable demo (19 tests) |
 | [AI and MCP QA Workflows](case-studies/ai-mcp-qa-workflows.md) | AI-assisted analysis and reconciliation with human review | Case study |
+
+---
+
+## Quick Start
+
+No accounts, VPN or private configuration needed; every demo runs on its own synthetic data.
+
+```bash
+git clone https://github.com/bathiyalakruwan99/qa-automation-portfolio.git
+cd qa-automation-portfolio
+
+# Playwright framework + demo app (Node 22.12+)
+cd smart-qa-automation-framework && npm ci && npx playwright install chromium && npm test && cd ..
+
+# TypeScript QA tools
+cd gps-simulation-validation-suite && npm ci && npm test && npm run gps -- --scenario off-route-rejoin --devices 5 && cd ..
+cd route-optimizer-validation-workbench && npm ci && npm test && npm run validate:clean && cd ..
+
+# Python QA tools (3.11+): same pattern in each folder
+cd bulk-upload-validator && python -m venv .venv && . .venv/bin/activate && pip install -r requirements-dev.txt && pytest
+```
+
+The Python folders are `bulk-upload-validator`, `job-master-validation-tool`, `jira-tools` and
+`ai-assisted-test-design`. Each README has its own run commands and real sample output.
 
 ---
 

@@ -7,7 +7,7 @@ have been detected, PASS or FAIL against the scenario's expectations.
 
 ## Project Status
 
-**Public implementation:** Runnable demo. TypeScript library, 5 JSON scenarios, CLI, 29 automated tests.
+**Public implementation:** Runnable demo. TypeScript library, 5 JSON scenarios, CLI, offline map viewer, 32 automated tests.
 
 **Professional relevance:** Based on QA problems handled in professional TMS / logistics testing (fleet-scale
 tracking without devices, geofence edges, off-route behaviour). This public version is independently written
@@ -41,6 +41,7 @@ Tracking features (live maps, geofence alerts, off-route warnings, stop detectio
 | Multi-vehicle | `--devices N` runs N vehicles with their own seed and start time |
 | Validation | Geofence ENTER/EXIT with dwell, off-route/rejoin, stops, data-quality issues |
 | Determinism | Same scenario + seed → byte-identical results |
+| Map viewer | `--viewer` writes a self-contained HTML/SVG map of the run: route, fences, tracks, off-route fixes, PASS/FAIL table |
 
 ## 3. Architecture
 
@@ -89,9 +90,10 @@ whichever values were agreed.
 ```bash
 cd gps-simulation-validation-suite
 npm ci
-npm test                                                        # 29 tests
+npm test                                                        # 32 tests
 npm run gps -- --scenario off-route-rejoin --devices 5 --seed 7  # CLI
 npm run gps -- --scenario baseline --devices 1000 --json output/fleet.json
+npm run gps -- --scenario off-route-rejoin --devices 5 --viewer output/map.html   # open in a browser
 npm run verify                                                  # typecheck + lint + format + tests
 ```
 
@@ -137,6 +139,11 @@ Result: PASS
 ```
 
 A 1000-vehicle `baseline` run (26,000 fixes) completes in about 1.7 s locally, and every vehicle passes.
+
+The map viewer for the same run ([HTML](sample-output/off-route-rejoin.map.html)) makes the finding obvious: the
+detour skips the Zone Gamma checkpoint. No map tiles or scripts are loaded, so the page works offline.
+
+<img src="../assets/screenshots/gps-simulator-off-route.png" alt="GPS map viewer: off-route detour skipping Zone Gamma" width="640"/>
 
 ## 7. Test coverage
 
