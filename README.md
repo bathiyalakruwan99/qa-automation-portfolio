@@ -41,7 +41,7 @@ Playwright + TypeScript reference framework: Page Object Model, component object
 - **Public today:** framework structure and code (TypeScript), Postman collection, k6 scripts, synthetic QA artifacts.
 - **In progress:** a local demo logistics app so every test runs on clone, typed API clients, API and hybrid suites, a state-driven workflow engine, unit-tested utilities, and CI.
 
-[View project →](smart-qa-agent-os/)
+[View project →](smart-qa-automation-framework/)
 
 ### 2. GPS Simulation & Validation Suite
 

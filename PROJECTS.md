@@ -22,7 +22,7 @@ A QA automation framework plus a modular AI-assisted QA operating model. Capabil
 - **Stack:** Playwright, TypeScript, BDD, POM, Postman/Newman, k6, AI QA operating model
 - **QA value:** A structured, evidence-driven, reusable approach that keeps human QA judgement at the centre.
 
-[Open reference implementation →](smart-qa-agent-os/)
+[Open reference implementation →](smart-qa-automation-framework/)
 
 ---
 

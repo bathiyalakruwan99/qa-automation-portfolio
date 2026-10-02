@@ -4,7 +4,7 @@ A guided tour of this repository. Each project documents a QA tool, utility, or 
 
 ## Start here
 
-1. **Smart QA Agent OS** ([`smart-qa-agent-os/`](../smart-qa-agent-os/)) — a QA automation and AI-assisted testing prototype with clearly labelled capability maturity and human QA ownership at the center.
+1. **Smart QA Agent OS** ([`smart-qa-automation-framework/`](../smart-qa-automation-framework/)) — a QA automation and AI-assisted testing prototype with clearly labelled capability maturity and human QA ownership at the center.
 2. **GPS Simulator & Geofence Validation Suite** ([`gps-simulation-validation-suite/`](../gps-simulation-validation-suite/)) — internal QA tool: GPS stream simulation, vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle scenarios, and live-map QA evidence.
 3. **Route Optimizer Validation Workbench** ([`route-optimizer-validation-workbench/`](../route-optimizer-validation-workbench/)) — internal QA tool: independent comparison across distance, vehicle suitability, capacity, cost-per-kilometre, feasibility, and allocation.
 
@@ -23,7 +23,7 @@ A guided tour of this repository. Each project documents a QA tool, utility, or 
 
 ## Smart QA Agent OS — deeper dive
 
-Inside [`smart-qa-agent-os/`](../smart-qa-agent-os/) the documentation shows the full operating model: the AI QA operating model overview, architecture and flow diagrams, the agents and workflow docs, capability maturity labelling, and synthetic QA artifact examples. Locator/test-healing is presented as a guided, human-reviewed investigation workflow, not a fully autonomous runtime auto-healer.
+Inside [`smart-qa-automation-framework/`](../smart-qa-automation-framework/) the documentation shows the full operating model: the AI QA operating model overview, architecture and flow diagrams, the agents and workflow docs, capability maturity labelling, and synthetic QA artifact examples. Locator/test-healing is presented as a guided, human-reviewed investigation workflow, not a fully autonomous runtime auto-healer.
 
 ## Sanitized artifact examples
 
@@ -44,6 +44,6 @@ See [`assets/sample-artifacts/`](../assets/sample-artifacts/) for synthetic, non
 ## Skim path (60 seconds)
 
 - Read the root `README.md` first.
-- Open `smart-qa-agent-os/README.md` for the operating-model summary.
+- Open `smart-qa-automation-framework/README.md` for the operating-model summary.
 - Scan the Featured QA Case Studies list for coverage.
 - Click any case study that matches the role you are hiring for.

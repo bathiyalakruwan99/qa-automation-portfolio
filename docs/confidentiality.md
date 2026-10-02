@@ -68,7 +68,7 @@ Screenshots and recordings come only from the public demo apps, generated report
 ## Safety checks
 
 - `.gitignore` excludes environment files, saved auth state, raw exports and generated artifacts; only reviewed synthetic sample data is allowed.
-- A repository pattern scanner (`smart-qa-agent-os/scripts/check-no-secrets.js`) runs before commits.
+- A repository pattern scanner (`smart-qa-automation-framework/scripts/check-no-secrets.js`) runs before commits.
 - gitleaks scans the full git history and working tree in CI (`.github/workflows/secret-scan.yml`).
 - Every commit is checked against the public-safety checklist below.
 

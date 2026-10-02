@@ -20,7 +20,7 @@ Voice-over:
 
 ## Scene 2 - Automation Framework (0:10 - 0:25)
 
-Visual: Side-by-side - `smart-qa-agent-os/playwright-demo/` tree on the left, `playwright.config.ts` and a POM file on the right. Briefly highlight `tests/ui`, `tests/api`, `tests/hybrid`, `tests/bdd`.
+Visual: Side-by-side - `smart-qa-automation-framework/playwright-demo/` tree on the left, `playwright.config.ts` and a POM file on the right. Briefly highlight `tests/ui`, `tests/api`, `tests/hybrid`, `tests/bdd`.
 
 Voice-over:
 > "The framework layer is Playwright with TypeScript, Page Object Model, BDD scenarios, API and hybrid flows, Postman/Newman regression, and k6 performance."
@@ -56,14 +56,14 @@ Voice-over:
 
 ## Scene 6 - Closing (1:25 - 1:30)
 
-Visual: Return to `smart-qa-agent-os/README.md` navigation index with the AI QA Operating Model section visible.
+Visual: Return to `smart-qa-automation-framework/README.md` navigation index with the AI QA Operating Model section visible.
 
 Voice-over:
 > "Smart QA Agent OS - one place for framework, agents, skills, rules, memory, and evidence."
 
 End card:
 - GitHub: `bathiyalakruwan99/qa-automation-portfolio`
-- Section: `smart-qa-agent-os/`
+- Section: `smart-qa-automation-framework/`
 - Persistent disclaimer remains visible.
 
 ---
