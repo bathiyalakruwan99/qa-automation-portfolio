@@ -1,4 +1,4 @@
-# Job Master Validation Tool
+# Job Data Validation Tool
 
 **Reconciles job, load and activity exports and lists every inconsistency with its file, line and reason.** It
 turns a large export into a short exception list for a release review.
@@ -71,26 +71,26 @@ flowchart LR
 ## 4. Setup and run
 
 ```bash
-cd job-master-validation-tool
+cd job-data-validation-tool
 python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
 pytest                                                  # 21 tests
 ruff check . && ruff format --check .
 
-python -m job_master_validator                                   # sample with exceptions -> exit 1
-python -m job_master_validator --data sample-data/clean          # exit 0
-python -m job_master_validator --data path/to/export --out output
+python -m job_data_validator                                   # sample with exceptions -> exit 1
+python -m job_data_validator --data sample-data/clean          # exit 0
+python -m job_data_validator --data path/to/export --out output
 ```
 
 Exit codes: `0` no errors (warnings allowed), `1` errors found, `2` export not usable.
 
 ## 5. Sample output
 
-`python -m job_master_validator` ([full text](sample-output/with-exceptions.report.txt) ·
+`python -m job_data_validator` ([full text](sample-output/with-exceptions.report.txt) ·
 [CSV](sample-output/exceptions.csv) · [JSON](sample-output/summary.json)):
 
 ```text
-Job Master Reconciliation
+Job Data Reconciliation
 
 Records checked: 13 jobs, 13 loads, 36 activities
 Errors: 10   Warnings: 4

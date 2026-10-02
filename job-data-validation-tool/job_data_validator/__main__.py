@@ -1,4 +1,4 @@
-"""CLI: python -m job_master_validator [--data DIR] [--out DIR]
+"""CLI: python -m job_data_validator [--data DIR] [--out DIR]
 
 Exit codes: 0 no errors, 1 errors found, 2 export unusable.
 """
@@ -17,7 +17,7 @@ HERE = Path(__file__).resolve().parent.parent
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="job_master_validator", description="Reconcile jobs, loads and activities.")
+    parser = argparse.ArgumentParser(prog="job_data_validator", description="Reconcile jobs, loads and activities.")
     parser.add_argument("--data", default=str(HERE / "sample-data" / "with-exceptions"))
     parser.add_argument("--out", default="output")
     args = parser.parse_args(argv)

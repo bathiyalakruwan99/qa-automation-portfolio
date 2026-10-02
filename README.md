@@ -72,7 +72,7 @@ Bulk-upload and job/load reconciliation validation: required fields, duplicates,
 
 - **Public today:** a Python bulk upload validator for CSV + XLSX, with a fault-injecting data generator used as a test oracle (36 tests), and a job / load / activity reconciliation tool that deliberately does not infer progress formulas (21 tests).
 
-[View Bulk Upload Validator →](bulk-upload-validator/) · [View Job Master Validation Tool →](job-master-validation-tool/)
+[View Bulk Upload Validator →](bulk-upload-validator/) · [View Job Data Validation Tool →](job-data-validation-tool/)
 
 ### More
 
@@ -104,7 +104,7 @@ cd bulk-upload-validator && python -m venv .venv && . .venv/bin/activate && pip 
 # Windows (PowerShell): python -m venv .venv; .venv\Scripts\Activate.ps1; pip install -r requirements-dev.txt; pytest
 ```
 
-The Python folders are `bulk-upload-validator`, `job-master-validation-tool`, `jira-tools` and
+The Python folders are `bulk-upload-validator`, `job-data-validation-tool`, `jira-tools` and
 `ai-assisted-test-design`. Each README has its own run commands and real sample output.
 
 ---

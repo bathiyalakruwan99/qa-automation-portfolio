@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from job_master_validator.__main__ import main
-from job_master_validator.checks import run_checks
-from job_master_validator.model import ExportError, read_export
+from job_data_validator.__main__ import main
+from job_data_validator.checks import run_checks
+from job_data_validator.model import ExportError, read_export
 
 SAMPLES = Path(__file__).resolve().parent.parent / "sample-data"
 

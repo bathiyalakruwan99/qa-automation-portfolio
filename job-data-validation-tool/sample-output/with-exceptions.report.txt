@@ -1,4 +1,4 @@
-Job Master Reconciliation
+Job Data Reconciliation
 
 Records checked: 13 jobs, 13 loads, 36 activities
 Errors: 10   Warnings: 4

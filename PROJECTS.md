@@ -7,7 +7,7 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 | Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests (+ auth setup), 116 unit tests, CI + nightly workflows | — |
 | GPS Simulator & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, map viewer, 32 tests | Road snapping |
 | Route Optimizer Validation Workbench | Runnable demo: 6 validators, sample plans, CLI, 19 tests | Road-network distances |
-| Job Master Data Validation & Release Evidence Tool | Runnable demo: reconciliation checks, CLI, 21 tests | Time-based checks |
+| Job Data Validation & Release Evidence Tool | Runnable demo: reconciliation checks, CLI, 21 tests | Time-based checks |
 | Bulk Upload Validator & Synthetic Test Data Generator | Runnable demo: CSV/XLSX validator, generator oracle, CLI, 36 tests | Multi-sheet workbooks |
 | AI-Assisted Test Design Pipeline | Prototype: 4 templates, schema, governance validator, 17 tests | — |
 | Jira QA Evidence & Release Readiness Tools | Runnable demo (offline): 3 reports, CLI, 19 tests | — |
@@ -50,7 +50,7 @@ An independent QA comparison tool I built to validate route-optimizer output acr
 
 ---
 
-## Job Master Data Validation & Release Evidence Tool — Internal QA Tool
+## Job Data Validation & Release Evidence Tool — Internal QA Tool
 
 A data-validation tool I built to process job and work-order exports, run completeness/consistency/reconciliation checks, and produce an actionable exception summary for release evidence. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
 
@@ -58,7 +58,7 @@ A data-validation tool I built to process job and work-order exports, run comple
 - **Stack:** Python standard library, pytest, ruff
 - **QA value:** Automates repeated checks across large exports and surfaces exceptions manual review would miss.
 
-[Open project →](job-master-validation-tool/)
+[Open project →](job-data-validation-tool/)
 
 ---
 

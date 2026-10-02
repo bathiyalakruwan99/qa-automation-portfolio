@@ -16,4 +16,4 @@ Real evidence produced in this repository, for comparison:
 
 - Playwright HTML report and `test-results/failure-classification.json` from `npm test` in the framework
 - `workflow-evidence.json` attached to the state-engine runs (ENGINE-001…005)
-- `sample-output/` in each QA tool (GPS, route, bulk upload, job master, Jira, AI test design)
+- `sample-output/` in each QA tool (GPS, route, bulk upload, job data, Jira, AI test design)

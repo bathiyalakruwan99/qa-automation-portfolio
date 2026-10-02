@@ -6,7 +6,7 @@ on:
       - 'gps-simulation-validation-suite/**'
       - 'route-optimizer-validation-workbench/**'
       - 'bulk-upload-validator/**'
-      - 'job-master-validation-tool/**'
+      - 'job-data-validation-tool/**'
       - 'jira-tools/**'
       - 'ai-assisted-test-design/**'
       - '.github/workflows/qa-tools.yml'
@@ -60,7 +60,7 @@ jobs:
       matrix:
         project:
           - bulk-upload-validator
-          - job-master-validation-tool
+          - job-data-validation-tool
           - jira-tools
           - ai-assisted-test-design
     defaults:

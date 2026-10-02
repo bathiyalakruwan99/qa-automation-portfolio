@@ -10,7 +10,7 @@ A guided tour of this repository. Each project documents a QA tool, utility, or 
 
 ## Then explore
 
-4. **Job Master Data Validation & Release Evidence Tool** ([`job-master-validation-tool/`](../job-master-validation-tool/)) — internal QA tool: job/work-order data validation, status consistency, missing-data detection, and release evidence.
+4. **Job Data Validation & Release Evidence Tool** ([`job-data-validation-tool/`](../job-data-validation-tool/)) — internal QA tool: job/work-order data validation, status consistency, missing-data detection, and release evidence.
 5. **Bulk Upload Validator & Synthetic Test Data Generator** ([`bulk-upload-validator/`](../bulk-upload-validator/)) — internal QA tool: bulk upload data-quality validation and synthetic test-data generation.
 6. **AI-Assisted Test Design Pipeline** ([`ai-assisted-test-design/`](../ai-assisted-test-design/)) — human-reviewed workflow: AI drafts, QA reviews and approves. See also the [detailed case study](../case-studies/ai-assisted-test-design.md).
 7. **Jira QA Evidence & Release Readiness Tools** ([`jira-tools/`](../jira-tools/)) — offline release-readiness, regression-mapping and status-history tools over fictional tickets. See also the [detailed case study](../case-studies/jira-qa-workflow-automation.md).
@@ -39,7 +39,7 @@ the module template. Real outputs come from running the projects; each README sh
 | Smart QA Automation Framework | Runnable UI, API, hybrid and state-driven automation | Automation architecture, evidence-first triage |
 | GPS Simulator & Geofence Validation Suite | Location and time-based testing | Deterministic test data for hard scenarios |
 | Route Optimizer Validation Workbench | Algorithmic output validation | Independent oracle, risk-based comparison |
-| Job Master Data Validation & Release Evidence Tool | Data validation and reconciliation | Turning large exports into actionable exceptions |
+| Job Data Validation & Release Evidence Tool | Data validation and reconciliation | Turning large exports into actionable exceptions |
 | Bulk Upload Validator | Shift-left data validation | Separating data issues from product defects |
 | AI-Assisted Test Design Pipeline | Requirement-to-test workflow | Human review gate over AI drafts |
 | Jira QA Evidence & Release Readiness Tools | Release-readiness reporting | Evidence-based go/hold decisions |

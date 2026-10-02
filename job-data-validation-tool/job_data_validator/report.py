@@ -26,7 +26,7 @@ def summary(export: Export, found: list[Finding]) -> dict[str, object]:
 def format_report(export: Export, found: list[Finding], limit: int = 25) -> str:
     s = summary(export, found)
     lines = [
-        "Job Master Reconciliation",
+        "Job Data Reconciliation",
         "",
         f"Records checked: {len(export.jobs)} jobs, {len(export.loads)} loads, {len(export.activities)} activities",
         f"Errors: {s['errors']}   Warnings: {s['warnings']}",

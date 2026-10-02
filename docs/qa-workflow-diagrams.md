@@ -77,7 +77,7 @@ flowchart TD
     Rep --> Find[Finding: lower distance can mean higher cost]
 ```
 
-## Job Master Validation Pipeline
+## Job Data Validation Pipeline
 
 ```mermaid
 flowchart LR
