@@ -37,6 +37,7 @@ Feature: {{feature name}}
 ```
 
 Checklist:
+
 - [ ] Each `Then` is observable, not "works correctly"
 - [ ] Negative scenarios prove that nothing changed
 - [ ] Limits have exact boundary rows
