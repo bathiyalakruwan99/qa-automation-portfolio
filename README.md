@@ -7,6 +7,7 @@ Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Valida
 [![CI](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
+[![QA Tools](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
@@ -134,7 +135,7 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 | AI-assisted QA workflow | Templates, schema, governance validator | High | Prototype (human-reviewed) |
 | State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
 | k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
-| CI/CD | Checks, smoke, API regression and secret scan (verified on GitHub Actions); QA tools and nightly workflows (rehearsed locally, first GitHub run pending) | Developing | Working knowledge |
+| CI/CD | Checks, smoke, API regression, QA tools and secret scan (verified on GitHub Actions); nightly regression (scheduled, first run pending) | Developing | Working knowledge |
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 
