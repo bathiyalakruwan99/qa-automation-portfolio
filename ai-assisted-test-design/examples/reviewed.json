@@ -1,0 +1,81 @@
+{
+  "_note": "The same set after human QA review (fictional). Changes: invented TC-003 rejected and removed; boundary and AC-4 cases added; open question resolved.",
+  "requirementId": "REQ-UPLOAD-REEFER",
+  "draftedBy": "ai",
+  "reviewStatus": "APPROVED",
+  "cases": [
+    {
+      "id": "TC-001",
+      "title": "REEFER row with a valid temperature is accepted",
+      "type": "positive",
+      "priority": "P1",
+      "steps": [
+        { "action": "Upload a file with one REEFER row and temperature_c = -18", "expected": "Row is accepted with no errors" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-2"] },
+      "confidence": "high",
+      "review": { "reviewer": "QA reviewer", "decision": "approve" }
+    },
+    {
+      "id": "TC-002",
+      "title": "REEFER row without temperature is rejected",
+      "type": "negative",
+      "priority": "P1",
+      "steps": [
+        { "action": "Upload a REEFER row with temperature_c empty", "expected": "Row is rejected with REEFER_TEMPERATURE_MISSING" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-1"] },
+      "confidence": "high",
+      "review": { "reviewer": "QA reviewer", "decision": "approve", "notes": "Expected result made specific (finding code)." }
+    },
+    {
+      "id": "TC-004",
+      "title": "VAN row with a temperature is accepted with a warning",
+      "type": "positive",
+      "priority": "P2",
+      "steps": [
+        { "action": "Upload a VAN row with temperature_c = 4", "expected": "Row is accepted; TEMPERATURE_NOT_APPLICABLE warning in the row report" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-3"] },
+      "openQuestions": ["Should the warning appear in the summary or only in the row report?"],
+      "confidence": "medium",
+      "review": { "reviewer": "QA reviewer", "decision": "approve", "notes": "Product owner confirmed: row report only." }
+    },
+    {
+      "id": "TC-005",
+      "title": "Temperature exactly at -25 and 8 is accepted; -25.1 and 8.1 are rejected",
+      "type": "boundary",
+      "priority": "P1",
+      "steps": [
+        { "action": "Upload REEFER rows with temperature_c -25, 8, -25.1 and 8.1", "expected": "-25 and 8 accepted; -25.1 and 8.1 rejected with OUT_OF_RANGE" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-2"] },
+      "confidence": "high",
+      "review": { "reviewer": "QA reviewer", "decision": "approve", "notes": "Added in review: the draft had no boundary case." }
+    },
+    {
+      "id": "TC-006",
+      "title": "Rejection names the row number and the column",
+      "type": "negative",
+      "priority": "P2",
+      "steps": [
+        { "action": "Upload a file whose third data row is a REEFER row without temperature", "expected": "The report shows row 4 (header is row 1) and column temperature_c" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-4", "AC-1"] },
+      "confidence": "high",
+      "review": { "reviewer": "QA reviewer", "decision": "approve", "notes": "Added in review: AC-4 was not covered." }
+    },
+    {
+      "id": "TC-007",
+      "title": "A TRUCK row with an out-of-range temperature is still rejected",
+      "type": "boundary",
+      "priority": "P3",
+      "steps": [
+        { "action": "Upload a TRUCK row with temperature_c = -30 (outside the reefer range)", "expected": "Row is rejected with OUT_OF_RANGE: the range applies to any value given" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-3", "AC-2"] },
+      "confidence": "medium",
+      "review": { "reviewer": "QA reviewer", "decision": "approve", "notes": "Edge between AC-2 and AC-3 confirmed against the validator: range is checked whenever a value is present." }
+    }
+  ]
+}

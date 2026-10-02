@@ -1,0 +1,115 @@
+{
+  "_note": "Fictional demo data. Synthetic coordinates near a public reference point; not derived from any real system.",
+  "runId": "DEMO-RUN-FLAWED",
+  "routes": [
+    {
+      "vehicleId": "TRUCK-001",
+      "stops": [
+        {
+          "orderId": "DEMO-ORD-3001",
+          "locationId": "WAREHOUSE-ALPHA"
+        },
+        {
+          "orderId": "DEMO-ORD-3010",
+          "locationId": "SITE-EPSILON"
+        },
+        {
+          "orderId": "DEMO-ORD-3003",
+          "locationId": "SITE-GAMMA"
+        },
+        {
+          "orderId": "DEMO-ORD-3011",
+          "locationId": "SITE-GAMMA"
+        },
+        {
+          "orderId": "DEMO-ORD-3004",
+          "locationId": "CUSTOMER-SITE-BETA"
+        },
+        {
+          "orderId": "DEMO-ORD-3005",
+          "locationId": "SITE-GAMMA"
+        }
+      ],
+      "reportedDistanceKm": 15.7
+    },
+    {
+      "vehicleId": "TRUCK-002",
+      "stops": [
+        {
+          "orderId": "DEMO-ORD-3006",
+          "locationId": "SITE-ZETA"
+        },
+        {
+          "orderId": "DEMO-ORD-3012",
+          "locationId": "SITE-ZETA"
+        },
+        {
+          "orderId": "DEMO-ORD-3007",
+          "locationId": "SITE-DELTA"
+        },
+        {
+          "orderId": "DEMO-ORD-3008",
+          "locationId": "SITE-DELTA"
+        },
+        {
+          "orderId": "DEMO-ORD-3011",
+          "locationId": "SITE-GAMMA"
+        },
+        {
+          "orderId": "DEMO-ORD-3016",
+          "locationId": "SITE-DELTA"
+        }
+      ],
+      "reportedDistanceKm": 6.6
+    },
+    {
+      "vehicleId": "VAN-001",
+      "stops": [
+        {
+          "orderId": "DEMO-ORD-3009",
+          "locationId": "SITE-EPSILON"
+        },
+        {
+          "orderId": "DEMO-ORD-3013",
+          "locationId": "SITE-THETA"
+        },
+        {
+          "orderId": "DEMO-ORD-3018",
+          "locationId": "WAREHOUSE-ALPHA"
+        },
+        {
+          "orderId": "DEMO-ORD-3002",
+          "locationId": "WAREHOUSE-ALPHA"
+        }
+      ],
+      "reportedDistanceKm": 14.5
+    },
+    {
+      "vehicleId": "REEFER-001",
+      "stops": [
+        {
+          "orderId": "DEMO-ORD-3015",
+          "locationId": "COLD-STORE-ETA"
+        },
+        {
+          "orderId": "DEMO-ORD-3014",
+          "locationId": "COLD-STORE-ETA"
+        }
+      ],
+      "reportedDistanceKm": 4.7
+    }
+  ],
+  "unassigned": [
+    {
+      "orderId": "DEMO-ORD-3017",
+      "reasonCode": "CAPACITY"
+    },
+    {
+      "orderId": "DEMO-ORD-3020"
+    },
+    {
+      "orderId": "DEMO-ORD-3999",
+      "reasonCode": "OTHER"
+    }
+  ]
+}

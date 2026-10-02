@@ -1,0 +1,29 @@
+{
+  "name": "gps-simulation-validation-suite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deterministic GPS stream simulator and validator (geofences, off-route/rejoin, stops, data quality). Synthetic data only.",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "gps": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.11.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3"
+  }
+}

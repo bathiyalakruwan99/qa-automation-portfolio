@@ -1,0 +1,54 @@
+{
+  "_note": "Illustrative AI first draft (fictional). It contains the kinds of problems a reviewer must catch.",
+  "requirementId": "REQ-UPLOAD-REEFER",
+  "draftedBy": "ai",
+  "reviewStatus": "APPROVED",
+  "cases": [
+    {
+      "id": "TC-001",
+      "title": "REEFER row with a valid temperature is accepted",
+      "type": "positive",
+      "priority": "P1",
+      "steps": [
+        { "action": "Upload a file with one REEFER row and temperature_c = -18", "expected": "Row is accepted with no errors" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-2"] },
+      "confidence": "high"
+    },
+    {
+      "id": "TC-002",
+      "title": "REEFER row without temperature is rejected",
+      "type": "negative",
+      "priority": "P1",
+      "steps": [
+        { "action": "Upload a REEFER row with temperature_c empty", "expected": "Row is rejected: REEFER shipments need temperature_c" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-1"] },
+      "confidence": "high"
+    },
+    {
+      "id": "TC-003",
+      "title": "Temperature is converted from Fahrenheit automatically",
+      "type": "positive",
+      "priority": "P2",
+      "steps": [
+        { "action": "Upload a REEFER row with temperature_c = 0F", "expected": "Value is converted to -17.8 C" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-9"] },
+      "assumptions": ["The upload accepts Fahrenheit values"],
+      "confidence": "low"
+    },
+    {
+      "id": "TC-004",
+      "title": "VAN row with a temperature is accepted with a warning",
+      "type": "positive",
+      "priority": "P2",
+      "steps": [
+        { "action": "Upload a VAN row with temperature_c = 4", "expected": "Row is accepted; a warning says the value is ignored" }
+      ],
+      "traceability": { "acceptanceCriteria": ["AC-3"] },
+      "openQuestions": ["Should the warning appear in the summary or only in the row report?"],
+      "confidence": "medium"
+    }
+  ]
+}

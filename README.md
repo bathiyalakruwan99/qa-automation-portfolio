@@ -8,7 +8,7 @@ Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Valida
 [![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
 [![Postman](https://img.shields.io/badge/Postman-Newman-FF6C37.svg)](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/)
 [![k6](https://img.shields.io/badge/k6-learning-7D64FF.svg)](https://k6.io/)
@@ -17,7 +17,15 @@ QA Engineer focused on product quality, test automation, data validation and com
 
 Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [Portfolio site](https://bathiya-qa.vercel.app/) · [LinkedIn](https://www.linkedin.com/in/bathiyalakruwan99/) · [GitHub](https://github.com/bathiyalakruwan99)
 
-> **Portfolio status (October 2026):** this repository is being upgraded from documentation-heavy case studies into **runnable, independently built public demos**. The [maturity matrix](#project-maturity) shows exactly what is public code today and what is still a case study.
+### At a glance
+
+- **Approach:** Playwright + TypeScript → API → UI → UI + API hybrid → state-driven workflows → CI
+- **Runnable locally:** `npm test` in [`smart-qa-automation-framework/`](smart-qa-automation-framework/) starts a fictional logistics app and runs the suite. No accounts, VPN or private configuration.
+- **Evidence:** 30 Playwright tests (+ auth setup), 116 unit tests, a Newman collection and GitHub Actions CI.
+- **Domain:** logistics / TMS, GPS tracking, route validation and data quality.
+- **Also:** QA tools in TypeScript and Python, k6 performance smoke, AI-assisted test design under human review.
+
+Every featured project is an independent, runnable public demo on synthetic data. The [maturity matrix](#project-maturity) shows how mature each part is.
 
 ---
 
@@ -41,26 +49,28 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 
 Runnable Playwright + TypeScript framework with its own fictional logistics app: Page Object Model, components, fixtures, seeded typed data, business flows, typed API clients with contract schemas, UI + API hybrid tests, a state-driven workflow engine with guardrails, and failure classification. A human-governed AI QA operating model sits alongside it.
 
-- **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
-- **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); mutation checks show the suites catch deliberate defects.
+- **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine; plus an auth setup step) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
+- **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); deliberate fault-injection checks show the suites catch planted defects.
 
 [View project →](smart-qa-automation-framework/)
+
+<img src="assets/demo-gifs/shipment-journey.gif" alt="A shipment driven from CREATED to DELIVERED in the demo app" width="640"/>
 
 ### 2. GPS Simulation & Validation Suite
 
 Approach for testing GPS, live-map and geofence features without hardware: route playback, multi-device simulation, geofence enter/exit and boundary cases, off-route and rejoin scenarios.
 
-- **Public today:** case study with fictional scenarios.
-- **In progress:** independently built simulator library, JSON scenarios with synthetic coordinates, CLI, and automated tests.
+- **Public today:** TypeScript simulator + validators, 5 JSON scenarios on synthetic coordinates, CLI with PASS/FAIL exit codes, offline map viewer, 32 tests (GPS-001…010). 1000 vehicles in about 1.7 s; same seed, byte-identical output.
 
 [View project →](gps-simulation-validation-suite/)
+
+<img src="assets/screenshots/gps-simulator-off-route.png" alt="GPS map viewer: off-route detour that skips the Zone Gamma checkpoint" width="640"/>
 
 ### 3. Route Optimizer Validation Workbench
 
 An independent QA validation layer for route-optimizer **output** (not an optimizer): order allocation, duplicates, missing orders, capacity, vehicle suitability, route sanity.
 
-- **Public today:** case study with fictional examples.
-- **In progress:** TypeScript validators, fictional optimizer output, CLI report, unit tests.
+- **Public today:** six TypeScript validators, a clean plan and a plan with one planted defect per validator, CLI report that never says "approved", 19 tests (ROUTE-001…017).
 
 [View project →](route-optimizer-validation-workbench/)
 
@@ -68,18 +78,42 @@ An independent QA validation layer for route-optimizer **output** (not an optimi
 
 Bulk-upload and job/load reconciliation validation: required fields, duplicates, formats, references, cross-field rules, orphan records, status/progress consistency, structured reports, synthetic data generation.
 
-- **Public today:** case studies for the [Bulk Upload Validator](bulk-upload-validator/) and [Job Master Validation Tool](job-master-validation-tool/).
-- **In progress:** runnable Python validators (CSV + XLSX), synthetic data generator, pytest suites.
+- **Public today:** a Python bulk upload validator for CSV + XLSX, with a fault-injecting data generator used as a test oracle (36 tests), and a job / load / activity reconciliation tool that deliberately does not infer progress formulas (21 tests).
 
-[View Bulk Upload Validator →](bulk-upload-validator/) · [View Job Master Validation Tool →](job-master-validation-tool/)
+[View Bulk Upload Validator →](bulk-upload-validator/) · [View Job Data Validation Tool →](job-data-validation-tool/)
 
 ### More
 
 | Project | What it covers | Status |
 | --- | --- | --- |
-| [AI-Assisted Test Design](ai-assisted-test-design/) | AI drafts test cases; QA reviews and approves every case | Case study (prompt templates and schema in progress) |
-| [Jira Release-Readiness Tools](jira-tools/) | Release-readiness views, regression mapping, status history | Case study (public Python implementation in progress) |
+| [AI-Assisted Test Design](ai-assisted-test-design/) | Prompt templates, test-case schema, and a validator that rejects invented criteria and self-approved AI drafts | Prototype with runnable tooling (17 tests) |
+| [Jira Release-Readiness Tools](jira-tools/) | Offline release readiness, regression mapping, status history over fictional tickets | Runnable demo (19 tests) |
 | [AI and MCP QA Workflows](case-studies/ai-mcp-qa-workflows.md) | AI-assisted analysis and reconciliation with human review | Case study |
+
+---
+
+## Quick Start
+
+No accounts, VPN or private configuration needed; every demo runs on its own synthetic data.
+
+```bash
+git clone https://github.com/bathiyalakruwan99/qa-automation-portfolio.git
+cd qa-automation-portfolio
+
+# Playwright framework + demo app (Node 22.12+)
+cd smart-qa-automation-framework && npm ci && npx playwright install chromium && npm test && cd ..
+
+# TypeScript QA tools
+cd gps-simulation-validation-suite && npm ci && npm test && npm run gps -- --scenario off-route-rejoin --devices 5 && cd ..
+cd route-optimizer-validation-workbench && npm ci && npm test && npm run validate:clean && cd ..
+
+# Python QA tools (3.11+): same pattern in each folder
+cd bulk-upload-validator && python -m venv .venv && . .venv/bin/activate && pip install -r requirements-dev.txt && pytest
+# Windows (PowerShell): python -m venv .venv; .venv\Scripts\Activate.ps1; pip install -r requirements-dev.txt; pytest
+```
+
+The Python folders are `bulk-upload-validator`, `job-data-validation-tool`, `jira-tools` and
+`ai-assisted-test-design`. Each README has its own run commands and real sample output.
 
 ---
 
@@ -92,15 +126,15 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 | Playwright framework (POM, fixtures, flows, local demo app) | Yes | High | Runnable demo |
 | API automation (typed clients, schemas, Newman) | Yes | High | Runnable demo |
 | UI + API hybrid testing | Yes | High | Runnable demo |
-| GPS simulation and validation | No | High | Case study — public reference build planned |
-| Route-output validation | No | High | Case study — public reference build planned |
-| Bulk upload / data validation | No | High | Case study — public reference build planned |
-| Job / load reconciliation | No | High | Case study — public reference build planned |
-| Jira release-readiness tools | No | Medium | Case study — public implementation planned |
-| AI-assisted QA workflow | Documentation and templates | High | Prototype (human-reviewed) |
+| GPS simulation and validation | Yes | High | Runnable demo |
+| Route-output validation | Yes | High | Runnable demo |
+| Bulk upload / data validation | Yes | High | Runnable demo |
+| Job / load reconciliation | Yes | High | Runnable demo |
+| Jira release-readiness tools | Yes (offline) | Medium | Runnable demo |
+| AI-assisted QA workflow | Templates, schema, governance validator | High | Prototype (human-reviewed) |
 | State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
 | k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
-| CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (verified on GitHub Actions) |
+| CI/CD | Checks, smoke, API regression and secret scan (verified on GitHub Actions); QA tools and nightly workflows (rehearsed locally, first GitHub run pending) | Developing | Working knowledge |
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 
@@ -121,11 +155,11 @@ Details: [`docs/confidentiality.md`](docs/confidentiality.md) · [`docs/qa-appro
 
 ### Haulmatic Technologies — Software Quality Assurance Engineer (Jul 2024 – Present)
 
-- End-to-end QA for web and Android-assistance applications across TMS modules (job management, GPS live map, control tower, work orders, optimizer, contracts, invoicing).
+- End-to-end QA for web and Android-assistance applications in transport management (TMS / logistics): job planning, GPS tracking, route planning, and contract and billing workflows.
 - Test plans, scenarios, test cases and RTMs; regression, exploratory and UAT cycles for production releases; full Jira defect lifecycle through release sign-off.
 - REST API validation (Postman, Playwright, Cypress) including negative and authentication scenarios.
 - Automated key UI and API workflows with Playwright (POM) and Selenium.
-- Built internal QA tooling for GPS simulation, route-optimizer output comparison, and upload-data validation.
+- Built QA tooling for GPS simulation, route-output comparison and upload-data validation.
 
 ### IFS R&D International — Software Engineering QA Trainee (Mar 2023 – Feb 2024)
 
@@ -156,7 +190,7 @@ Details: [`docs/confidentiality.md`](docs/confidentiality.md) · [`docs/qa-appro
 - [`SKILLS.md`](SKILLS.md) — skills grouped by evidence level
 - [`docs/confidentiality.md`](docs/confidentiality.md) — public/private boundary and sanitization rules
 - [`docs/demo-app-design-rationale.md`](docs/demo-app-design-rationale.md) — why the demos run against a local, repository-owned app
-- [`NOTICE.md`](NOTICE.md) — portfolio-use notice
+- [`NOTICE.md`](NOTICE.md) — portfolio-use notice (all rights reserved; portfolio demonstration only)
 
 ---
 

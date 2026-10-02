@@ -1,0 +1,30 @@
+{
+  "name": "route-optimizer-validation-workbench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Independent QA validator for fictional route-optimizer output (allocation, duplicates, capacity, compatibility, sequence, distance). Not an optimizer.",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "validate": "tsx src/cli.ts",
+    "validate:clean": "tsx src/cli.ts --output optimizer-output-clean.json",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.11.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3"
+  }
+}

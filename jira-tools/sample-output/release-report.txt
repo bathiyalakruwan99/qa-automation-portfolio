@@ -1,0 +1,21 @@
+Release readiness: 2026.10
+
+Items in scope: 10
+  READY: 5
+  READY_WITH_RISK: 1
+  NOT_READY: 3
+  BLOCKED: 1
+
+  DEMO-106  BLOCKED          open blocker/critical defect(s): DEMO-112
+  DEMO-102  NOT_READY        status is In QA
+  DEMO-105  NOT_READY        bug fix is Done but not Verified by QA
+  DEMO-112  NOT_READY        status is In Progress
+  DEMO-103  READY_WITH_RISK  accepted known issue(s): DEMO-111
+  DEMO-101  READY            status is Verified
+  DEMO-104  READY            status is Verified
+  DEMO-107  READY            status is Done
+  DEMO-108  READY            status is Verified
+  DEMO-109  READY            status is Verified
+
+Recommendation: HOLD
+The go/hold decision is made by the release owner.

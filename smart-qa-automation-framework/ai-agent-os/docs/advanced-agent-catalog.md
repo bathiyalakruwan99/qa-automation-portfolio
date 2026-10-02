@@ -4,7 +4,7 @@ A public, architecture-level catalog of the specialised QA agents in the Smart Q
 
 > **Public Showcase Boundary.** This section presents the architecture and operating model only. It does not expose private agent prompts, source code, internal rules, private memory content, customer data, credentials, system endpoints, test selectors, proprietary workflows, or confidential automation assets.
 
-Where multiple specialised implementations of the same capability exist privately (for example, several API-test builders for different platform layers), they are presented here under one public capability card. The agent count below describes capability-level roles, not internal file counts.
+Each card describes one capability. Where a capability is covered by more than one specialised agent (for example, API-test builders for different layers), it is shown as a single card. The agent count below describes capability-level roles.
 
 ---
 
@@ -477,4 +477,4 @@ The public catalog above documents **34 capability-level QA agent roles** groupe
 - Reporting, Documentation, and Release
 - Learning and Memory
 
-Multiple specialised internal implementations exist for some capabilities (for example, several API-test builders, several test healers, and curator variants). They are presented here under unified public capability cards to avoid leaking internal structure.
+Some capabilities are covered by several specialised agents (for example, API-test builders, test healers and memory curators). Each is shown here as one capability card.

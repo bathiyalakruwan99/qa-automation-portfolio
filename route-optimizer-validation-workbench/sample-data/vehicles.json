@@ -1,0 +1,34 @@
+[
+  {
+    "id": "TRUCK-001",
+    "type": "TRUCK",
+    "capacityKg": 10000,
+    "capacityM3": 40,
+    "depotId": "CENTRAL-HUB",
+    "maxStops": 6
+  },
+  {
+    "id": "TRUCK-002",
+    "type": "TRUCK",
+    "capacityKg": 10000,
+    "capacityM3": 40,
+    "depotId": "CENTRAL-HUB",
+    "maxStops": 6
+  },
+  {
+    "id": "VAN-001",
+    "type": "VAN",
+    "capacityKg": 1500,
+    "capacityM3": 10,
+    "depotId": "CENTRAL-HUB",
+    "maxStops": 5
+  },
+  {
+    "id": "REEFER-001",
+    "type": "REEFER",
+    "capacityKg": 8000,
+    "capacityM3": 30,
+    "depotId": "CENTRAL-HUB",
+    "maxStops": 4
+  }
+]

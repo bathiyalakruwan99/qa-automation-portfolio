@@ -37,7 +37,11 @@ test.describe('UI negative and validation', { tag: ['@ui', '@negative', '@regres
     expect(list.total).toBe(0);
   });
 
-  test('NEG-004 same origin and destination is rejected', async ({ shipmentsPage, shipmentBuilder }) => {
+  test('NEG-004 same origin and destination is rejected and nothing is created', async ({
+    shipmentsPage,
+    shipmentBuilder,
+    shipments,
+  }) => {
     const form = shipmentBuilder.build({ origin: 'CENTRAL-HUB', destination: 'CENTRAL-HUB' });
 
     await shipmentsPage.goto();
@@ -45,6 +49,8 @@ test.describe('UI negative and validation', { tag: ['@ui', '@negative', '@regres
     await shipmentsPage.createButton.click();
 
     await expect(shipmentsPage.formError).toHaveText('origin and destination must differ');
+    const list = await readJson<ShipmentList>(await shipments.list({ q: form.reference }), 200);
+    expect(list.total).toBe(0);
   });
 
   test('NEG-005 assigning an over-capacity vehicle shows an error and keeps the status', async ({

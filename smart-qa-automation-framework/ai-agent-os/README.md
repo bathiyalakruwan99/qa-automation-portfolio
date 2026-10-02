@@ -27,13 +27,11 @@ The public version uses fictional examples, synthetic artifacts, and high-level 
 | [`docs/`](docs/) | Agent role details, advanced agent catalog, workflow matrix, shared skills, rules and guardrails, QA memory, example agent journey, demo script |
 | [`manual-knowledge/`](manual-knowledge/) | Sanitized manual QA notes that seed agent memory (checkout flow, test plan, test data, locators, selectors, coupon rules) |
 | [`module-template/`](module-template/) | Reusable scaffold for adding a new business workflow with parallel `tests/` and `qa-output/` trees |
-| [`examples/checkout-reference/`](../examples/checkout-reference/) | Earlier Playwright + TypeScript layering reference (POM, components, flows, BDD). Reference only, not runnable; the runnable suite is the [parent framework](../) |
 | [`postman/`](../postman/) | Postman collection for the local demo app, run with Newman |
 | [`k6/`](../k6/) | k6 smoke, load, stress and soak scripts against the local demo app (learning) |
 | [`prompts/`](prompts/) | Sanitized prompt templates for master orchestration, test planning, BDD/POM automation, execution/healing, memory update, and manual bug hunting |
 | [`qa-graph-tool/`](qa-graph-tool/) | Architecture overview of a local visualization tool that renders the operating model as an interactive graph |
-| [`qa-output/`](qa-output/) | Sample module-level QA outputs, run notes, skill-agent reports, DOM capture evidence, and sanitized Playwright results |
-| [`sample-artifacts/`](sample-artifacts/) | Synthetic sample artifacts: test plan, BDD scenario, API validation result, release gate report, failure classification, memory update, evidence summary |
+| [`templates/`](templates/) | Blank report templates: BDD scenario, locator-healing review, memory update, release-gate report |
 | [`scripts/`](scripts/) | Sample utility scripts for secret scanning, evidence cleanup, Newman runs, memory-triggered test execution, and report generation |
 | [`test-data/`](test-data/) | Synthetic demo test data for users and todos |
 | [`evidence-samples/`](evidence-samples/) | Evidence sample placeholders |
@@ -55,7 +53,7 @@ This repository contains a mix of actively used QA practices, implemented protot
 | QA Knowledge Capture | Implemented Prototype | Organises reusable QA knowledge such as flows, risks, validation rules, test-data dependencies, defects, and lessons learned. |
 | Playwright Test Design | Actively Used | Supports Playwright test planning, BDD scenario drafting, Page Object Model design, reusable test-flow ideas, and test-data planning. |
 | Locator Healing | Actively Used / Learning | Supports structured investigation of locator instability, DOM or workflow changes, timing issues, and safer locator-selection approaches. Suggested changes require human QA review before adoption. |
-| Playwright Test Execution | Runnable Demo | 30 Playwright tests run against the local demo app, with traces, reports and failure classification ([framework](../)). |
+| Playwright Test Execution | Runnable Demo | 30 Playwright tests (+ auth setup) run against the local demo app, with traces, reports and failure classification ([framework](../)). |
 | API and Hybrid Testing | Runnable Demo | Typed API clients, contract schemas, API-001..011 and HYBRID-001..002 in the [framework](../). |
 | Postman and Newman | Runnable Demo | PM-001..009 collection against the local demo app. |
 | k6 Performance Testing | Learning | Smoke, load, stress and soak scripts against the local demo app; only smoke has been run. |
@@ -129,7 +127,6 @@ Each agent has a focused responsibility. Agents use shared skills and rules, cre
 - [Module Template](module-template/) - Reusable scaffold for adding a new business workflow with parallel tests/ and qa-output/ trees
 - [Prompt Examples](prompts/) - Sanitized prompt templates for master orchestration, test planning, BDD/POM automation, execution/healing, memory update, and manual bug hunting
 - [QA Graph Tool](qa-graph-tool/) - Architecture overview of a local visualization tool that renders the operating model as an interactive graph
-- [QA Output](qa-output/) - Sample module-level QA outputs, run notes, skill-agent reports, DOM capture evidence, and sanitized Playwright results
 - [Scripts](scripts/) - Sample utility scripts for secret scanning, evidence cleanup, Newman runs, memory-triggered test execution, and report generation
 
 ---

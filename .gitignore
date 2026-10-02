@@ -42,6 +42,9 @@ __pycache__/
 venv/
 
 # Generated reports and raw test artifacts
+qa-output/
+!**/module-template/qa-output/
+!**/module-template/qa-output/**
 reports/
 test-results/
 traces/
@@ -71,7 +74,5 @@ output/
 !**/sample-data/**
 !**/test-data/
 !**/test-data/**
-!assets/sample-reports/
-!assets/sample-reports/**
 !**/sample-output/
 !**/sample-output/**

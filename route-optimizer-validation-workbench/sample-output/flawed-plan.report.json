@@ -1,0 +1,142 @@
+{
+  "runId": "DEMO-RUN-FLAWED",
+  "stats": {
+    "ordersInScope": 20,
+    "ordersRouted": 17,
+    "ordersUnassigned": 2,
+    "vehicles": 4,
+    "routes": 4
+  },
+  "issues": [
+    {
+      "validator": "distance",
+      "code": "DISTANCE_BELOW_STRAIGHT_LINE",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "TRUCK-002: reported 6.6 km vs straight-line 9.4 km - physically impossible",
+      "refs": [
+        "TRUCK-002"
+      ]
+    },
+    {
+      "validator": "duplicate",
+      "code": "ORDER_ASSIGNED_TWICE",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3011 appears 2 times (TRUCK-001, TRUCK-002)",
+      "refs": [
+        "DEMO-ORD-3011",
+        "TRUCK-001",
+        "TRUCK-002"
+      ]
+    },
+    {
+      "validator": "allocation",
+      "code": "ORDER_MISSING",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3019 is neither routed nor unassigned",
+      "refs": [
+        "DEMO-ORD-3019"
+      ]
+    },
+    {
+      "validator": "allocation",
+      "code": "UNKNOWN_ORDER",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3999 is in the output but not in the input",
+      "refs": [
+        "DEMO-ORD-3999"
+      ]
+    },
+    {
+      "validator": "vehicle",
+      "code": "VEHICLE_TYPE_MISMATCH",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3016 needs a REEFER; TRUCK-002 is a TRUCK",
+      "refs": [
+        "DEMO-ORD-3016",
+        "TRUCK-002"
+      ]
+    },
+    {
+      "validator": "capacity",
+      "code": "VOLUME_OVER_CAPACITY",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "VAN-001 capacity 10 m3, assigned 11 m3, overload 1 m3",
+      "refs": [
+        "VAN-001"
+      ]
+    },
+    {
+      "validator": "capacity",
+      "code": "WEIGHT_OVER_CAPACITY",
+      "severity": "CRITICAL",
+      "status": "FAIL",
+      "message": "VAN-001 capacity 1500 kg, assigned 2100 kg, overload 600 kg",
+      "refs": [
+        "VAN-001"
+      ]
+    },
+    {
+      "validator": "vehicle",
+      "code": "LOCATION_DISALLOWS_VEHICLE",
+      "severity": "MAJOR",
+      "status": "FAIL",
+      "message": "SITE-EPSILON only accepts VAN; TRUCK-001 is a TRUCK",
+      "refs": [
+        "SITE-EPSILON",
+        "TRUCK-001"
+      ]
+    },
+    {
+      "validator": "sequence",
+      "code": "STOP_LOCATION_MISMATCH",
+      "severity": "MAJOR",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3005 belongs at SITE-THETA but is scheduled at SITE-GAMMA",
+      "refs": [
+        "DEMO-ORD-3005",
+        "SITE-GAMMA"
+      ]
+    },
+    {
+      "validator": "allocation",
+      "code": "UNASSIGNED_WITHOUT_REASON",
+      "severity": "MAJOR",
+      "status": "FAIL",
+      "message": "DEMO-ORD-3020 is unassigned with no reason; expected one of CAPACITY, NO_COMPATIBLE_VEHICLE, LOCATION_RESTRICTION, INVALID_LOCATION",
+      "refs": [
+        "DEMO-ORD-3020"
+      ]
+    },
+    {
+      "validator": "sequence",
+      "code": "LOCATION_REVISITED",
+      "severity": "MINOR",
+      "status": "WARNING",
+      "message": "TRUCK-001 returns to SITE-GAMMA after leaving it (stop 6)",
+      "refs": [
+        "TRUCK-001",
+        "SITE-GAMMA"
+      ]
+    },
+    {
+      "validator": "sequence",
+      "code": "LOCATION_REVISITED",
+      "severity": "MINOR",
+      "status": "WARNING",
+      "message": "TRUCK-002 returns to SITE-DELTA after leaving it (stop 6)",
+      "refs": [
+        "TRUCK-002",
+        "SITE-DELTA"
+      ]
+    }
+  ],
+  "blocking": 10,
+  "warnings": 2,
+  "verdict": "REVIEW REQUIRED"
+}

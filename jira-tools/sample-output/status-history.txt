@@ -1,0 +1,9 @@
+Status history
+
+  DEMO-101  To Do 48 h, In Progress 78 h, In Review 19 h, In QA 54 h, Verified 236 h
+  DEMO-102  To Do 144 h, In Progress 144 h, In QA 123 h
+            ! LONG_IN_QA (123 h > 72 h)
+  DEMO-106  To Do 24 h, In Progress 192 h, In QA 80 h, Verified 211 h, Reopened 24 h
+            ! REOPENED x1
+            ! LONG_IN_QA (80 h > 72 h)
+  DEMO-112  To Do 15 h, In Progress 27 h

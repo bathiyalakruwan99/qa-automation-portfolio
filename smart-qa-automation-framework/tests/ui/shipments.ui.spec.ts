@@ -83,4 +83,23 @@ test.describe('Shipments UI', { tag: ['@ui', '@regression'] }, () => {
       await expect(shipmentDetailPage.action(name)).toBeDisabled();
     }
   });
+
+  test('UI-006 a disabled destructive action looks disabled, not clickable', async ({
+    shipmentDetailPage,
+    createShipment,
+    shipments,
+  }) => {
+    // Regression: the red "danger" style used to override the disabled style.
+    const shipment = await createShipment();
+    await readJson(await shipments.assignVehicle(shipment.shipmentId, 'TRUCK-001'), 200);
+    await readJson(await shipments.changeStatus(shipment.shipmentId, 'ROUTE_PLANNED'), 200);
+    await readJson(await shipments.changeStatus(shipment.shipmentId, 'IN_TRANSIT'), 200);
+
+    await shipmentDetailPage.goto(shipment.shipmentId);
+    const cancel = shipmentDetailPage.action('Cancel shipment');
+    await expect(cancel).toBeDisabled();
+    const background = (name: 'Cancel shipment' | 'Plan route') =>
+      shipmentDetailPage.action(name).evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(await background('Cancel shipment')).toBe(await background('Plan route'));
+  });
 });

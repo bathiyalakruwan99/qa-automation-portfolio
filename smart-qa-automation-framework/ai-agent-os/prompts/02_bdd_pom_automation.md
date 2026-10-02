@@ -40,7 +40,7 @@ Defect handling:
 
 ## Example Output (Synthetic)
 
-See `module-template/tests/example-module/` for sample feature, steps, POM, spec, fixture, and data files.
+Follow the layer layout in `module-template/tests/module-name/README.md`; the running example of each layer is the framework's `src/` and `tests/`.
 
 ## Confidentiality
 

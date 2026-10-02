@@ -1,0 +1,81 @@
+{
+  "_note": "Fictional work items for the portfolio demo. DEMO-* keys, summaries and dates are invented.",
+  "issues": [
+    {
+      "key": "DEMO-101", "summary": "Create shipment from a saved template", "type": "Story", "status": "Verified",
+      "priority": "Major", "fixVersion": "2026.10", "components": ["Shipments"], "regressionRequired": true,
+      "history": [
+        { "at": "2026-09-14T09:00:00Z", "from": null, "to": "To Do" },
+        { "at": "2026-09-16T09:00:00Z", "from": "To Do", "to": "In Progress" },
+        { "at": "2026-09-19T15:00:00Z", "from": "In Progress", "to": "In Review" },
+        { "at": "2026-09-20T10:00:00Z", "from": "In Review", "to": "In QA" },
+        { "at": "2026-09-22T16:00:00Z", "from": "In QA", "to": "Verified" }
+      ]
+    },
+    {
+      "key": "DEMO-102", "summary": "Geofence arrival alert for Customer Site Beta", "type": "Story", "status": "In QA",
+      "priority": "Major", "fixVersion": "2026.10", "components": ["Tracking"], "regressionRequired": true,
+      "history": [
+        { "at": "2026-09-15T09:00:00Z", "from": null, "to": "To Do" },
+        { "at": "2026-09-21T09:00:00Z", "from": "To Do", "to": "In Progress" },
+        { "at": "2026-09-27T09:00:00Z", "from": "In Progress", "to": "In QA" }
+      ]
+    },
+    {
+      "key": "DEMO-103", "summary": "Export invoice summary as PDF", "type": "Story", "status": "Verified",
+      "priority": "Minor", "fixVersion": "2026.10", "components": ["Billing"], "labels": ["known-issue"],
+      "openDefects": ["DEMO-111"]
+    },
+    {
+      "key": "DEMO-104", "summary": "Duplicate shipment reference is accepted", "type": "Bug", "status": "Verified",
+      "priority": "Critical", "fixVersion": "2026.10", "components": ["Shipments"]
+    },
+    {
+      "key": "DEMO-105", "summary": "Map pin drawn 20 m off the vehicle position", "type": "Bug", "status": "Done",
+      "priority": "Major", "fixVersion": "2026.10", "components": ["Tracking"]
+    },
+    {
+      "key": "DEMO-106", "summary": "Bulk upload validates pickup and delivery dates", "type": "Story",
+      "status": "Verified", "priority": "Major", "fixVersion": "2026.10", "components": ["Shipments", "Reporting"],
+      "regressionRequired": true, "openDefects": ["DEMO-112"],
+      "history": [
+        { "at": "2026-09-10T09:00:00Z", "from": null, "to": "To Do" },
+        { "at": "2026-09-11T09:00:00Z", "from": "To Do", "to": "In Progress" },
+        { "at": "2026-09-15T09:00:00Z", "from": "In Progress", "to": "In QA" },
+        { "at": "2026-09-17T09:00:00Z", "from": "In QA", "to": "Verified" },
+        { "at": "2026-09-24T09:00:00Z", "from": "Verified", "to": "Reopened" },
+        { "at": "2026-09-25T09:00:00Z", "from": "Reopened", "to": "In Progress" },
+        { "at": "2026-09-29T09:00:00Z", "from": "In Progress", "to": "In QA" },
+        { "at": "2026-09-30T17:00:00Z", "from": "In QA", "to": "Verified" }
+      ]
+    },
+    {
+      "key": "DEMO-107", "summary": "Update public API reference for shipments", "type": "Task", "status": "Done",
+      "priority": "Minor", "fixVersion": "2026.10"
+    },
+    {
+      "key": "DEMO-108", "summary": "Driver app sign-in with demo account", "type": "Story", "status": "Verified",
+      "priority": "Major", "fixVersion": "2026.10", "components": ["Auth"], "regressionRequired": true
+    },
+    {
+      "key": "DEMO-109", "summary": "Route summary chart on the dashboard", "type": "Story", "status": "Verified",
+      "priority": "Minor", "fixVersion": "2026.10", "components": ["Analytics"], "regressionRequired": true
+    },
+    {
+      "key": "DEMO-110", "summary": "Edit stops on a multi-stop route", "type": "Story", "status": "In Progress",
+      "priority": "Major", "fixVersion": "2026.11", "components": ["Shipments"]
+    },
+    {
+      "key": "DEMO-111", "summary": "Invoice PDF footer wraps onto a second page", "type": "Bug", "status": "To Do",
+      "priority": "Minor", "fixVersion": "2026.11", "components": ["Billing"]
+    },
+    {
+      "key": "DEMO-112", "summary": "Upload rejects 29 February in a leap year", "type": "Bug", "status": "In Progress",
+      "priority": "Critical", "fixVersion": "2026.10", "components": ["Shipments"],
+      "history": [
+        { "at": "2026-09-30T18:00:00Z", "from": null, "to": "To Do" },
+        { "at": "2026-10-01T09:00:00Z", "from": "To Do", "to": "In Progress" }
+      ]
+    }
+  ]
+}

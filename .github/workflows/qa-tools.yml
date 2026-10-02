@@ -1,0 +1,82 @@
+name: QA Tools
+
+on:
+  pull_request:
+    paths:
+      - 'gps-simulation-validation-suite/**'
+      - 'route-optimizer-validation-workbench/**'
+      - 'bulk-upload-validator/**'
+      - 'job-data-validation-tool/**'
+      - 'jira-tools/**'
+      - 'ai-assisted-test-design/**'
+      - '.github/workflows/qa-tools.yml'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-tools-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typescript:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: gps-simulation-validation-suite
+            demo: npm run gps -- --scenario off-route-rejoin --devices 5 --seed 7
+          - project: route-optimizer-validation-workbench
+            demo: npm run validate:clean
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+      - run: npm ci
+      - name: Typecheck, lint, format, tests
+        run: npm run verify
+      - name: Demo run (must exit 0)
+        run: ${{ matrix.demo }}
+
+  python:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - bulk-upload-validator
+          - job-data-validation-tool
+          - jira-tools
+          - ai-assisted-test-design
+    defaults:
+      run:
+        working-directory: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: ${{ matrix.project }}/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Lint and format check
+        run: |
+          ruff check .
+          ruff format --check .
+      - name: Tests
+        run: pytest

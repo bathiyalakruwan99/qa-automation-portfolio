@@ -51,7 +51,7 @@ The QA engineer then reviews the drafts, removes anything unsupported by the req
 
 ## QA Value
 
-- Cuts time-to-first-draft from hours to minutes per module
+- Shortens time-to-first-draft (not a measured benchmark; review time still applies to every case)
 - Improves coverage consistency through reusable structure
 - Keeps a defensible authoring trail
 - Frees QA time for exploratory and risk-based testing

@@ -1,0 +1,23 @@
+Validation Summary
+
+File: invalid.csv   Schema: shipment-upload-v1
+
+Rows checked: 17
+
+Valid rows: 4
+Rows with errors: 14
+Warnings: 4
+Errors: 14
+
+Duplicate IDs: 1
+Missing required fields: 1
+Invalid formats: 6
+Invalid references: 1
+Cross-field rule breaks: 4
+Structural (blank rows, repeated header): 2
+
+By code: BLANK_ROW 1, COORDINATE_PAIR_INCOMPLETE 1, DELIVERY_BEFORE_PICKUP 1, DUPLICATE_VALUE 1, INVALID_DATE 1, INVALID_EMAIL 1, INVALID_ENUM 1, INVALID_NUMBER 1, OUT_OF_RANGE 1, PATTERN_MISMATCH 1, REEFER_TEMPERATURE_MISSING 1, REPEATED_HEADER 1, REQUIRED_MISSING 1, SAME_ORIGIN_DESTINATION 1, TEMPERATURE_NOT_APPLICABLE 1, UNKNOWN_COLUMN 1, UNKNOWN_REFERENCE 1, WHITESPACE 1
+
+Output:
+  sample-output/invalid.validation-report.csv
+  sample-output/invalid.validation-summary.json

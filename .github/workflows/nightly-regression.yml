@@ -1,0 +1,106 @@
+name: Nightly Regression
+
+on:
+  schedule:
+    # 18:00 UTC daily. Runs only against repository-owned demos and synthetic data.
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  framework-full:
+    name: framework - full Playwright regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: smart-qa-automation-framework
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: smart-qa-automation-framework/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: All Playwright projects (API, UI, negative, hybrid, state engine)
+        run: npm test
+      - name: Upload report and failure classification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-playwright-report
+          path: |
+            smart-qa-automation-framework/playwright-report/
+            smart-qa-automation-framework/test-results/
+          retention-days: 14
+
+  k6-smoke:
+    name: k6 smoke against the local demo app
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: smart-qa-automation-framework
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: smart-qa-automation-framework/package-lock.json
+      - run: npm ci
+      - uses: grafana/setup-k6-action@v1
+      - name: Start demo app
+        run: |
+          npm run demo:start > demo-app.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fs http://127.0.0.1:3000/health && exit 0
+            sleep 1
+          done
+          echo "demo app did not become healthy"; cat demo-app.log; exit 1
+      # Thresholds in k6/lib/thresholds.js decide pass/fail. Local-demo numbers are trend data, not a benchmark.
+      - name: k6 smoke
+        run: k6 run --summary-export k6-smoke-summary.json k6/smoke.js
+      - name: Upload k6 summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-k6-smoke
+          path: |
+            smart-qa-automation-framework/k6-smoke-summary.json
+            smart-qa-automation-framework/demo-app.log
+          retention-days: 14
+
+  gps-fleet-scale:
+    name: GPS simulator - 1000-vehicle run
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: gps-simulation-validation-suite
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: gps-simulation-validation-suite/package-lock.json
+      - run: npm ci
+      - name: Every scenario at fleet scale must still pass
+        # pipefail: a FAIL (exit 1) from any scenario must fail the job, not be hidden by the grep.
+        run: |
+          set -o pipefail
+          for s in baseline off-route-rejoin short-stop geofence-edge data-quality; do
+            echo "== $s"
+            npm run -s gps -- --scenario "$s" --devices 1000 --json "output/$s.json" | grep -E '^(Vehicles|Result):'
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nightly-gps-fleet
+          path: gps-simulation-validation-suite/output/
+          retention-days: 14

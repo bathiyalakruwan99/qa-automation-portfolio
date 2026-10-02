@@ -20,7 +20,7 @@ Each agent has a focused responsibility. Agents use shared skills and rules, cre
 - [Quality Rules and Guardrails](docs/rules-guardrails.md)
 - [Continuous QA Memory Architecture](docs/qa-memory.md)
 - [Example Agent Journey](docs/example-agent-journey.md)
-- [Sample Artifacts](sample-artifacts/)
+- [Report templates](templates/)
 - [Demo Walkthrough Script](docs/smart-qa-agent-os-demo-script.md)
 - [Public Showcase Boundary](#public-showcase-boundary)
 

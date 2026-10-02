@@ -1,0 +1,46 @@
+{
+  "seed": 3,
+  "rows": 60,
+  "faults": [
+    {
+      "row": 7,
+      "fault": "delivery_before_pickup",
+      "expected_code": "DELIVERY_BEFORE_PICKUP"
+    },
+    {
+      "row": 13,
+      "fault": "missing_customer",
+      "expected_code": "REQUIRED_MISSING"
+    },
+    {
+      "row": 25,
+      "fault": "duplicate_ref",
+      "expected_code": "DUPLICATE_VALUE"
+    },
+    {
+      "row": 26,
+      "fault": "missing_customer",
+      "expected_code": "REQUIRED_MISSING"
+    },
+    {
+      "row": 42,
+      "fault": "bad_vehicle_type",
+      "expected_code": "INVALID_ENUM"
+    },
+    {
+      "row": 45,
+      "fault": "padded_whitespace",
+      "expected_code": "WHITESPACE"
+    },
+    {
+      "row": 46,
+      "fault": "bad_date",
+      "expected_code": "INVALID_DATE"
+    },
+    {
+      "row": 48,
+      "fault": "unknown_location",
+      "expected_code": "UNKNOWN_REFERENCE"
+    }
+  ]
+}

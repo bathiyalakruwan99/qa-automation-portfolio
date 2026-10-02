@@ -1,0 +1,26 @@
+{
+  "records": {
+    "jobs": 13,
+    "loads": 13,
+    "activities": 36
+  },
+  "errors": 10,
+  "warnings": 4,
+  "by_code": {
+    "ACTIVITY_DONE_OUT_OF_ORDER": 1,
+    "COMPLETED_JOB_BELOW_100": 1,
+    "COMPLETED_JOB_OPEN_LOADS": 1,
+    "DELIVERED_LOAD_PENDING_ACTIVITIES": 1,
+    "DUPLICATE_JOB_REF": 1,
+    "DUPLICATE_SEQUENCE": 1,
+    "JOB_WITHOUT_LOADS": 1,
+    "ORPHAN_ACTIVITY": 1,
+    "ORPHAN_LOAD": 1,
+    "PROGRESS_100_NOT_COMPLETED": 1,
+    "PROGRESS_OUT_OF_RANGE": 1,
+    "SEQUENCE_GAP": 1,
+    "STATE_CONFLICT": 1,
+    "UNKNOWN_STATUS": 1
+  },
+  "recommendation": "HOLD - resolve errors before release"
+}

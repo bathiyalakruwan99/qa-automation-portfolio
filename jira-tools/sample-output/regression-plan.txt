@@ -1,0 +1,11 @@
+Regression plan: 2026.10
+
+  smoke                  always
+  auth                   DEMO-108
+  live-map               DEMO-102, DEMO-105
+  reports                DEMO-106
+  shipments-api          DEMO-101, DEMO-104, DEMO-106, DEMO-112
+  shipments-ui           DEMO-101, DEMO-104, DEMO-106, DEMO-112
+  tracking-geofence      DEMO-102, DEMO-105
+
+  NEEDS MAPPING: DEMO-109 (regression required, no component mapped)

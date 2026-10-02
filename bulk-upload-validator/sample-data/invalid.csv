@@ -1,0 +1,20 @@
+shipment_ref,customer_code,origin_code,destination_code,vehicle_type,weight_kg,pickup_date,delivery_date,dest_lat,dest_lng,temperature_c,contact_email,internal_note
+SHP-20001,CUST-ALPHA,WAREHOUSE-ALPHA,CUSTOMER-SITE-BETA,TRUCK,1200,2026-01-10,2026-01-11,37.77,-122.41,,ops@example.test,ok row
+SHP-20002,,WAREHOUSE-ALPHA,CENTRAL-HUB,VAN,300,2026-01-10,2026-01-10,,,,,missing customer
+SHP-20001,CUST-BETA,CENTRAL-HUB,SITE-DELTA,TRUCK,800,2026-01-12,2026-01-13,,,,,duplicate ref
+SHP-20004,CUST-GAMMA,SITE-DELTA,WAREHOUSE-ALPHA,TRUCK,500,2026-02-30,2026-03-02,,,,,impossible date
+SHP-20005,CUST-ALPHA,CENTRAL-HUB,WAREHOUSE-ALPHA,VAN,450,2026-01-15,2026-01-15,137.71,-122.40,,,latitude out of range
+SHP-20006,CUST-BETA,CENTRAL-HUB,SITE-NOWHERE,TRUCK,700,2026-01-15,2026-01-16,,,,,unknown destination
+SHP-20007,CUST-BETA,CENTRAL-HUB,SITE-DELTA,truck,700,2026-01-15,2026-01-16,,,,,lowercase enum
+SHP-20008,CUST-GAMMA,WAREHOUSE-ALPHA,SITE-DELTA,REEFER,2500,2026-01-20,2026-01-21,,,,,reefer without temperature
+SHP-20009,CUST-ALPHA,SITE-DELTA,CENTRAL-HUB,TRUCK,900,2026-03-10,2026-03-08,,,,,delivery before pickup
+SHP-20010, CUST-ALPHA ,CENTRAL-HUB,SITE-DELTA,TRUCK,900,2026-03-10,2026-03-11,,,,,padded whitespace (corrected)
+SHP-20011,CUST-BETA,CENTRAL-HUB,CENTRAL-HUB,VAN,100,2026-03-10,2026-03-11,,,,,same origin and destination
+SHP-20012,CUST-BETA,CENTRAL-HUB,SITE-DELTA,TRUCK,heavy,2026-03-10,2026-03-11,,,,,weight not a number
+SHP-20013,CUST-BETA,CENTRAL-HUB,SITE-DELTA,TRUCK,400,2026-03-10,2026-03-11,37.76,,,,latitude without longitude
+SHP-20014,CUST-GAMMA,CENTRAL-HUB,SITE-DELTA,VAN,400,2026-03-10,2026-03-11,,,4,,temperature on a van (warning)
+SHP-20015,CUST-GAMMA,CENTRAL-HUB,SITE-DELTA,VAN,400,2026-03-10,2026-03-11,,,,ops@nowhere,bad email
+SH-15,CUST-GAMMA,CENTRAL-HUB,SITE-DELTA,VAN,400,2026-03-10,2026-03-11,,,,,bad reference pattern
+,,,,,,,,,,,,
+shipment_ref,customer_code,origin_code,destination_code,vehicle_type,weight_kg,pickup_date,delivery_date,dest_lat,dest_lng,temperature_c,contact_email,internal_note
+SHP-20018,CUST-ALPHA,WAREHOUSE-ALPHA,SITE-DELTA,REEFER,1800,2026-03-12,2026-03-12,37.75,-122.42,-18,,ok reefer row

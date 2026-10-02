@@ -1,0 +1,19 @@
+row,column,code,severity,message,value
+1,internal_note,UNKNOWN_COLUMN,WARNING,"Column ""internal_note"" is not in shipment-upload-v1; it is ignored",
+3,customer_code,REQUIRED_MISSING,ERROR,customer_code is required,
+4,shipment_ref,DUPLICATE_VALUE,ERROR,shipment_ref SHP-20001 already used in row 2,SHP-20001
+5,pickup_date,INVALID_DATE,ERROR,pickup_date must be a real date in YYYY-MM-DD,2026-02-30
+6,dest_lat,OUT_OF_RANGE,ERROR,dest_lat must be between -90 and 90,137.71
+7,destination_code,UNKNOWN_REFERENCE,ERROR,SITE-NOWHERE is not a known location,SITE-NOWHERE
+8,vehicle_type,INVALID_ENUM,ERROR,"vehicle_type must be one of TRUCK, VAN, REEFER (values are case-sensitive)",truck
+9,temperature_c,REEFER_TEMPERATURE_MISSING,ERROR,REEFER shipments need temperature_c,
+10,delivery_date,DELIVERY_BEFORE_PICKUP,ERROR,delivery_date 2026-03-08 is before pickup_date 2026-03-10,2026-03-08
+11,customer_code,WHITESPACE,WARNING,Leading/trailing spaces removed, CUST-ALPHA 
+12,destination_code,SAME_ORIGIN_DESTINATION,ERROR,origin and destination must differ,
+13,weight_kg,INVALID_NUMBER,ERROR,weight_kg must be a number,heavy
+14,dest_lng,COORDINATE_PAIR_INCOMPLETE,ERROR,dest_lat and dest_lng must be given together,
+15,temperature_c,TEMPERATURE_NOT_APPLICABLE,WARNING,temperature_c is ignored for VAN shipments,4
+16,contact_email,INVALID_EMAIL,ERROR,contact_email is not a valid e-mail address,ops@nowhere
+17,shipment_ref,PATTERN_MISMATCH,ERROR,"shipment_ref does not match ^SHP-\d{4,8}$",SH-15
+18,,BLANK_ROW,WARNING,Blank row skipped,
+19,,REPEATED_HEADER,ERROR,The header row is repeated inside the data,

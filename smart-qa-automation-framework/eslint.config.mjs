@@ -10,7 +10,6 @@ export default tseslint.config(
       'playwright-report/**',
       'test-results/**',
       'reports/**',
-      'examples/**',
       'ai-agent-os/**',
       'k6/**',
     ],

@@ -1,112 +1,176 @@
-# GPS Simulator & Geofence Validation Suite
+# GPS Simulation & Validation Suite
 
-> **Case Study — public reference implementation in progress**
-> A web-based QA toolkit I designed to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios.
+**A deterministic GPS stream simulator and validator for testing tracking, geofence and live-map features
+without hardware.** Scenarios describe a route plus incidents (deviation, rejoin, stops, bad fixes); the
+simulator generates the stream a device would send; the validators play the backend and report what should
+have been detected, PASS or FAIL against the scenario's expectations.
 
 ## Project Status
 
-**Public implementation:** Case study / documentation only. A runnable, independently built simulator (TypeScript library, JSON scenarios with synthetic coordinates, CLI, automated tests) is in progress.
+**Public implementation:** Runnable demo. TypeScript library, 5 JSON scenarios, CLI, offline map viewer, 32 automated tests.
 
-**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing (fleet-scale
+tracking without devices, geofence edges, off-route behaviour). This public version is independently written
+for this portfolio.
 
-**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+**Confidentiality:** No employer code, payload formats, endpoints, device IDs, routes or coordinates. All
+coordinates are synthetic points near a public reference location and say so in every scenario file. See
+[`../docs/confidentiality.md`](../docs/confidentiality.md).
 
-## Business Problem
+---
 
-GPS, live-map, geofence, and vehicle-tracking features must be tested at fleet scale without physical hardware. The hardest scenarios, off-route drivers, GPS jumps, rejoin behaviour, and multi-vehicle scenario coverage, must be reproducible on demand. Relying on real devices makes these tests slow, expensive, and impossible to repeat exactly.
+## 1. The QA problem
 
-## QA Challenge
+Tracking features (live maps, geofence alerts, off-route warnings, stop detection) are hard to test:
 
-- Simulate GPS streams for multiple vehicles without physical hardware
-- Reproduce off-route, detour, geofence-edge, and rejoin scenarios deterministically
-- Generate realistic, road-aware vehicle movement paths
-- Create scenario-specific movement data (short stops, return early, out of sequence, unplanned stops)
-- Validate geofence entry/exit behaviour at the edges, not just the centre
-- Produce QA evidence that travels cleanly into defect reports
+- real vehicles are slow, expensive and impossible to repeat exactly;
+- the interesting cases (a vehicle 10 m inside a fence edge, a detour that skips a checkpoint, a fix that
+  arrives late) almost never happen on demand;
+- fleets need many devices at once.
 
-## What the Tool Does
+## 2. What this tool does
 
-A web-based QA toolkit that turns GPS testing from a hardware-dependent activity into repeatable scenario-based validation. Built to support Transport Management System QA workflows.
+| Capability | How |
+| --- | --- |
+| Route playback | Densifies a planned route into fixes spaced by speed × sample interval, with timestamps |
+| Configurable speed and timing | `speedKmh`, `sampleIntervalS`, staggered fleet starts |
+| Position noise | Seeded random offset up to `noiseM` per fix: realistic, but reproducible |
+| Deviation and rejoin | `DEVIATE` moves the vehicle sideways by `offsetM`; `REJOIN` brings it back |
+| Stop / dwell | `STOP` holds the vehicle in place for `durationS` |
+| Unreliable devices | `DUPLICATE` repeats a fix; `OUT_OF_ORDER` delivers a fix after its successor |
+| Multi-vehicle | `--devices N` runs N vehicles with their own seed and start time |
+| Validation | Geofence ENTER/EXIT with dwell, off-route/rejoin, stops, data-quality issues |
+| Determinism | Same scenario + seed → byte-identical results |
+| Map viewer | `--viewer` writes a self-contained HTML/SVG map of the run: route, fences, tracks, off-route fixes, PASS/FAIL table |
 
-### Capabilities
+## 3. Architecture
 
-| Capability | What it supports | QA use |
-| --- | --- | --- |
-| GPS stream simulation | Generate streams for one or many vehicles | Exercise live-map and tracking without devices |
-| Vehicle movement patterns | Road-aware paths, configurable speed, interpolation | Make movement resemble real driving |
-| Route and path testing | Build and replay planned routes | Compare planned vs actual movement |
-| Geofence entry/exit | Define zones and verify entry, exit, dwell, and edge events | Validate geofence triggers reliably |
-| Multi-vehicle scenarios | Run several vehicles concurrently | Test concurrent tracking and live-map load |
-| Live-map QA evidence | Capture path data and map snapshots | Attach evidence to defect reports |
-
-### Scenario types
-
-- Planned route (baseline)
-- Short stop
-- Return early
-- Out of sequence
-- Unplanned stop
-- Off-route then rejoin
-- Geofence edge (enter, dwell, exit near the boundary)
-
-## Fictional Scenario Example
-
-| Element | Fictional Value |
-|---|---|
-| Vehicle | Vehicle-001 |
-| Origin | Warehouse Alpha |
-| Destination | Customer Site Beta |
-| Geofence zone | Zone Gamma |
-| Scenario | Off-route then rejoin |
-
-A QA run with this fictional setup sends `Vehicle-001` from `Warehouse Alpha` toward `Customer Site Beta`, drives it off-route, verifies the live map reflects the deviation, then rejoins the planned route and confirms `Zone Gamma` entry and exit events fire correctly.
-
-### Example multi-vehicle scenario (fictional)
-
-| Vehicle | Scenario | Expected behaviour |
-| --- | --- | --- |
-| Vehicle-001 | Planned route | Clean entry/exit at Zone Gamma |
-| Vehicle-002 | Off-route then rejoin | Deviation visible, then rejoin |
-| Vehicle-003 | Unplanned stop | Dwell event inside Zone Gamma |
-
-Running all three together checks that concurrent tracking, live-map rendering, and geofence events stay correct under load.
-
-### Fictional evidence output
-
-```
-Scenario: Off-route then rejoin (Vehicle-001)
-Geofence Zone Gamma: ENTER ok, EXIT ok
-Deviation detected: yes (reflected on live map)
-Rejoin: yes
-Evidence: path data + map snapshot attached
+```mermaid
+flowchart LR
+    S[Scenario JSON] --> P[parseScenario: validate input]
+    P --> G[generateStream: route playback + events + seeded noise]
+    G --> RAW[Raw stream, as received]
+    RAW --> DQ[checkDataQuality: duplicates, out-of-order, impossible speed]
+    RAW --> N[normalizeStream: sort + de-duplicate]
+    N --> RA[checkRouteAdherence: off-route / rejoin]
+    N --> ST[detectStops]
+    N --> GF[detectGeofenceEvents]
+    DQ --> C[compare with scenario expectations]
+    RA --> C
+    ST --> C
+    GF --> C
+    C --> R[Report: text + JSON, PASS / FAIL]
 ```
 
-## Scale
+| Folder | Responsibility |
+| --- | --- |
+| `src/geo/` | Haversine distance, bearing, destination point, distance to a route segment |
+| `src/simulator/` | Route densification, event injection, seeded noise, stream generation |
+| `src/geofence/` | Circle geofences: inside test (boundary inclusive), ENTER/EXIT with dwell |
+| `src/validation/` | Data-quality checks, normalisation, off-route/rejoin, stop detection |
+| `src/scenarios/` | Scenario schema and validation, fleet runner, expectation checks |
+| `src/reporting/` | Text report |
+| `scenarios/` | The five demo scenarios |
 
-Designed and tested for multi-device simulation scenarios, including controlled runs at up to 1,000 simulated device streams in QA scenarios.
+### Detection rules, and why
 
-## Integration Boundary
+| Rule | Default | Why |
+| --- | --- | --- |
+| Off-route distance | 100 m from the planned route | Wider than GPS noise and lane offsets, narrower than a wrong turn |
+| Confirmation | 2 consecutive fixes | One noisy fix must not raise an alert; a real detour persists |
+| Stop | within 25 m for ≥ 120 s | A traffic-light pause is not a stop; 2 minutes in one place is |
+| Geofence boundary | distance ≤ radius counts as inside | A defined, testable rule for exact-edge fixes |
+| Implausible jump | > 160 km/h implied between fixes | Catches teleporting fixes and clock errors |
 
-The internal version sends simulated GPS data to configured non-public test environments. Real endpoint structures, tokens, payloads, and integration settings are intentionally excluded from this public overview.
+These are thresholds for this demo. In a real product they come from the requirements, and the tests pin
+whichever values were agreed.
 
-## QA Value
+## 4. Setup and run
 
-- Enables repeatable GPS, geofence, off-route, rejoin, and multi-device scenarios without relying on physical hardware
-- Makes hard-to-reproduce, time-and-location-based scenarios deterministic
-- Produces path data and map evidence that travels cleanly into defect reports
-- Supports concurrent multi-vehicle testing
+```bash
+cd gps-simulation-validation-suite
+npm ci
+npm test                                                        # 32 tests
+npm run gps -- --scenario off-route-rejoin --devices 5 --seed 7  # CLI
+npm run gps -- --scenario baseline --devices 1000 --json output/fleet.json
+npm run gps -- --scenario off-route-rejoin --devices 5 --viewer output/map.html   # open in a browser
+npm run verify                                                  # typecheck + lint + format + tests
+```
 
-## QA Skills Demonstrated
+The CLI exits with `0` on PASS, `1` on FAIL and `2` on bad arguments, so it can gate a pipeline.
 
-- Designing deterministic test data for hard-to-reproduce, real-world scenarios
-- Edge-focused testing (geofence boundaries, rejoin, out-of-sequence)
-- Concurrent, multi-entity test design
-- Evidence capture for time-and-location-based features
+## 5. Scenarios
 
-## Public Portfolio Scope
+| Scenario | What happens | A correct backend should report |
+| --- | --- | --- |
+| `baseline` | Warehouse Alpha → Zone Gamma → Customer Site Beta | 5 geofence events in order, no deviation, no stop |
+| `off-route-rejoin` | 250 m detour, then back on route | Deviation + rejoin; **Zone Gamma never entered** (the checkpoint was skipped) |
+| `short-stop` | 60 s pause and a 5 min stop | Exactly 1 stop (the pause is below the threshold) |
+| `geofence-edge` | Route clips one fence 10 m inside its edge, misses another by 30 m | ENTER/EXIT for the first fence only |
+| `data-quality` | One duplicated fix, one late fix | `DUPLICATE_POINT` and `OUT_OF_ORDER`; route analysis still correct |
 
-The public repository contains documentation, fictional scenarios, and safe artifacts only. The internal tool's source code, real map data, endpoint structures, and screenshots with real locations are not public.
+## 6. Sample output
 
-## Confidentiality Note
+From `npm run gps -- --scenario off-route-rejoin --devices 5 --seed 7`
+([full text](sample-output/off-route-rejoin.5-vehicles.txt) · [JSON](sample-output/off-route-rejoin.5-vehicles.json)):
 
-The original tool is real. No real source code, map data, coordinates, routes, vehicle registrations, geofence names, customer locations, GPS payloads, API URLs, tokens, route polylines, or internal GPS workflow rules are included. All examples are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+```text
+Scenario: off-route-rejoin
+Seed: 7
+
+Vehicles: 5
+Points generated: 130
+
+TRUCK-001
+  Deviation: detected (max 252 m off route)
+  Rejoin: detected
+  Stops: 0
+  Geofence events: ENTER WAREHOUSE-ALPHA, EXIT WAREHOUSE-ALPHA (dwell 20 s), ENTER CUSTOMER-SITE-BETA
+  Data quality: clean
+  PASS  deviation detected (expected true, got true)
+  PASS  rejoin detected (expected true, got true)
+  PASS  stops (expected 0, got 0)
+  PASS  geofence events (expected [...], got [...])
+  PASS  data-quality issues (expected [], got [])
+...
+2 more vehicle(s): all PASS
+
+Result: PASS
+```
+
+A 1000-vehicle `baseline` run (26,000 fixes) completes in about 1.7 s locally, and every vehicle passes.
+
+The map viewer for the same run ([HTML](sample-output/off-route-rejoin.map.html)) makes the finding obvious: the
+detour skips the Zone Gamma checkpoint. No map tiles or scripts are loaded, so the page works offline.
+
+<img src="../assets/screenshots/gps-simulator-off-route.png" alt="GPS map viewer: off-route detour skipping Zone Gamma" width="640"/>
+
+## 7. Test coverage
+
+| ID | Test |
+| --- | --- |
+| GPS-001 | Baseline movement: even timing, start/end on the route, spacing matches speed × interval |
+| GPS-002 | Off-route: a 250 m deviation is detected; 3 m noise is not |
+| GPS-003 | Rejoin: deviation closes when back on route; stays open without a REJOIN |
+| GPS-004 | Geofence ENTER fires once on arrival |
+| GPS-005 | Geofence EXIT carries the dwell time since ENTER |
+| GPS-006 | Edge boundary: 99.9 m inside a 100 m fence, 100.1 m outside; the edge scenario |
+| GPS-007 | Stopped vehicle: 5 min stop reported, 60 s pause ignored |
+| GPS-008 | Duplicate fix flagged and removed before analysis |
+| GPS-009 | Out-of-order fix flagged; normalised stream back in time order |
+| GPS-010 | Multi-vehicle: unique IDs, staggered starts, deterministic per seed |
+
+Also: geometry unit tests, an implausible-jump test, scenario-validation tests, and a check that every shipped
+scenario passes its own expectations. A negative control (a scenario whose expectation is deliberately wrong)
+was run during development and correctly ended in `Result: FAIL` with exit code 1.
+
+## 8. Known limitations
+
+This public implementation intentionally simplifies:
+
+- **straight-line playback:** routes follow straight lines between waypoints, with no road snapping;
+- **circle geofences only:** no polygons;
+- **no transport protocol:** the stream is generated in memory, and nothing is sent to a device API;
+- **flat-earth approximations:** fine at city scale, not for long-haul routes.
+
+It exists to demonstrate GPS QA reasoning, not to reproduce a production tracking platform.
