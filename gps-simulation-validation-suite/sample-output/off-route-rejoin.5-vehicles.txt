@@ -43,4 +43,3 @@ TRUCK-003
 2 more vehicle(s): all PASS
 
 Result: PASS
-
