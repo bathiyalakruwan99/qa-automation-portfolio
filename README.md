@@ -26,7 +26,8 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 - **Domain:** logistics / TMS, GPS tracking, route validation and data quality.
 - **Also:** QA tools in TypeScript and Python, k6 performance smoke, AI-assisted test design under human review.
 
-Every featured project is an independent, runnable public demo on synthetic data. The [maturity matrix](#project-maturity) shows how mature each part is.
+All runnable projects are independently implemented for this portfolio using synthetic data. Non-runnable material isexplicitly labelled as a case
+  study or prototype. The [maturity matrix](#project-maturity) shows how mature each part is.
 
 ---
 
