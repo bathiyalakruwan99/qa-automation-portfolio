@@ -1,0 +1,10 @@
+{
+  "_note": "Fictional component -> regression suite map for the portfolio demo.",
+  "components": {
+    "Shipments": ["shipments-api", "shipments-ui"],
+    "Tracking": ["tracking-geofence", "live-map"],
+    "Billing": ["billing"],
+    "Auth": ["auth"],
+    "Reporting": ["reports"]
+  }
+}
