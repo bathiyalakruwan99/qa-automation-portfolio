@@ -19,6 +19,8 @@ export interface RunOptions {
   /** Seconds between device start times in a fleet run. */
   staggerS?: number;
   thresholds?: ValidationThresholds;
+  /** Keep each device's normalised stream on the result (for the map viewer). Off by default to keep JSON small. */
+  keepStreams?: boolean;
 }
 
 export interface Check {
@@ -37,6 +39,8 @@ export interface DeviceResult {
   dataQuality: DataQualityIssue[];
   checks: Check[];
   result: 'PASS' | 'FAIL';
+  /** Present only when RunOptions.keepStreams is set. */
+  stream?: GpsPoint[];
 }
 
 export interface RunResult {
@@ -108,7 +112,12 @@ export function runScenario(scenario: Scenario, options: RunOptions = {}): RunRe
       dataQuality: checkDataQuality(raw, thresholds),
     };
     const checks = compare(scenario, partial);
-    return { ...partial, checks, result: checks.every((c) => c.pass) ? 'PASS' : 'FAIL' };
+    const result: DeviceResult = {
+      ...partial,
+      checks,
+      result: checks.every((c) => c.pass) ? 'PASS' : 'FAIL',
+    };
+    return options.keepStreams ? { ...result, stream: clean } : result;
   });
   return {
     scenario: scenario.name,

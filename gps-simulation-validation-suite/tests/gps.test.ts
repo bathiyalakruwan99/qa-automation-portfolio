@@ -5,6 +5,7 @@ import { destination, distanceM } from '../src/geo/geo';
 import { detectGeofenceEvents, isInside } from '../src/geofence/geofence';
 import { parseScenario, type Scenario, ScenarioError } from '../src/scenarios/scenario';
 import { runScenario } from '../src/scenarios/scenario-runner';
+import { renderMapViewer } from '../src/reporting/map-viewer';
 import { generateStream, type GpsPoint } from '../src/simulator/gps-stream';
 import {
   checkDataQuality,
@@ -165,5 +166,29 @@ describe('scenario validation', () => {
   it('rejects a REJOIN without a DEVIATE', () => {
     const s = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'scenarios', 'baseline.json'), 'utf8'));
     expect(() => parseScenario({ ...s, events: [{ type: 'REJOIN', atIndex: 3 }] })).toThrow(/REJOIN/);
+  });
+});
+
+describe('map viewer', () => {
+  it('renders a self-contained page with the route, fences, every vehicle and the result', () => {
+    const s = load('off-route-rejoin');
+    const html = renderMapViewer(s, runScenario(s, { devices: 2, keepStreams: true }));
+    expect(html).toContain('<svg');
+    expect(html).toContain('Result: <span class="pass">PASS</span>');
+    expect((html.match(/class="fence"/g) ?? []).length).toBe(s.geofences.length);
+    expect(html).toContain('TRUCK-002');
+    expect(html).toMatch(/class="off"/); // the deviation is highlighted
+    expect(html).not.toMatch(/<script|https?:\/\//); // no external resources
+  });
+
+  it('refuses a run without streams instead of drawing an empty map', () => {
+    const s = load('baseline');
+    expect(() => renderMapViewer(s, runScenario(s))).toThrow(/keepStreams/);
+  });
+
+  it('keeps streams off the result unless asked', () => {
+    const s = load('baseline');
+    expect(runScenario(s).devices[0]!.stream).toBeUndefined();
+    expect(runScenario(s, { keepStreams: true }).devices[0]!.stream!.length).toBeGreaterThan(0);
   });
 });
