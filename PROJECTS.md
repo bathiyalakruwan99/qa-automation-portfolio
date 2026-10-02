@@ -4,7 +4,7 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 
 | Project | Public implementation today | Next |
 |---|---|---|
-| Smart QA Agent OS (automation framework + AI QA operating model) | Reference implementation (TypeScript structure, not yet runnable) + prototype docs | Runnable local demo app, API + hybrid suites, CI |
+| Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests, 116 unit tests, CI workflows | First GitHub Actions run, nightly regression |
 | GPS Simulator & Geofence Validation Suite | Case study | Public simulator library + CLI + tests |
 | Route Optimizer Validation Workbench | Case study | Public output validators + CLI + tests |
 | Job Master Data Validation & Release Evidence Tool | Case study | Public reconciliation validator + pytest |
@@ -14,15 +14,15 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 
 ---
 
-## Smart QA Agent OS — QA Automation & AI-Assisted Testing Prototype
+## Smart QA Automation Framework
 
-A QA automation framework plus a modular AI-assisted QA operating model. Capability areas are separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned), and a human QA engineer remains responsible for requirement interpretation, test approval, defect decisions, release recommendations, and memory updates.
+A runnable Playwright + TypeScript framework with its own fictional logistics app, plus a modular AI-assisted QA operating model. Capability areas are separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned), and a human QA engineer remains responsible for requirement interpretation, test approval, defect decisions, release recommendations, and memory updates.
 
-- **Status:** Reference implementation (structure) + prototype operating model; runnable demo in progress
-- **Stack:** Playwright, TypeScript, BDD, POM, Postman/Newman, k6, AI QA operating model
+- **Status:** Runnable demo (framework) + prototype operating model
+- **Stack:** Playwright, TypeScript, Express demo app, Ajv, Vitest, Postman/Newman, k6, GitHub Actions
 - **QA value:** A structured, evidence-driven, reusable approach that keeps human QA judgement at the centre.
 
-[Open reference implementation →](smart-qa-automation-framework/)
+[Open project →](smart-qa-automation-framework/)
 
 ---
 

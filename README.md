@@ -36,10 +36,10 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 
 ### 1. Smart QA Automation Framework
 
-Playwright + TypeScript reference framework: Page Object Model, component objects, fixtures, typed test data, reusable business flows, BDD layer, tagging, negative and diagnostic specs, plus a human-governed AI QA operating model.
+Runnable Playwright + TypeScript framework with its own fictional logistics app: Page Object Model, components, fixtures, seeded typed data, business flows, typed API clients with contract schemas, UI + API hybrid tests, a state-driven workflow engine with guardrails, and failure classification. A human-governed AI QA operating model sits alongside it.
 
-- **Public today:** framework structure and code (TypeScript), Postman collection, k6 scripts, synthetic QA artifacts.
-- **In progress:** a local demo logistics app so every test runs on clone, typed API clients, API and hybrid suites, a state-driven workflow engine, unit-tested utilities, and CI.
+- **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
+- **Verified:** locally and in a fresh-clone CI rehearsal; mutation checks show the suites catch deliberate defects. The first GitHub Actions run is pending.
 
 [View project →](smart-qa-automation-framework/)
 
@@ -86,17 +86,18 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 
 | Area | Public code today | Professional relevance | Public maturity |
 | --- | --- | --- | --- |
-| Playwright framework structure (POM, fixtures, flows, BDD) | Yes | High | Reference implementation — runnable target in progress |
-| API automation | Postman collection only | High | Reference — typed Playwright API suite in progress |
-| UI + API hybrid testing | No | High | Documented — in progress |
+| Playwright framework (POM, fixtures, flows, local demo app) | Yes | High | Runnable demo |
+| API automation (typed clients, schemas, Newman) | Yes | High | Runnable demo |
+| UI + API hybrid testing | Yes | High | Runnable demo |
 | GPS simulation and validation | No | High | Case study — public reference build planned |
 | Route-output validation | No | High | Case study — public reference build planned |
 | Bulk upload / data validation | No | High | Case study — public reference build planned |
 | Job / load reconciliation | No | High | Case study — public reference build planned |
 | Jira release-readiness tools | No | Medium | Case study — public implementation planned |
 | AI-assisted QA workflow | Documentation and templates | High | Prototype (human-reviewed) |
-| k6 performance testing | Scripts against a public demo API | Developing | Learning |
-| CI/CD | Secret-scan workflow | Developing | Working knowledge |
+| State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
+| k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
+| CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (first GitHub run pending) |
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 
