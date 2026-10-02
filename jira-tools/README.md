@@ -1,11 +1,19 @@
 # Jira QA Evidence & Release Readiness Tools
 
-> **Public-Safe QA Utility Collection**
-> Python tools for collecting Jira ticket data, building release-readiness views, tracking status history, and generating QA evidence reports.
+> **Case Study — public Python implementation in progress**
+> Case study of the Python tools I use to collect ticket data, build release-readiness views, track status history and generate QA evidence. The public, offline reimplementation over fictional tickets is not published yet.
 
 ## Security and Data Handling
 
 No real Jira URL, user account, API token, project key, ticket content, customer data, or internal release information is included in this repository. Never commit `.env`, Jira tokens, project keys, real issue exports, or customer data. Use `.env.example` as a configuration template only.
+
+## Project Status
+
+**Public implementation:** Case study / documentation only. No Python code is published in this folder yet. An offline implementation over fictional tickets (`DEMO-101`…) with release-readiness, regression-mapping and status-history reports plus pytest is in progress.
+
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+
+**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
 
 ## Business Problem
 
@@ -30,7 +38,7 @@ Fictional sample tickets are included for demonstration and report-generation te
 
 ### Release-readiness flow
 
-```
+```text
 Ticketing workflow
   -> Consolidate work items into a review view
   -> Track readiness status and status history
@@ -58,7 +66,7 @@ For the detailed workflow, see [`../case-studies/jira-qa-workflow-automation.md`
 | DEMO-102 | In QA | Yes | Not ready |
 | DEMO-103 | Verified with known issue | Yes | Ready with risk |
 
-```
+```text
 Items in scope: 3
 Ready: 1
 Ready with known risk: 1 (DEMO-103)

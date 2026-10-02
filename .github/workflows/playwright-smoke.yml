@@ -1,0 +1,57 @@
+name: Playwright Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'smart-qa-automation-framework/**'
+      - '.github/workflows/playwright-smoke.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'smart-qa-automation-framework/**'
+      - '.github/workflows/playwright-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: smoke (API + UI against the local demo app)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: smart-qa-automation-framework
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: smart-qa-automation-framework/package-lock.json
+
+      - run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Playwright starts the demo app itself (webServer) and stops it afterwards.
+      - name: Run @smoke tests
+        run: npm run test:smoke
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-smoke-report
+          path: |
+            smart-qa-automation-framework/playwright-report/
+            smart-qa-automation-framework/test-results/
+          retention-days: 14

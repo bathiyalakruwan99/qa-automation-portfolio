@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shipments · Northstar Logistics (demo)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="shipments">
+    <header class="topbar">
+      <span class="brand">Northstar Logistics</span>
+      <span class="demo-tag">Fictional demo app</span>
+      <button type="button" id="sign-out" class="link">Sign out</button>
+    </header>
+    <main>
+      <h1>Shipments</h1>
+
+      <section aria-labelledby="create-heading" class="card">
+        <h2 id="create-heading">Create shipment</h2>
+        <form id="create-form" novalidate>
+          <div class="grid">
+            <div>
+              <label for="reference">Reference</label>
+              <input id="reference" name="reference" type="text" />
+            </div>
+            <div>
+              <label for="customerId">Customer</label>
+              <select id="customerId" name="customerId"></select>
+            </div>
+            <div>
+              <label for="vehicleType">Vehicle type</label>
+              <select id="vehicleType" name="vehicleType">
+                <option value="TRUCK">Truck</option>
+                <option value="VAN">Van</option>
+                <option value="REEFER">Reefer</option>
+              </select>
+            </div>
+            <div>
+              <label for="origin">Origin</label>
+              <select id="origin" name="origin"></select>
+            </div>
+            <div>
+              <label for="destination">Destination</label>
+              <select id="destination" name="destination"></select>
+            </div>
+            <div>
+              <label for="weightKg">Weight (kg)</label>
+              <input id="weightKg" name="weightKg" type="number" min="1" step="1" />
+            </div>
+          </div>
+          <p id="create-error" class="error" role="alert" data-testid="form-error" hidden></p>
+          <p id="create-success" class="success" role="status" hidden></p>
+          <button type="submit">Create shipment</button>
+        </form>
+      </section>
+
+      <section aria-labelledby="list-heading" class="card">
+        <h2 id="list-heading">All shipments</h2>
+        <div class="filters">
+          <input
+            id="search"
+            type="search"
+            aria-label="Search shipments"
+            placeholder="Search by ID, reference or customer"
+          />
+          <label for="status-filter">Status</label>
+          <select id="status-filter">
+            <option value="">All</option>
+            <option>CREATED</option>
+            <option>ASSIGNED</option>
+            <option>ROUTE_PLANNED</option>
+            <option>IN_TRANSIT</option>
+            <option>DELIVERED</option>
+            <option>CLOSED</option>
+            <option>CANCELLED</option>
+          </select>
+        </div>
+        <table data-testid="shipment-table" data-state="loading">
+          <caption class="sr-only">
+            Shipments
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Shipment</th>
+              <th scope="col">Reference</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Status</th>
+              <th scope="col">Vehicle</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="empty-state" hidden>No shipments found</p>
+      </section>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

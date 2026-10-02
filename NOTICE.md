@@ -1,9 +1,9 @@
 # Portfolio Use Notice
 
-This repository is a professional QA portfolio showcase.
+This repository is a professional QA engineering portfolio.
 
-It contains sanitized case studies, high-level architecture diagrams, synthetic examples, and QA workflow documentation.
+It contains sanitized reference implementations, synthetic demo applications, generic QA automation examples, architecture documentation and technical case studies. All public code is independently written for this portfolio, and all data is synthetic or fictional.
 
-It does not grant permission to reproduce, redistribute, reuse, reverse engineer, or adapt proprietary workflow details, private QA processes, portfolio assets, or confidential implementation concepts without permission.
+It does not contain employer-owned source code, real customer data, production environment details, credentials, internal endpoints, private agent prompts, confidential workflows, private business rules or proprietary implementation logic.
 
-No employer source code, production data, customer information, credentials, internal endpoints, private automation scripts, private agent prompts, or confidential business logic are included.
+Public demo code may be read and learned from. Reuse, redistribution or adaptation of the code, case-study material, portfolio assets or described workflow concepts requires permission. See [`docs/confidentiality.md`](docs/confidentiality.md) for the public/private boundary.

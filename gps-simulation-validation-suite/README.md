@@ -1,7 +1,15 @@
 # GPS Simulator & Geofence Validation Suite
 
-> **Internal QA Tool — Sanitized Public Overview**
+> **Case Study — public reference implementation in progress**
 > A web-based QA toolkit I designed to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios.
+
+## Project Status
+
+**Public implementation:** Case study / documentation only. A runnable, independently built simulator (TypeScript library, JSON scenarios with synthetic coordinates, CLI, automated tests) is in progress.
+
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+
+**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
 
 ## Business Problem
 
