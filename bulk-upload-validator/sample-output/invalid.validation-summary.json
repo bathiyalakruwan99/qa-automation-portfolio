@@ -1,0 +1,29 @@
+{
+  "source": "sample-data\\invalid.csv",
+  "schema": "shipment-upload-v1",
+  "fatal": false,
+  "rows_checked": 17,
+  "valid_rows": 4,
+  "rows_with_errors": 14,
+  "rows_with_warnings_only": 3,
+  "issue_counts": {
+    "BLANK_ROW": 1,
+    "COORDINATE_PAIR_INCOMPLETE": 1,
+    "DELIVERY_BEFORE_PICKUP": 1,
+    "DUPLICATE_VALUE": 1,
+    "INVALID_DATE": 1,
+    "INVALID_EMAIL": 1,
+    "INVALID_ENUM": 1,
+    "INVALID_NUMBER": 1,
+    "OUT_OF_RANGE": 1,
+    "PATTERN_MISMATCH": 1,
+    "REEFER_TEMPERATURE_MISSING": 1,
+    "REPEATED_HEADER": 1,
+    "REQUIRED_MISSING": 1,
+    "SAME_ORIGIN_DESTINATION": 1,
+    "TEMPERATURE_NOT_APPLICABLE": 1,
+    "UNKNOWN_COLUMN": 1,
+    "UNKNOWN_REFERENCE": 1,
+    "WHITESPACE": 1
+  }
+}
