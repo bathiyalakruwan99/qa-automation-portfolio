@@ -1,82 +1,86 @@
 /**
  * check-no-secrets.js
  *
- * Scans staged files for potential secrets, tokens, and credentials.
- * Exits with code 1 if any suspicious patterns are found.
+ * Lightweight pre-commit secret scan. Complements (does not replace) gitleaks in CI.
  *
- * Synthetic example for portfolio demonstration.
+ * Usage:
+ *   node check-no-secrets.js          # scan staged files (default)
+ *   node check-no-secrets.js --all    # scan every tracked file
+ *
+ * Exits with code 1 if any suspicious pattern is found. Matched values are never printed.
  */
 
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const PATTERNS = [
-  /(?:api[_-]?key|apikey)\s*[:=]\s*['"][A-Za-z0-9]{20,}['"]/gi,
-  /(?:secret|token|password|passwd)\s*[:=]\s*['"][^\s'"]{8,}['"]/gi,
-  /Bearer\s+[A-Za-z0-9._-]{20,}/gi,
-  /-----BEGIN\s+(RSA\s+)?PRIVATE\s+KEY-----/g,
-  /mongodb(?:\+srv)?:\/\/[^\s'"]+:[^\s'"]+@/gi,
-  /postgres(?:ql)?:\/\/[^\s'"]+:[^\s'"]+@/gi,
+const RULES = [
+  { name: 'generic api key assignment', re: /(?:api[_-]?key|apikey|x-api-key)['"]?\s*[:=]\s*['"][A-Za-z0-9_\-]{16,}['"]/gi },
+  { name: 'secret/token/password assignment', re: /(?:secret|token|password|passwd|pwd)['"]?\s*[:=]\s*['"][^\s'"]{8,}['"]/gi },
+  { name: 'bearer token', re: /Bearer\s+[A-Za-z0-9._\-]{20,}/g },
+  { name: 'JWT', re: /eyJ[A-Za-z0-9_\-]{10,}\.eyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}/g },
+  { name: 'Google API key', re: /AIza[0-9A-Za-z_\-]{35}/g },
+  { name: 'AWS access key id', re: /\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g },
+  { name: 'GitHub token', re: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,}\b|\bgithub_pat_[A-Za-z0-9_]{50,}\b/g },
+  { name: 'Slack token', re: /\bxox[abprs]-[A-Za-z0-9-]{10,}\b/g },
+  { name: 'private key block', re: /-----BEGIN\s+(?:RSA\s+|EC\s+|OPENSSH\s+|DSA\s+)?PRIVATE\s+KEY-----/g },
+  { name: 'database URL with credentials', re: /\b(?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql|redis|amqp):\/\/[^\s'"/:]+:[^\s'"@]+@/gi },
 ];
 
-const ALLOWED = [
-  /\.env\.example$/,
-  /\.env\.template$/,
-  /node_modules\//,
+// Values that are intentionally fake and documented as such.
+const ALLOWED_VALUES = [/REPLACE_ME/i, /demo[-_]?pass/i, /example\.(?:test|com)/i, /['"]role=/, /<[^>]+>/];
+
+const SKIPPED_FILES = [
+  /(^|\/)\.env\.example$/,
+  /(^|\/)node_modules\//,
   /package-lock\.json$/,
+  /\.(png|jpe?g|gif|mp4|webm|ico|pdf|zip|xlsx)$/i,
 ];
 
-function getStagedFiles() {
+function listFiles(all) {
+  const cmd = all ? 'git ls-files' : 'git diff --cached --name-only --diff-filter=ACMR';
   try {
-    const output = execSync('git diff --cached --name-only', { encoding: 'utf-8' });
-    return output.trim().split('\n').filter(Boolean);
+    return execSync(cmd, { encoding: 'utf-8' }).split('\n').map((f) => f.trim()).filter(Boolean);
   } catch {
     return [];
   }
 }
 
-function isAllowed(file) {
-  return ALLOWED.some((p) => p.test(file));
-}
-
 function scanFile(file) {
   const full = path.resolve(file);
-  if (!fs.existsSync(full)) return [];
-  const content = fs.readFileSync(full, 'utf-8');
+  if (!fs.existsSync(full) || fs.statSync(full).isDirectory()) return [];
+  const lines = fs.readFileSync(full, 'utf-8').split(/\r?\n/);
   const findings = [];
-  for (const pattern of PATTERNS) {
-    const matches = content.match(pattern);
-    if (matches) {
-      findings.push({ file, pattern: pattern.source, count: matches.length });
+  lines.forEach((line, i) => {
+    for (const rule of RULES) {
+      rule.re.lastIndex = 0;
+      for (const match of line.matchAll(rule.re)) {
+        if (ALLOWED_VALUES.some((ok) => ok.test(match[0]))) continue;
+        findings.push({ file, line: i + 1, rule: rule.name });
+      }
     }
-  }
+  });
   return findings;
 }
 
 function main() {
-  const files = getStagedFiles();
+  const all = process.argv.includes('--all');
+  const files = listFiles(all).filter((f) => !SKIPPED_FILES.some((p) => p.test(f)));
   if (files.length === 0) {
-    console.log('[check-no-secrets] No staged files to scan.');
+    console.log(`[check-no-secrets] No ${all ? 'tracked' : 'staged'} files to scan.`);
     return;
   }
 
-  let total = 0;
-  for (const file of files) {
-    if (isAllowed(file)) continue;
-    const findings = scanFile(file);
-    for (const f of findings) {
-      console.error(`[check-no-secrets] WARNING: ${f.file} - ${f.count} match(es) for ${f.pattern}`);
-      total += f.count;
-    }
+  const findings = files.flatMap(scanFile);
+  for (const f of findings) {
+    console.error(`[check-no-secrets] ${f.file}:${f.line} - ${f.rule}`);
   }
 
-  if (total > 0) {
-    console.error(`[check-no-secrets] ${total} suspicious pattern(s) found. Review before committing.`);
+  if (findings.length > 0) {
+    console.error(`[check-no-secrets] ${findings.length} suspicious value(s) in ${files.length} file(s). Review before committing.`);
     process.exit(1);
   }
-
-  console.log('[check-no-secrets] No secrets detected in staged files.');
+  console.log(`[check-no-secrets] OK - ${files.length} ${all ? 'tracked' : 'staged'} file(s) scanned, no secrets detected.`);
 }
 
 main();
