@@ -151,6 +151,8 @@ async function initShipments() {
 
   $('#create-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    // Marked synchronously, so a test that just submitted never sees the stale list as "ready".
+    table.dataset.state = 'loading';
     hide($('#create-error'));
     hide($('#create-success'));
     const weight = $('#weightKg').value;
@@ -171,6 +173,7 @@ async function initShipments() {
       await load();
     } catch (error) {
       show($('#create-error'), error.message);
+      table.dataset.state = 'ready';
     }
   });
 
@@ -244,6 +247,8 @@ async function initShipment() {
   }
 
   async function act(call) {
+    // Runs synchronously inside the click handler: the view is "loading" before the click resolves.
+    main.dataset.state = 'loading';
     hide(error);
     try {
       await call();
