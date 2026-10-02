@@ -17,7 +17,7 @@ QA Engineer focused on product quality, test automation, data validation and com
 
 Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [Portfolio site](https://bathiya-qa.vercel.app/) · [LinkedIn](https://www.linkedin.com/in/bathiyalakruwan99/) · [GitHub](https://github.com/bathiyalakruwan99)
 
-> **Portfolio status (October 2026):** this repository is being upgraded from documentation-heavy case studies into **runnable, independently built public demos**. The [maturity matrix](#project-maturity) shows exactly what is public code today and what is still a case study.
+> **Portfolio status (October 2026):** every featured project is now a **runnable, independently built public demo** with automated tests and CI. The [maturity matrix](#project-maturity) shows exactly what is public code and how mature each part is.
 
 ---
 
@@ -50,8 +50,7 @@ Runnable Playwright + TypeScript framework with its own fictional logistics app:
 
 Approach for testing GPS, live-map and geofence features without hardware: route playback, multi-device simulation, geofence enter/exit and boundary cases, off-route and rejoin scenarios.
 
-- **Public today:** case study with fictional scenarios.
-- **In progress:** independently built simulator library, JSON scenarios with synthetic coordinates, CLI, and automated tests.
+- **Public today:** TypeScript simulator + validators, 5 JSON scenarios on synthetic coordinates, CLI with PASS/FAIL exit codes, 29 tests (GPS-001…010). 1000 vehicles in about 1.7 s; same seed, byte-identical output.
 
 [View project →](gps-simulation-validation-suite/)
 
@@ -59,8 +58,7 @@ Approach for testing GPS, live-map and geofence features without hardware: route
 
 An independent QA validation layer for route-optimizer **output** (not an optimizer): order allocation, duplicates, missing orders, capacity, vehicle suitability, route sanity.
 
-- **Public today:** case study with fictional examples.
-- **In progress:** TypeScript validators, fictional optimizer output, CLI report, unit tests.
+- **Public today:** six TypeScript validators, a clean plan and a plan with one planted defect per validator, CLI report that never says "approved", 19 tests (ROUTE-001…017).
 
 [View project →](route-optimizer-validation-workbench/)
 
@@ -68,8 +66,7 @@ An independent QA validation layer for route-optimizer **output** (not an optimi
 
 Bulk-upload and job/load reconciliation validation: required fields, duplicates, formats, references, cross-field rules, orphan records, status/progress consistency, structured reports, synthetic data generation.
 
-- **Public today:** case studies for the [Bulk Upload Validator](bulk-upload-validator/) and [Job Master Validation Tool](job-master-validation-tool/).
-- **In progress:** runnable Python validators (CSV + XLSX), synthetic data generator, pytest suites.
+- **Public today:** a Python bulk upload validator for CSV + XLSX, with a fault-injecting data generator used as a test oracle (36 tests), and a job / load / activity reconciliation tool that deliberately does not infer progress formulas (21 tests).
 
 [View Bulk Upload Validator →](bulk-upload-validator/) · [View Job Master Validation Tool →](job-master-validation-tool/)
 
@@ -77,8 +74,8 @@ Bulk-upload and job/load reconciliation validation: required fields, duplicates,
 
 | Project | What it covers | Status |
 | --- | --- | --- |
-| [AI-Assisted Test Design](ai-assisted-test-design/) | AI drafts test cases; QA reviews and approves every case | Case study (prompt templates and schema in progress) |
-| [Jira Release-Readiness Tools](jira-tools/) | Release-readiness views, regression mapping, status history | Case study (public Python implementation in progress) |
+| [AI-Assisted Test Design](ai-assisted-test-design/) | Prompt templates, test-case schema, and a validator that rejects invented criteria and self-approved AI drafts | Prototype with runnable tooling (17 tests) |
+| [Jira Release-Readiness Tools](jira-tools/) | Offline release readiness, regression mapping, status history over fictional tickets | Runnable demo (19 tests) |
 | [AI and MCP QA Workflows](case-studies/ai-mcp-qa-workflows.md) | AI-assisted analysis and reconciliation with human review | Case study |
 
 ---
@@ -92,12 +89,12 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 | Playwright framework (POM, fixtures, flows, local demo app) | Yes | High | Runnable demo |
 | API automation (typed clients, schemas, Newman) | Yes | High | Runnable demo |
 | UI + API hybrid testing | Yes | High | Runnable demo |
-| GPS simulation and validation | No | High | Case study — public reference build planned |
-| Route-output validation | No | High | Case study — public reference build planned |
-| Bulk upload / data validation | No | High | Case study — public reference build planned |
-| Job / load reconciliation | No | High | Case study — public reference build planned |
-| Jira release-readiness tools | No | Medium | Case study — public implementation planned |
-| AI-assisted QA workflow | Documentation and templates | High | Prototype (human-reviewed) |
+| GPS simulation and validation | Yes | High | Runnable demo |
+| Route-output validation | Yes | High | Runnable demo |
+| Bulk upload / data validation | Yes | High | Runnable demo |
+| Job / load reconciliation | Yes | High | Runnable demo |
+| Jira release-readiness tools | Yes (offline) | Medium | Runnable demo |
+| AI-assisted QA workflow | Templates, schema, governance validator | High | Prototype (human-reviewed) |
 | State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
 | k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
 | CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (verified on GitHub Actions) |

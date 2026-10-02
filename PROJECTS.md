@@ -5,12 +5,12 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 | Project | Public implementation today | Next |
 |---|---|---|
 | Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests, 116 unit tests, CI workflows | Nightly regression |
-| GPS Simulator & Geofence Validation Suite | Case study | Public simulator library + CLI + tests |
-| Route Optimizer Validation Workbench | Case study | Public output validators + CLI + tests |
-| Job Master Data Validation & Release Evidence Tool | Case study | Public reconciliation validator + pytest |
-| Bulk Upload Validator & Synthetic Test Data Generator | Case study | Public CSV/XLSX validator + generator + pytest |
-| AI-Assisted Test Design Pipeline | Prototype workflow (case study) | Generic prompt templates, schema + validator |
-| Jira QA Evidence & Release Readiness Tools | Case study (no public code yet) | Offline Python tools over fictional tickets + pytest |
+| GPS Simulator & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, 29 tests | Optional map viewer |
+| Route Optimizer Validation Workbench | Runnable demo: 6 validators, sample plans, CLI, 19 tests | Road-network distances |
+| Job Master Data Validation & Release Evidence Tool | Runnable demo: reconciliation checks, CLI, 21 tests | Time-based checks |
+| Bulk Upload Validator & Synthetic Test Data Generator | Runnable demo: CSV/XLSX validator, generator oracle, CLI, 36 tests | Multi-sheet workbooks |
+| AI-Assisted Test Design Pipeline | Prototype: 4 templates, schema, governance validator, 17 tests | — |
+| Jira QA Evidence & Release Readiness Tools | Runnable demo (offline): 3 reports, CLI, 19 tests | — |
 
 ---
 
@@ -30,11 +30,11 @@ A runnable Playwright + TypeScript framework with its own fictional logistics ap
 
 A web-based QA toolkit I built to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
 
-- **Status:** Case study — public reference implementation in progress
-- **Stack:** JavaScript, web-based map rendering, road-aware pathing
+- **Status:** Runnable demo
+- **Stack:** TypeScript, Vitest (public demo); the internal tool also uses web map rendering
 - **QA value:** Enables repeatable multi-device GPS scenarios without depending on physical hardware.
 
-[Open case study →](gps-simulation-validation-suite/)
+[Open project →](gps-simulation-validation-suite/)
 
 ---
 
@@ -42,11 +42,11 @@ A web-based QA toolkit I built to simulate GPS activity, build movement paths, v
 
 An independent QA comparison tool I built to validate route-optimizer output across distance, vehicle suitability, capacity, cost, allocation, and operational feasibility. It does not replace a product optimizer; it provides an independent QA comparison layer. Key QA insight: lower total distance does not always mean lower operating cost.
 
-- **Status:** Case study — public reference implementation in progress
-- **Stack:** TypeScript, public routing/map APIs
+- **Status:** Runnable demo
+- **Stack:** TypeScript, Vitest
 - **QA value:** Creates a repeatable, explainable comparison process and catches silent failures (dropped orders, overloads, infeasible routes).
 
-[Open case study →](route-optimizer-validation-workbench/)
+[Open project →](route-optimizer-validation-workbench/)
 
 ---
 
@@ -54,11 +54,11 @@ An independent QA comparison tool I built to validate route-optimizer output acr
 
 A data-validation tool I built to process job and work-order exports, run completeness/consistency/reconciliation checks, and produce an actionable exception summary for release evidence. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
 
-- **Status:** Case study — public reference implementation in progress
-- **Stack:** Python, Pandas, data validation
+- **Status:** Runnable demo
+- **Stack:** Python standard library, pytest, ruff
 - **QA value:** Automates repeated checks across large exports and surfaces exceptions manual review would miss.
 
-[Open case study →](job-master-validation-tool/)
+[Open project →](job-master-validation-tool/)
 
 ---
 
@@ -66,11 +66,11 @@ A data-validation tool I built to process job and work-order exports, run comple
 
 A QA utility I built to validate bulk-upload files, classify data-quality issues (auto-correctable vs needs review), and generate safe synthetic test datasets for regression, negative, workflow, and performance testing.
 
-- **Status:** Case study — public reference implementation in progress
-- **Stack:** Python, Pandas, data validation
+- **Status:** Runnable demo
+- **Stack:** Python, openpyxl, pytest, ruff
 - **QA value:** Removes a common class of false defects and reduces dependence on production data through synthetic test data.
 
-[Open case study →](bulk-upload-validator/)
+[Open project →](bulk-upload-validator/)
 
 ---
 
@@ -78,11 +78,11 @@ A QA utility I built to validate bulk-upload files, classify data-quality issues
 
 A pipeline I built and use to draft structured test cases with AI, then review, refine, and approve them before they enter the test suite: AI Draft → QA Review and Refinement → QA Approval → Test Management Import. QA approval is mandatory.
 
-- **Status:** Prototype workflow — case study; public templates in progress
-- **Stack:** AI-assisted drafting, human review gate
+- **Status:** Prototype workflow with runnable templates, schema and governance validator
+- **Stack:** Prompt templates, JSON Schema, Python (jsonschema), pytest
 - **QA value:** Faster first-pass drafting and more consistent coverage, with QA judgement preserved.
 
-[Open case study →](ai-assisted-test-design/) · [Detailed case study →](case-studies/ai-assisted-test-design.md)
+[Open project →](ai-assisted-test-design/) · [Detailed case study →](case-studies/ai-assisted-test-design.md)
 
 ---
 
@@ -90,11 +90,11 @@ A pipeline I built and use to draft structured test cases with AI, then review, 
 
 Python tools I use in my work to collect Jira ticket data into sanitized local structures, build release-readiness views, track status history, and generate QA evidence reports. No real ticket data, project keys, or credentials are included.
 
-- **Status:** Case study — public Python implementation in progress
-- **Stack:** Python, JSON reporting
+- **Status:** Runnable demo (offline, fictional tickets)
+- **Stack:** Python standard library, pytest, ruff
 - **QA value:** Repeatable, evidence-friendly views of release readiness with a defensible audit trail.
 
-[Open case study →](jira-tools/) · [Detailed case study →](case-studies/jira-qa-workflow-automation.md)
+[Open project →](jira-tools/) · [Detailed case study →](case-studies/jira-qa-workflow-automation.md)
 
 ---
 

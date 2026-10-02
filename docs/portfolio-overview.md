@@ -13,7 +13,7 @@ A guided tour of this repository. Each project documents a QA tool, utility, or 
 4. **Job Master Data Validation & Release Evidence Tool** ([`job-master-validation-tool/`](../job-master-validation-tool/)) — internal QA tool: job/work-order data validation, status consistency, missing-data detection, and release evidence.
 5. **Bulk Upload Validator & Synthetic Test Data Generator** ([`bulk-upload-validator/`](../bulk-upload-validator/)) — internal QA tool: bulk upload data-quality validation and synthetic test-data generation.
 6. **AI-Assisted Test Design Pipeline** ([`ai-assisted-test-design/`](../ai-assisted-test-design/)) — human-reviewed workflow: AI drafts, QA reviews and approves. See also the [detailed case study](../case-studies/ai-assisted-test-design.md).
-7. **Jira QA Evidence & Release Readiness Tools** ([`jira-tools/`](../jira-tools/)) — case study for release-readiness and evidence reporting (public Python implementation in progress). See also the [detailed case study](../case-studies/jira-qa-workflow-automation.md).
+7. **Jira QA Evidence & Release Readiness Tools** ([`jira-tools/`](../jira-tools/)) — offline release-readiness, regression-mapping and status-history tools over fictional tickets. See also the [detailed case study](../case-studies/jira-qa-workflow-automation.md).
 8. **AI and MCP QA Workflows** ([`case-studies/ai-mcp-qa-workflows.md`](../case-studies/ai-mcp-qa-workflows.md)) — AI-assisted data analysis, validation, and reconciliation concepts.
 
 ## What to look at in each project
