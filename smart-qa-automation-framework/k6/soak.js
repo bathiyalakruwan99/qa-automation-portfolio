@@ -1,22 +1,21 @@
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+// SOAK: does performance degrade over time (memory growth, slow leaks)? Moderate load held for a long period.
+// Default duration is short so it can be tried locally; real soak runs use SOAK_DURATION=1h or more.
+import { sleep } from 'k6';
+import { login, shipmentJourney } from './lib/shipment-journey.js';
+import { thresholds } from './lib/thresholds.js';
 
 export const options = {
   stages: [
-    { duration: '2m', target: 20 },
-    { duration: '30m', target: 20 },
-    { duration: '2m', target: 0 },
+    { duration: '30s', target: 5 },
+    { duration: __ENV.SOAK_DURATION || '5m', target: 5 },
+    { duration: '30s', target: 0 },
   ],
-  thresholds: {
-    http_req_failed: ['rate<0.02'],
-    http_req_duration: ['p(95)<2000'],
-  },
+  thresholds,
 };
 
-const BASE_URL = __ENV.BASE_URL || 'https://reqres.in/api';
+export const setup = login;
 
-export default function () {
-  const res = http.get(`${BASE_URL}/users?page=1`);
-  check(res, { 'status is 200': (r) => r.status === 200 });
-  sleep(1);
+export default function (data) {
+  shipmentJourney(data);
+  sleep(2);
 }

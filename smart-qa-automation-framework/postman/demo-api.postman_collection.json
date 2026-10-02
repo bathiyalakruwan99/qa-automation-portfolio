@@ -1,129 +1,227 @@
 {
   "info": {
-    "_postman_id": "a1b2c3d4-0000-0000-0000-000000000001",
-    "name": "Smart QA Agent OS - Demo API",
-    "description": "Sanitized demo collection targeting https://reqres.in. Smoke + regression coverage with status, schema-style, and negative checks.",
+    "name": "Northstar Logistics Demo API",
+    "description": "Collection-based regression for the local Northstar Logistics demo app (fictional). Run with Newman against http://127.0.0.1:3000. Requests run in order: login, then a create/read/negative/cleanup sequence that leaves no data behind.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    { "key": "token", "value": "" },
+    { "key": "shipmentId", "value": "" },
+    { "key": "reference", "value": "" }
+  ],
   "item": [
     {
-      "name": "Smoke - List users page 1",
-      "event": [
+      "name": "Auth",
+      "item": [
         {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
-              "pm.test('response time < 2000ms', function () { pm.expect(pm.response.responseTime).to.be.below(2000); });",
-              "var body = pm.response.json();",
-              "pm.test('returns page 1', function () { pm.expect(body.page).to.eql(1); });",
-              "pm.test('data is non-empty array', function () { pm.expect(body.data).to.be.an('array').and.not.empty; });",
-              "pm.test('first user has required fields', function () {",
-              "  var u = body.data[0];",
-              "  pm.expect(u).to.have.all.keys('id', 'email', 'first_name', 'last_name', 'avatar');",
-              "});"
-            ]
+          "name": "PM-001 Login returns a bearer token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('token issued', () => pm.expect(body.token).to.match(/^demo-[0-9a-f]{32}$/));",
+                  "pm.collectionVariables.set('token', body.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"email\": \"{{email}}\", \"password\": \"{{password}}\" }" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
           }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users?page=1",
-          "host": ["{{baseUrl}}"],
-          "path": ["users"],
-          "query": [{ "key": "page", "value": "1" }]
-        }
-      }
-    },
-    {
-      "name": "Regression - Get single user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
-              "var body = pm.response.json();",
-              "pm.test('user id is 2', function () { pm.expect(body.data.id).to.eql(2); });",
-              "pm.test('email looks valid', function () { pm.expect(body.data.email).to.match(/.+@.+\\..+/); });"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users/2",
-          "host": ["{{baseUrl}}"],
-          "path": ["users", "2"]
-        }
-      }
-    },
-    {
-      "name": "Regression - Unknown user returns 404",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('status is 404', function () { pm.response.to.have.status(404); });"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users/99999",
-          "host": ["{{baseUrl}}"],
-          "path": ["users", "99999"]
-        }
-      }
-    },
-    {
-      "name": "Regression - Create user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('status is 201', function () { pm.response.to.have.status(201); });",
-              "var body = pm.response.json();",
-              "pm.test('echoes back name and job', function () {",
-              "  pm.expect(body.name).to.eql('qa-demo');",
-              "  pm.expect(body.job).to.eql('qa-engineer');",
-              "});",
-              "pm.test('returns id and createdAt', function () {",
-              "  pm.expect(body).to.have.property('id');",
-              "  pm.expect(body).to.have.property('createdAt');",
-              "});"
-            ]
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json" }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"qa-demo\",\n  \"job\": \"qa-engineer\"\n}"
         },
-        "url": {
-          "raw": "{{baseUrl}}/users",
-          "host": ["{{baseUrl}}"],
-          "path": ["users"]
+        {
+          "name": "PM-002 Request without a token is rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 401', () => pm.response.to.have.status(401));",
+                  "pm.test('error code UNAUTHORIZED', () => pm.expect(pm.response.json().error.code).to.eql('UNAUTHORIZED'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/demo/shipments", "host": ["{{baseUrl}}"], "path": ["api", "demo", "shipments"] }
+          }
         }
-      }
+      ]
+    },
+    {
+      "name": "Shipments",
+      "item": [
+        {
+          "name": "PM-003 Create a shipment",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": { "exec": ["pm.collectionVariables.set('reference', 'PM-' + Date.now());"] }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 201', () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.test('created in CREATED state', () => pm.expect(body.status).to.eql('CREATED'));",
+                  "pm.test('echoes the reference', () => pm.expect(body.reference).to.eql(pm.collectionVariables.get('reference')));",
+                  "pm.test('response time under 500 ms', () => pm.expect(pm.response.responseTime).to.be.below(500));",
+                  "pm.collectionVariables.set('shipmentId', body.shipmentId);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"{{reference}}\",\n  \"customerId\": \"CUSTOMER-ALPHA\",\n  \"vehicleType\": \"TRUCK\",\n  \"origin\": \"WAREHOUSE-ALPHA\",\n  \"destination\": \"CUSTOMER-SITE-BETA\",\n  \"weightKg\": 1200\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/demo/shipments", "host": ["{{baseUrl}}"], "path": ["api", "demo", "shipments"] }
+          }
+        },
+        {
+          "name": "PM-004 Retrieve the shipment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('same shipment', () => pm.expect(pm.response.json().shipmentId).to.eql(pm.collectionVariables.get('shipmentId')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/shipments/{{shipmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "demo", "shipments", "{{shipmentId}}"]
+            }
+          }
+        },
+        {
+          "name": "PM-005 Duplicate reference is rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('error code DUPLICATE_REFERENCE', () => pm.expect(pm.response.json().error.code).to.eql('DUPLICATE_REFERENCE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"{{reference}}\",\n  \"customerId\": \"CUSTOMER-ALPHA\",\n  \"vehicleType\": \"TRUCK\",\n  \"origin\": \"WAREHOUSE-ALPHA\",\n  \"destination\": \"CUSTOMER-SITE-BETA\",\n  \"weightKg\": 1200\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/demo/shipments", "host": ["{{baseUrl}}"], "path": ["api", "demo", "shipments"] }
+          }
+        },
+        {
+          "name": "PM-006 Missing customer is rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 400', () => pm.response.to.have.status(400));",
+                  "const err = pm.response.json().error;",
+                  "pm.test('REQUIRED_FIELD on customerId', () => { pm.expect(err.code).to.eql('REQUIRED_FIELD'); pm.expect(err.field).to.eql('customerId'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reference\": \"PM-NO-CUSTOMER\",\n  \"vehicleType\": \"TRUCK\",\n  \"origin\": \"WAREHOUSE-ALPHA\",\n  \"destination\": \"CUSTOMER-SITE-BETA\",\n  \"weightKg\": 1200\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/demo/shipments", "host": ["{{baseUrl}}"], "path": ["api", "demo", "shipments"] }
+          }
+        },
+        {
+          "name": "PM-007 Illegal status jump is rejected",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 409', () => pm.response.to.have.status(409));",
+                  "pm.test('error code ILLEGAL_TRANSITION', () => pm.expect(pm.response.json().error.code).to.eql('ILLEGAL_TRANSITION'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"status\": \"DELIVERED\" }" },
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/shipments/{{shipmentId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "demo", "shipments", "{{shipmentId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "PM-008 Delete the shipment (cleanup)",
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('status 204', () => pm.response.to.have.status(204));"] }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/shipments/{{shipmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "demo", "shipments", "{{shipmentId}}"]
+            }
+          }
+        },
+        {
+          "name": "PM-009 Deleted shipment is gone",
+          "event": [
+            {
+              "listen": "test",
+              "script": { "exec": ["pm.test('status 404', () => pm.response.to.have.status(404));"] }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/demo/shipments/{{shipmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "demo", "shipments", "{{shipmentId}}"]
+            }
+          }
+        }
+      ]
     }
-  ]
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  }
 }

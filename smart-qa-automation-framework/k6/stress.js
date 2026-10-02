@@ -1,23 +1,21 @@
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+// STRESS: where does degradation begin? Step load well past normal and watch latency and errors per stage.
+import { sleep } from 'k6';
+import { login, shipmentJourney } from './lib/shipment-journey.js';
+import { stressThresholds } from './lib/thresholds.js';
 
 export const options = {
   stages: [
-    { duration: '1m', target: 50 },
-    { duration: '2m', target: 100 },
-    { duration: '2m', target: 200 },
-    { duration: '1m', target: 0 },
+    { duration: '30s', target: 10 },
+    { duration: '30s', target: 25 },
+    { duration: '30s', target: 50 },
+    { duration: '30s', target: 0 },
   ],
-  thresholds: {
-    http_req_failed: ['rate<0.05'],
-    http_req_duration: ['p(95)<3500'],
-  },
+  thresholds: stressThresholds,
 };
 
-const BASE_URL = __ENV.BASE_URL || 'https://reqres.in/api';
+export const setup = login;
 
-export default function () {
-  const res = http.get(`${BASE_URL}/users?page=1`);
-  check(res, { 'status is 200': (r) => r.status === 200 });
+export default function (data) {
+  shipmentJourney(data);
   sleep(0.5);
 }
