@@ -25,9 +25,12 @@ A guided tour of this repository. Each project documents a QA tool, utility, or 
 
 Start with the framework README for the runnable suite. Inside [`ai-agent-os/`](../smart-qa-automation-framework/ai-agent-os/) the documentation shows the full operating model: the AI QA operating model overview, architecture and flow diagrams, the agents and workflow docs, capability maturity labelling, and synthetic QA artifact examples. Locator/test-healing is presented as a guided, human-reviewed investigation workflow, not a fully autonomous runtime auto-healer.
 
-## Sanitized artifact examples
+## Report templates
 
-See [`assets/sample-artifacts/`](../assets/sample-artifacts/) for synthetic, non-runnable QA artifact examples (BDD scenarios, POM responsibilities, hybrid flow, failure classification, locator-healing flow, memory update, release-gate summary, performance test plan). All examples use fictional identifiers only.
+Blank templates for the documents the QA workflow produces (BDD scenario, locator-healing review, memory update,
+release-gate report, per-module reports) are in
+[`smart-qa-automation-framework/ai-agent-os/templates/`](../smart-qa-automation-framework/ai-agent-os/templates/) and
+the module template. Real outputs come from running the projects; each README shows them.
 
 ## Coverage at a glance
 

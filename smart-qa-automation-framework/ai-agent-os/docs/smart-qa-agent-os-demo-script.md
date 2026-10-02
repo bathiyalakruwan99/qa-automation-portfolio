@@ -47,7 +47,7 @@ Voice-over:
 
 ## Scene 5 - Evidence and Confidentiality (1:05 - 1:25)
 
-Visual: Open `sample-artifacts/sample-release-gate-report.md` then `sample-artifacts/sample-evidence-summary.md`. Briefly highlight the "Synthetic example for portfolio demonstration" label at the top.
+Visual: Open `templates/release-gate-report.md`, then run `python -m jira_tools release-report` in `jira-tools/` to show a real, generated readiness report.
 
 Voice-over:
 > "Every artifact is synthetic and labelled. No real prompts, selectors, customer data, internal codenames, or proprietary workflows are exposed. What is shown here is the operating model, not the private implementation."

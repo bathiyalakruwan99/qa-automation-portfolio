@@ -31,7 +31,7 @@ The public version uses fictional examples, synthetic artifacts, and high-level 
 | [`k6/`](../k6/) | k6 smoke, load, stress and soak scripts against the local demo app (learning) |
 | [`prompts/`](prompts/) | Sanitized prompt templates for master orchestration, test planning, BDD/POM automation, execution/healing, memory update, and manual bug hunting |
 | [`qa-graph-tool/`](qa-graph-tool/) | Architecture overview of a local visualization tool that renders the operating model as an interactive graph |
-| [`sample-artifacts/`](sample-artifacts/) | Synthetic sample artifacts: test plan, BDD scenario, API validation result, release gate report, failure classification, memory update, evidence summary |
+| [`templates/`](templates/) | Blank report templates: BDD scenario, locator-healing review, memory update, release-gate report |
 | [`scripts/`](scripts/) | Sample utility scripts for secret scanning, evidence cleanup, Newman runs, memory-triggered test execution, and report generation |
 | [`test-data/`](test-data/) | Synthetic demo test data for users and todos |
 | [`evidence-samples/`](evidence-samples/) | Evidence sample placeholders |

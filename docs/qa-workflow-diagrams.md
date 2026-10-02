@@ -90,11 +90,8 @@ flowchart LR
     Ready --> Sum
 ```
 
-## Synthetic Sample Reports
+## Real outputs and blank templates
 
-Fictional, non-runnable examples that show the shape of QA evidence:
-
-- [Synthetic failure-classification report →](../assets/sample-artifacts/sample-failure-classification.md)
-- [Synthetic release-gate report →](../assets/sample-artifacts/sample-release-gate-summary.md)
-- [Synthetic QA memory update example →](../assets/sample-artifacts/sample-memory-update.md)
-- [All synthetic QA artifacts →](../assets/sample-artifacts/)
+- Real outputs produced by this repository: the framework's Playwright report and failure classification, the
+  state engine's `workflow-evidence.json`, and each QA tool's `sample-output/`.
+- Blank report templates: [`../smart-qa-automation-framework/ai-agent-os/templates/`](../smart-qa-automation-framework/ai-agent-os/templates/).

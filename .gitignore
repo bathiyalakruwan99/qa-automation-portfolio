@@ -74,7 +74,5 @@ output/
 !**/sample-data/**
 !**/test-data/
 !**/test-data/**
-!assets/sample-reports/
-!assets/sample-reports/**
 !**/sample-output/
 !**/sample-output/**
