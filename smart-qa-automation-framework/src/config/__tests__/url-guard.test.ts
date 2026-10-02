@@ -21,7 +21,7 @@ describe('isSafeHost', () => {
 
 describe('assertSafeBaseUrl', () => {
   it('returns the parsed URL for a local target', () => {
-    expect(assertSafeBaseUrl('http://localhost:3000').port).toBe('3000');
+    expect(assertSafeBaseUrl('http://127.0.0.1:3000').port).toBe('3000');
   });
 
   it('rejects a public host by default', () => {
@@ -44,7 +44,7 @@ describe('assertSafeBaseUrl', () => {
 describe('loadEnv', () => {
   it('uses local demo defaults', () => {
     expect(loadEnv({})).toEqual({
-      baseUrl: 'http://localhost:3000',
+      baseUrl: 'http://127.0.0.1:3000',
       username: 'demo.user@example.test',
       password: 'demo-password',
     });

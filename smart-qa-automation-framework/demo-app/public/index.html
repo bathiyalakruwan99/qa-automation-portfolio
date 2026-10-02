@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in · Northstar Logistics (demo)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="login">
+    <header class="topbar">
+      <span class="brand">Northstar Logistics</span>
+      <span class="demo-tag">Fictional demo app</span>
+    </header>
+    <main class="narrow">
+      <h1>Sign in</h1>
+      <form id="login-form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <p id="login-error" class="error" role="alert" hidden></p>
+        <button type="submit">Sign in</button>
+      </form>
+      <p class="hint">Demo account: <code>demo.user@example.test</code> / <code>demo-password</code></p>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

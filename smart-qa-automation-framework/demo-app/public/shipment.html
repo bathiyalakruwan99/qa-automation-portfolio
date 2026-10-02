@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shipment · Northstar Logistics (demo)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="shipment">
+    <header class="topbar">
+      <span class="brand">Northstar Logistics</span>
+      <span class="demo-tag">Fictional demo app</span>
+      <a href="shipments.html">Back to shipments</a>
+    </header>
+    <main data-testid="shipment-detail" data-state="loading">
+      <h1 id="shipment-title">Shipment</h1>
+      <p id="detail-error" class="error" role="alert" hidden></p>
+
+      <section class="card" aria-label="Shipment summary">
+        <dl class="summary">
+          <dt>Status</dt>
+          <dd><span class="badge" data-testid="shipment-status"></span></dd>
+          <dt>Reference</dt>
+          <dd data-testid="shipment-reference"></dd>
+          <dt>Customer</dt>
+          <dd data-testid="shipment-customer"></dd>
+          <dt>Route</dt>
+          <dd data-testid="shipment-route"></dd>
+          <dt>Weight</dt>
+          <dd data-testid="shipment-weight"></dd>
+          <dt>Vehicle</dt>
+          <dd data-testid="shipment-vehicle"></dd>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="actions-heading">
+        <h2 id="actions-heading">Actions</h2>
+        <div class="actions">
+          <label for="vehicle-select">Vehicle</label>
+          <select id="vehicle-select"></select>
+          <button type="button" data-action="assign">Assign vehicle</button>
+          <button type="button" data-action="plan">Plan route</button>
+          <button type="button" data-action="start">Start journey</button>
+          <button type="button" data-action="close">Close shipment</button>
+          <button type="button" data-action="cancel" class="danger">Cancel shipment</button>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="tasks-heading">
+        <h2 id="tasks-heading">Journey tasks</h2>
+        <ol id="tasks" aria-label="Journey tasks"></ol>
+        <p id="no-tasks">Tasks appear when the journey starts.</p>
+      </section>
+
+      <section class="card" aria-labelledby="history-heading">
+        <h2 id="history-heading">History</h2>
+        <ol id="history" aria-label="Status history"></ol>
+      </section>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -17,6 +17,13 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "demo-app/src/**/*.ts", "demo-app/__tests__/**/*.ts", "*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "demo-app/src/**/*.ts",
+    "demo-app/__tests__/**/*.ts",
+    "*.ts",
+    "*.mts"
+  ],
   "exclude": ["node_modules", "examples", "ai-agent-os"]
 }
