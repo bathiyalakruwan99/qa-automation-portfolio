@@ -3,7 +3,6 @@ package-lock.json
 playwright-report
 test-results
 reports
-examples
 ai-agent-os
 k6
 postman

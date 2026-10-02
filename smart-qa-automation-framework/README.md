@@ -228,4 +228,3 @@ It exists to demonstrate QA engineering patterns, not to reproduce a production 
 - [`ai-agent-os/`](ai-agent-os/): the human-governed AI QA operating model, with 10 core roles.
 - [`k6/`](k6/): performance scripts and threshold rationale (learning).
 - [`postman/`](postman/): the Newman collection.
-- [`examples/checkout-reference/`](examples/checkout-reference/): an earlier layering example (reference only).

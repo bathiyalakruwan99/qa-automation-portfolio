@@ -25,5 +25,5 @@
     "*.ts",
     "*.mts"
   ],
-  "exclude": ["node_modules", "examples", "ai-agent-os"]
+  "exclude": ["node_modules", "ai-agent-os"]
 }
