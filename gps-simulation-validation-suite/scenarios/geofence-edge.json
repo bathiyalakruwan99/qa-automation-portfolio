@@ -1,0 +1,52 @@
+{
+  "_note": "Synthetic demo coordinates near a public reference point. Not derived from production or customer data.",
+  "name": "geofence-edge",
+  "description": "Two fences beside the route: one the route clips 10 m inside its edge, one it misses by 30 m.",
+  "vehicle": "TRUCK-001",
+  "startTime": "2026-01-05T08:00:00Z",
+  "speedKmh": 36,
+  "sampleIntervalS": 10,
+  "noiseM": 0,
+  "route": [
+    {
+      "lat": 37.7749,
+      "lng": -122.4194
+    },
+    {
+      "lat": 37.779,
+      "lng": -122.41
+    },
+    {
+      "lat": 37.784,
+      "lng": -122.404
+    },
+    {
+      "lat": 37.789,
+      "lng": -122.399
+    }
+  ],
+  "geofences": [
+    {
+      "id": "EDGE-INSIDE",
+      "center": {
+        "lat": 37.780943,
+        "lng": -122.406257
+      },
+      "radiusM": 100
+    },
+    {
+      "id": "EDGE-OUTSIDE",
+      "center": {
+        "lat": 37.780695,
+        "lng": -122.405927
+      },
+      "radiusM": 100
+    }
+  ],
+  "events": [],
+  "expect": {
+    "deviation": false,
+    "geofenceEvents": ["ENTER:EDGE-INSIDE", "EXIT:EDGE-INSIDE"],
+    "dataQuality": []
+  }
+}

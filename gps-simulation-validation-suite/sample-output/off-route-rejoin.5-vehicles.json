@@ -1,0 +1,338 @@
+{
+  "scenario": "off-route-rejoin",
+  "seed": 7,
+  "devices": [
+    {
+      "deviceId": "TRUCK-001",
+      "points": 26,
+      "adherence": {
+        "deviations": [
+          {
+            "startedAt": "2026-01-05T08:01:00.000Z",
+            "maxDistanceM": 252.09586427662364,
+            "rejoinedAt": "2026-01-05T08:02:00.000Z"
+          }
+        ]
+      },
+      "stops": [],
+      "geofenceEvents": [
+        {
+          "type": "ENTER",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:00:00.000Z"
+        },
+        {
+          "type": "EXIT",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:00:20.000Z",
+          "dwellS": 20
+        },
+        {
+          "type": "ENTER",
+          "geofenceId": "CUSTOMER-SITE-BETA",
+          "timestamp": "2026-01-05T08:03:50.000Z"
+        }
+      ],
+      "dataQuality": [],
+      "checks": [
+        {
+          "name": "deviation detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "rejoin detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "stops",
+          "expected": "0",
+          "actual": "0",
+          "pass": true
+        },
+        {
+          "name": "geofence events",
+          "expected": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "actual": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "pass": true
+        },
+        {
+          "name": "data-quality issues",
+          "expected": "[]",
+          "actual": "[]",
+          "pass": true
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "deviceId": "TRUCK-002",
+      "points": 26,
+      "adherence": {
+        "deviations": [
+          {
+            "startedAt": "2026-01-05T08:01:30.000Z",
+            "maxDistanceM": 250.52901805468838,
+            "rejoinedAt": "2026-01-05T08:02:30.000Z"
+          }
+        ]
+      },
+      "stops": [],
+      "geofenceEvents": [
+        {
+          "type": "ENTER",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:00:30.000Z"
+        },
+        {
+          "type": "EXIT",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:00:50.000Z",
+          "dwellS": 20
+        },
+        {
+          "type": "ENTER",
+          "geofenceId": "CUSTOMER-SITE-BETA",
+          "timestamp": "2026-01-05T08:04:20.000Z"
+        }
+      ],
+      "dataQuality": [],
+      "checks": [
+        {
+          "name": "deviation detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "rejoin detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "stops",
+          "expected": "0",
+          "actual": "0",
+          "pass": true
+        },
+        {
+          "name": "geofence events",
+          "expected": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "actual": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "pass": true
+        },
+        {
+          "name": "data-quality issues",
+          "expected": "[]",
+          "actual": "[]",
+          "pass": true
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "deviceId": "TRUCK-003",
+      "points": 26,
+      "adherence": {
+        "deviations": [
+          {
+            "startedAt": "2026-01-05T08:02:00.000Z",
+            "maxDistanceM": 252.01135575850483,
+            "rejoinedAt": "2026-01-05T08:03:00.000Z"
+          }
+        ]
+      },
+      "stops": [],
+      "geofenceEvents": [
+        {
+          "type": "ENTER",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:01:00.000Z"
+        },
+        {
+          "type": "EXIT",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:01:20.000Z",
+          "dwellS": 20
+        },
+        {
+          "type": "ENTER",
+          "geofenceId": "CUSTOMER-SITE-BETA",
+          "timestamp": "2026-01-05T08:04:50.000Z"
+        }
+      ],
+      "dataQuality": [],
+      "checks": [
+        {
+          "name": "deviation detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "rejoin detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "stops",
+          "expected": "0",
+          "actual": "0",
+          "pass": true
+        },
+        {
+          "name": "geofence events",
+          "expected": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "actual": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "pass": true
+        },
+        {
+          "name": "data-quality issues",
+          "expected": "[]",
+          "actual": "[]",
+          "pass": true
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "deviceId": "TRUCK-004",
+      "points": 26,
+      "adherence": {
+        "deviations": [
+          {
+            "startedAt": "2026-01-05T08:02:30.000Z",
+            "maxDistanceM": 252.7447892469088,
+            "rejoinedAt": "2026-01-05T08:03:30.000Z"
+          }
+        ]
+      },
+      "stops": [],
+      "geofenceEvents": [
+        {
+          "type": "ENTER",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:01:30.000Z"
+        },
+        {
+          "type": "EXIT",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:01:50.000Z",
+          "dwellS": 20
+        },
+        {
+          "type": "ENTER",
+          "geofenceId": "CUSTOMER-SITE-BETA",
+          "timestamp": "2026-01-05T08:05:20.000Z"
+        }
+      ],
+      "dataQuality": [],
+      "checks": [
+        {
+          "name": "deviation detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "rejoin detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "stops",
+          "expected": "0",
+          "actual": "0",
+          "pass": true
+        },
+        {
+          "name": "geofence events",
+          "expected": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "actual": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "pass": true
+        },
+        {
+          "name": "data-quality issues",
+          "expected": "[]",
+          "actual": "[]",
+          "pass": true
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "deviceId": "TRUCK-005",
+      "points": 26,
+      "adherence": {
+        "deviations": [
+          {
+            "startedAt": "2026-01-05T08:03:00.000Z",
+            "maxDistanceM": 252.01140991961367,
+            "rejoinedAt": "2026-01-05T08:04:00.000Z"
+          }
+        ]
+      },
+      "stops": [],
+      "geofenceEvents": [
+        {
+          "type": "ENTER",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:02:00.000Z"
+        },
+        {
+          "type": "EXIT",
+          "geofenceId": "WAREHOUSE-ALPHA",
+          "timestamp": "2026-01-05T08:02:20.000Z",
+          "dwellS": 20
+        },
+        {
+          "type": "ENTER",
+          "geofenceId": "CUSTOMER-SITE-BETA",
+          "timestamp": "2026-01-05T08:05:50.000Z"
+        }
+      ],
+      "dataQuality": [],
+      "checks": [
+        {
+          "name": "deviation detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "rejoin detected",
+          "expected": "true",
+          "actual": "true",
+          "pass": true
+        },
+        {
+          "name": "stops",
+          "expected": "0",
+          "actual": "0",
+          "pass": true
+        },
+        {
+          "name": "geofence events",
+          "expected": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "actual": "[\"ENTER:WAREHOUSE-ALPHA\",\"EXIT:WAREHOUSE-ALPHA\",\"ENTER:CUSTOMER-SITE-BETA\"]",
+          "pass": true
+        },
+        {
+          "name": "data-quality issues",
+          "expected": "[]",
+          "actual": "[]",
+          "pass": true
+        }
+      ],
+      "result": "PASS"
+    }
+  ],
+  "totalPoints": 130,
+  "result": "PASS"
+}

@@ -1,0 +1,75 @@
+{
+  "_note": "Synthetic demo coordinates near a public reference point. Not derived from production or customer data.",
+  "name": "data-quality",
+  "description": "A duplicated fix and a fix delivered out of order, as an unreliable device might send them.",
+  "vehicle": "TRUCK-001",
+  "startTime": "2026-01-05T08:00:00Z",
+  "speedKmh": 36,
+  "sampleIntervalS": 10,
+  "noiseM": 3,
+  "route": [
+    {
+      "lat": 37.7749,
+      "lng": -122.4194
+    },
+    {
+      "lat": 37.779,
+      "lng": -122.41
+    },
+    {
+      "lat": 37.784,
+      "lng": -122.404
+    },
+    {
+      "lat": 37.789,
+      "lng": -122.399
+    }
+  ],
+  "geofences": [
+    {
+      "id": "WAREHOUSE-ALPHA",
+      "center": {
+        "lat": 37.7749,
+        "lng": -122.4194
+      },
+      "radiusM": 150
+    },
+    {
+      "id": "ZONE-GAMMA",
+      "center": {
+        "lat": 37.779,
+        "lng": -122.41
+      },
+      "radiusM": 120
+    },
+    {
+      "id": "CUSTOMER-SITE-BETA",
+      "center": {
+        "lat": 37.789,
+        "lng": -122.399
+      },
+      "radiusM": 150
+    }
+  ],
+  "events": [
+    {
+      "type": "DUPLICATE",
+      "atIndex": 4
+    },
+    {
+      "type": "OUT_OF_ORDER",
+      "atIndex": 8
+    }
+  ],
+  "expect": {
+    "deviation": false,
+    "geofenceEvents": [
+      "ENTER:WAREHOUSE-ALPHA",
+      "EXIT:WAREHOUSE-ALPHA",
+      "ENTER:ZONE-GAMMA",
+      "EXIT:ZONE-GAMMA",
+      "ENTER:CUSTOMER-SITE-BETA"
+    ],
+    "dataQuality": ["DUPLICATE_POINT", "OUT_OF_ORDER"]
+  }
+}

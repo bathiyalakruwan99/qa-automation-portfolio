@@ -1,0 +1,72 @@
+{
+  "_note": "Synthetic demo coordinates near a public reference point. Not derived from production or customer data.",
+  "name": "off-route-rejoin",
+  "description": "Vehicle leaves the planned route by 250 m, misses the Zone Gamma checkpoint, then rejoins.",
+  "vehicle": "TRUCK-001",
+  "startTime": "2026-01-05T08:00:00Z",
+  "speedKmh": 36,
+  "sampleIntervalS": 10,
+  "noiseM": 3,
+  "route": [
+    {
+      "lat": 37.7749,
+      "lng": -122.4194
+    },
+    {
+      "lat": 37.779,
+      "lng": -122.41
+    },
+    {
+      "lat": 37.784,
+      "lng": -122.404
+    },
+    {
+      "lat": 37.789,
+      "lng": -122.399
+    }
+  ],
+  "geofences": [
+    {
+      "id": "WAREHOUSE-ALPHA",
+      "center": {
+        "lat": 37.7749,
+        "lng": -122.4194
+      },
+      "radiusM": 150
+    },
+    {
+      "id": "ZONE-GAMMA",
+      "center": {
+        "lat": 37.779,
+        "lng": -122.41
+      },
+      "radiusM": 120
+    },
+    {
+      "id": "CUSTOMER-SITE-BETA",
+      "center": {
+        "lat": 37.789,
+        "lng": -122.399
+      },
+      "radiusM": 150
+    }
+  ],
+  "events": [
+    {
+      "type": "DEVIATE",
+      "atIndex": 6,
+      "offsetM": 250
+    },
+    {
+      "type": "REJOIN",
+      "atIndex": 12
+    }
+  ],
+  "expect": {
+    "deviation": true,
+    "rejoin": true,
+    "stops": 0,
+    "geofenceEvents": ["ENTER:WAREHOUSE-ALPHA", "EXIT:WAREHOUSE-ALPHA", "ENTER:CUSTOMER-SITE-BETA"],
+    "dataQuality": []
+  }
+}

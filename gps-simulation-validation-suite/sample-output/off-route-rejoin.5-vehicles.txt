@@ -1,0 +1,46 @@
+Scenario: off-route-rejoin
+Seed: 7
+
+Vehicles: 5
+Points generated: 130
+
+TRUCK-001
+  Deviation: detected (max 252 m off route)
+  Rejoin: detected
+  Stops: 0
+  Geofence events: ENTER WAREHOUSE-ALPHA, EXIT WAREHOUSE-ALPHA (dwell 20 s), ENTER CUSTOMER-SITE-BETA
+  Data quality: clean
+  PASS  deviation detected (expected true, got true)
+  PASS  rejoin detected (expected true, got true)
+  PASS  stops (expected 0, got 0)
+  PASS  geofence events (expected ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"], got ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"])
+  PASS  data-quality issues (expected [], got [])
+
+TRUCK-002
+  Deviation: detected (max 251 m off route)
+  Rejoin: detected
+  Stops: 0
+  Geofence events: ENTER WAREHOUSE-ALPHA, EXIT WAREHOUSE-ALPHA (dwell 20 s), ENTER CUSTOMER-SITE-BETA
+  Data quality: clean
+  PASS  deviation detected (expected true, got true)
+  PASS  rejoin detected (expected true, got true)
+  PASS  stops (expected 0, got 0)
+  PASS  geofence events (expected ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"], got ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"])
+  PASS  data-quality issues (expected [], got [])
+
+TRUCK-003
+  Deviation: detected (max 252 m off route)
+  Rejoin: detected
+  Stops: 0
+  Geofence events: ENTER WAREHOUSE-ALPHA, EXIT WAREHOUSE-ALPHA (dwell 20 s), ENTER CUSTOMER-SITE-BETA
+  Data quality: clean
+  PASS  deviation detected (expected true, got true)
+  PASS  rejoin detected (expected true, got true)
+  PASS  stops (expected 0, got 0)
+  PASS  geofence events (expected ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"], got ["ENTER:WAREHOUSE-ALPHA","EXIT:WAREHOUSE-ALPHA","ENTER:CUSTOMER-SITE-BETA"])
+  PASS  data-quality issues (expected [], got [])
+
+2 more vehicle(s): all PASS
+
+Result: PASS
+
