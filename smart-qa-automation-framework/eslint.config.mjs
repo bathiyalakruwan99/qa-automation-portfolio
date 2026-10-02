@@ -22,9 +22,17 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
       'no-console': 'off',
     },
+  },
+  {
+    // Playwright fixtures must destructure their (possibly empty) dependency object.
+    files: ['src/fixtures/**/*.ts'],
+    rules: { 'no-empty-pattern': 'off' },
   },
   {
     // Browser script of the demo app UI.
