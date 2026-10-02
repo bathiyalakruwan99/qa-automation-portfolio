@@ -1,7 +1,7 @@
 # Smart QA Automation Framework
 
 **Playwright + TypeScript reference framework with its own system under test.** Clone it, run `npm test`, and
-31 UI, API, hybrid and state-engine tests run against a local fictional logistics app. No credentials, VPN or
+30 UI, API, hybrid and state-engine tests (plus an auth setup step) run against a local fictional logistics app. No credentials, VPN or
 external services are needed.
 
 ## Project Status
@@ -119,7 +119,8 @@ npm run test:unit        # Vitest: utilities, state engine, demo app
 npm run verify           # typecheck + lint + format check + unit tests
 npm run report           # open the last HTML report
 
-npm run demo:start       # run the demo app yourself: http://127.0.0.1:3000 (demo.user@example.test / demo-password)
+npm run demo:start:test  # run the demo app yourself: http://127.0.0.1:3000 (demo.user@example.test / demo-password)
+                         # (plain `demo:start` has no test hooks; `npm test` would reuse it and fail on reset)
 npm run test:postman     # Newman collection (needs the app running)
 npm run perf:smoke       # k6 smoke (needs k6 and the app running)
 ```
@@ -145,7 +146,7 @@ npm run perf:smoke       # k6 smoke (needs k6 and the app running)
 
 ## 7. Sample output
 
-From a local run on 2026-10-02 (`npm test`, 1 worker):
+From a local run on 2026-10-02 (`npm test`, 1 worker; the count includes the auth setup step):
 
 ```text
 Running 31 tests using 1 worker
@@ -168,7 +169,7 @@ Evidence attached to ENGINE-004 (`workflow-evidence.json`):
 }
 ```
 
-Failure classification, from a deliberate mutation run where the demo app was changed to accept duplicate
+Failure classification, from a deliberate fault-injection run where the demo app was changed to accept duplicate
 references:
 
 ```json
@@ -188,7 +189,7 @@ All captured from the demo app and a real local run ([`../assets/`](../assets/))
 | --- | --- |
 | <img src="../assets/screenshots/demo-app-shipments.png" alt="Shipment list" width="420"/> | <img src="../assets/screenshots/demo-app-shipment-in-transit.png" alt="Shipment in transit" width="420"/> |
 
-The Playwright HTML report of a full local run, 31/31 passed:
+The Playwright HTML report of a full local run, all passed (30 tests + auth setup):
 [`playwright-report.png`](../assets/screenshots/playwright-report.png).
 
 While these screenshots were being reviewed, two UI bugs in the demo app came to light: a disabled "Cancel
@@ -200,7 +201,7 @@ first. It fails with the fix removed and passes with it.
 - **Unit tests:** 116 (Vitest) covering the URL guard, redaction, schema validation, seeded data, the
   failure classifier, the state engine, and the demo app's validation, workflow and HTTP behaviour.
 - **Stability:** UI, hybrid and engine specs were each run with `--repeat-each=3` with no flaky results.
-- **Mutation checks:** each suite was shown to fail when the app is broken on purpose. A 409 changed to 400 is
+- **Deliberate fault injection:** each suite was shown to fail when the app is broken on purpose (hand-made faults, not a mutation-testing tool). A 409 changed to 400 is
   caught by API-005b; enabling "Plan route" too early is caught by UI-005; accepting duplicate references is
   caught by API-009 and classified `PRODUCT_DEFECT`.
 - **CI:** rehearsed in a fresh clone with `npm ci` and `CI=1`, then verified on GitHub Actions. On the first run

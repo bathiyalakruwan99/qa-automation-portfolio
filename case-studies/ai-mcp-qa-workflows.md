@@ -49,7 +49,7 @@ For a fictional batch of records (`DEMO-JOB-1001` … `DEMO-JOB-1010`), an MCP w
 
 ## QA Value
 
-- Cuts repetitive analysis time from hours to minutes
+- Reduces repetitive analysis effort (no measured benchmark is published; the gain depends on the data and the review depth)
 - Applies consistent rules across releases
 - Produces structured, evidence-friendly reports
 - Frees QA time for exploratory and risk-based testing

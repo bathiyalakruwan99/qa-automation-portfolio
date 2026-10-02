@@ -137,7 +137,7 @@ The GPS simulator and route-output validator are **Node/TypeScript libraries wit
 
 - Their logic (interpolation, geofence math, capacity and allocation checks) is best proven by fast, deterministic unit tests.
 - A CLI with a readable report is the shape a QA utility actually takes in practice.
-- A single static `viewer.html` (Leaflet from a CDN) can load the generated JSON report to draw the path, geofence and deviation points. It exists only for screenshots and GIFs; **no test depends on it**, so it cannot make the suite flaky.
+- `--viewer` writes a self-contained HTML page with an inline SVG map (route, geofences, tracks, off-route fixes). It loads no map tiles or scripts, so it works offline and its screenshots are deterministic. The viewer has its own unit tests, and **no other test depends on it**, so it cannot make the suite flaky.
 
 All coordinates are synthetic, around a public, unrelated reference point, and marked as such.
 

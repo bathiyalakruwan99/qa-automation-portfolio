@@ -55,7 +55,7 @@ This repository contains a mix of actively used QA practices, implemented protot
 | QA Knowledge Capture | Implemented Prototype | Organises reusable QA knowledge such as flows, risks, validation rules, test-data dependencies, defects, and lessons learned. |
 | Playwright Test Design | Actively Used | Supports Playwright test planning, BDD scenario drafting, Page Object Model design, reusable test-flow ideas, and test-data planning. |
 | Locator Healing | Actively Used / Learning | Supports structured investigation of locator instability, DOM or workflow changes, timing issues, and safer locator-selection approaches. Suggested changes require human QA review before adoption. |
-| Playwright Test Execution | Runnable Demo | 31 Playwright tests run against the local demo app, with traces, reports and failure classification ([framework](../)). |
+| Playwright Test Execution | Runnable Demo | 30 Playwright tests (+ auth setup) run against the local demo app, with traces, reports and failure classification ([framework](../)). |
 | API and Hybrid Testing | Runnable Demo | Typed API clients, contract schemas, API-001..011 and HYBRID-001..002 in the [framework](../). |
 | Postman and Newman | Runnable Demo | PM-001..009 collection against the local demo app. |
 | k6 Performance Testing | Learning | Smoke, load, stress and soak scripts against the local demo app; only smoke has been run. |

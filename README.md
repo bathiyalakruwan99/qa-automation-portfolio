@@ -7,7 +7,6 @@ Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Valida
 [![CI](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
-[![QA Tools](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/qa-tools.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
@@ -18,7 +17,7 @@ QA Engineer focused on product quality, test automation, data validation and com
 
 Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [Portfolio site](https://bathiya-qa.vercel.app/) · [LinkedIn](https://www.linkedin.com/in/bathiyalakruwan99/) · [GitHub](https://github.com/bathiyalakruwan99)
 
-> **Portfolio status (October 2026):** every featured project is now a **runnable, independently built public demo** with automated tests and CI. The [maturity matrix](#project-maturity) shows exactly what is public code and how mature each part is.
+> **Portfolio status (October 2026):** every featured project is now a **runnable, independently built public demo** with automated tests. CI for the framework is verified on GitHub Actions; the workflows for the newer tools are rehearsed locally and get their first GitHub run when merged. The [maturity matrix](#project-maturity) shows exactly what is public code and how mature each part is.
 
 ---
 
@@ -42,8 +41,8 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 
 Runnable Playwright + TypeScript framework with its own fictional logistics app: Page Object Model, components, fixtures, seeded typed data, business flows, typed API clients with contract schemas, UI + API hybrid tests, a state-driven workflow engine with guardrails, and failure classification. A human-governed AI QA operating model sits alongside it.
 
-- **Public today:** `npm test` runs 31 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
-- **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); mutation checks show the suites catch deliberate defects.
+- **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine; plus an auth setup step) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
+- **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); deliberate fault-injection checks show the suites catch planted defects.
 
 [View project →](smart-qa-automation-framework/)
 
@@ -102,6 +101,7 @@ cd route-optimizer-validation-workbench && npm ci && npm test && npm run validat
 
 # Python QA tools (3.11+): same pattern in each folder
 cd bulk-upload-validator && python -m venv .venv && . .venv/bin/activate && pip install -r requirements-dev.txt && pytest
+# Windows (PowerShell): python -m venv .venv; .venv\Scripts\Activate.ps1; pip install -r requirements-dev.txt; pytest
 ```
 
 The Python folders are `bulk-upload-validator`, `job-master-validation-tool`, `jira-tools` and
@@ -126,7 +126,7 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 | AI-assisted QA workflow | Templates, schema, governance validator | High | Prototype (human-reviewed) |
 | State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
 | k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
-| CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (verified on GitHub Actions) |
+| CI/CD | Checks, smoke, API regression and secret scan (verified on GitHub Actions); QA tools and nightly workflows (rehearsed locally, first GitHub run pending) | Developing | Working knowledge |
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 

@@ -19,7 +19,7 @@ All captured from repository-owned demos with fictional data (never from interna
 | --- | --- |
 | `demo-gifs/shipment-journey.gif` | One shipment driven from CREATED to DELIVERED in the demo app |
 | `screenshots/demo-app-login.png`, `demo-app-shipments.png`, `demo-app-shipment-in-transit.png` | The Northstar Logistics demo app |
-| `screenshots/playwright-report.png` | The Playwright HTML report of a local run (31/31 passed) |
+| `screenshots/playwright-report.png` | The Playwright HTML report of a local run (30 tests + auth setup, all passed) |
 | `screenshots/gps-simulator-off-route.png` | The GPS map viewer for the `off-route-rejoin` scenario, 5 vehicles |
 
 ## Rules
