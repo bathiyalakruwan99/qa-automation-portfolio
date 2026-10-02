@@ -1,7 +1,15 @@
 # Route Optimizer Validation Workbench
 
-> **Internal QA Tool — Sanitized Public Overview**
+> **Case Study — public reference implementation in progress**
 > An independent QA comparison tool I built to validate route-optimizer output against transparent, independently calculated checks.
+
+## Project Status
+
+**Public implementation:** Case study / documentation only. Runnable TypeScript validators for fictional optimizer output (allocation, duplicates, capacity, compatibility, sequence, distance sanity) with a CLI report and unit tests are in progress. The public tool validates output only; it is not an optimizer.
+
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+
+**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
 
 ## Business Problem
 

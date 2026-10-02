@@ -1,7 +1,15 @@
 # AI-Assisted Test Design Pipeline
 
-> **Human-Reviewed QA Workflow — Sanitized Public Overview**
+> **Prototype workflow — case study; public templates in progress**
 > A QA pipeline I built and use to draft structured test cases with AI, then review, refine, and approve them before they enter the test suite. QA approval is mandatory.
+
+## Project Status
+
+**Public implementation:** Prototype / case study. Generic prompt templates, a test-case JSON schema with a validator, and human-review governance rules are in progress. Private prompts are never published.
+
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+
+**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
 
 ## Business Problem
 

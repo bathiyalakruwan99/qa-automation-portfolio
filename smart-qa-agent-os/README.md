@@ -25,8 +25,8 @@ The public version uses fictional examples, synthetic artifacts, and high-level 
 | [`docs/`](docs/) | Agents catalog, workflow matrix, shared skills, rules and guardrails, QA memory, example agent journey, demo script |
 | [`manual-knowledge/`](manual-knowledge/) | Sanitized manual QA notes that seed agent memory (checkout flow, test plan, test data, locators, selectors, coupon rules) |
 | [`module-template/`](module-template/) | Reusable scaffold for adding a new business workflow with parallel `tests/` and `qa-output/` trees |
-| [`playwright-demo/`](playwright-demo/) | Playwright + TypeScript demo with POM, BDD, API, hybrid tests, fixtures, and test data |
-| [`postman-newman/`](postman-newman/) | Postman collection and environment with Newman CI execution examples |
+| [`playwright-demo/`](playwright-demo/) | Playwright + TypeScript reference with POM, components, flows, BDD, fixtures, and typed test data. Not yet runnable (no target app); a local demo app plus API and hybrid suites are in progress |
+| [`postman-newman/`](postman-newman/) | Postman collection and environment against a public demo API, with Newman execution examples |
 | [`k6-performance/`](k6-performance/) | k6 smoke, load, stress, and soak test scripts |
 | [`prompts/`](prompts/) | Sanitized prompt templates for master orchestration, test planning, BDD/POM automation, execution/healing, memory update, and manual bug hunting |
 | [`qa-graph-tool/`](qa-graph-tool/) | Architecture overview of a local visualization tool that renders the operating model as an interactive graph |

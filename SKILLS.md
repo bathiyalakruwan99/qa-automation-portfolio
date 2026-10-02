@@ -1,6 +1,6 @@
 # Technical Skills
 
-Skills breakdown aligned to Software QA Engineer, Automation QA Engineer, Senior QA Engineer, and SDET-track roles. Capabilities are grouped by evidence-based level rather than a single "expert" label.
+Skills breakdown aligned to QA Engineer, Automation QA Engineer and SDET-track roles. Capabilities are grouped by evidence-based level rather than a single "expert" label.
 
 ---
 
@@ -18,7 +18,7 @@ Applied daily in my QA work and demonstrated across this portfolio.
 
 ### QA Tool Development Experience
 
-QA tools and utilities I designed and built (sanitized in this portfolio).
+QA tools and utilities I designed and built in my professional work. The internal tools are not public; independently written public reference versions are being added to this portfolio.
 
 - **Python** — QA utilities, data validation, Excel/CSV processing, report generation, and desktop QA tools
 - **JavaScript** — browser-based QA utilities, map/GPS simulation workflows, API integrations, and test-support tooling
@@ -65,7 +65,7 @@ Genuine learning and development focus.
 - **SQL** — queries, joins, aggregations, reconciliation against expected results
 - **MongoDB** — document inspection, data-integrity validation
 - **Excel / CSV** — Pandas, OpenPyXL, validation, diff, color-coded review
-- Report and calculation validation (e.g. job/load counting, prorated math)
+- Report and calculated-field validation against independently derived expected results
 
 ## Domain — Transport & GPS
 
@@ -110,6 +110,8 @@ Genuine learning and development focus.
 - Risk communication for go / hold / block release decisions
 
 ## Metrics from Professional Work
+
+*From employment; not reproducible from this public repository.*
 
 - 1,000+ test cases prepared and executed
 - 1,000+ defects identified and reported

@@ -1,7 +1,15 @@
 # Bulk Upload Validator & Synthetic Test Data Generator
 
-> **Internal QA Tool — Sanitized Public Overview**
+> **Case Study — public reference implementation in progress**
 > Built by me to validate bulk-upload data and generate safe synthetic datasets for QA testing. The public repository contains fictional examples only.
+
+## Project Status
+
+**Public implementation:** Case study / documentation only. A runnable Python validator (CSV + XLSX, fictional schema, CSV/JSON reports, synthetic data generator, pytest suite) is in progress.
+
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+
+**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
 
 ## Business Problem
 
