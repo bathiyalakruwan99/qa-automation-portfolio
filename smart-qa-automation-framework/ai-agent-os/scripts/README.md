@@ -8,7 +8,7 @@ Sanitized utility scripts that support the Smart QA Agent OS workflow. These are
 
 | File | Purpose |
 | --- | --- |
-| [`check-no-secrets.js`](check-no-secrets.js) | Scans staged files for secrets, tokens, and credentials before commit |
+| [`check-no-secrets.js`](../../../scripts/check-no-secrets.js) | Scans staged files for secrets, tokens, and credentials before commit |
 | [`clean-qa-output.js`](clean-qa-output.js) | Removes old evidence artifacts from `qa-output/` while keeping markdown reports |
 | [`run-postman-newman.js`](run-postman-newman.js) | Runs a Postman collection via Newman CLI with environment and reporter flags |
 | [`run-with-memory.js`](run-with-memory.js) | Runs the Playwright suite and triggers post-run memory curation |
