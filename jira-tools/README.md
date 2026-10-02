@@ -9,9 +9,8 @@ exported JSON file, so no ticketing-system access, URL or token is needed.
 **Public implementation:** Runnable demo. Python (standard library only), fictional sample tickets
 (`DEMO-101`…`DEMO-112`), CLI, 19 pytest tests, ruff lint.
 
-**Professional relevance:** Based on the release-readiness and regression-scoping work I do with ticket data. The
-internal tools pull data from a ticketing system; this public version is independently written for this portfolio
-and works only on fictional, offline data.
+**Professional relevance:** Based on the release-readiness and regression-scoping work I do with ticket data. This
+public version is independently written for this portfolio and works only on fictional, offline data.
 
 **Confidentiality:** No ticketing-system URL, project key, real ticket ID, user, token, ticket content or release data.
 Never commit `.env` files, tokens or real exports. See [`../docs/confidentiality.md`](../docs/confidentiality.md).

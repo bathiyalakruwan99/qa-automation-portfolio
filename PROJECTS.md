@@ -1,11 +1,11 @@
 # QA Tools & Portfolio Project Directory
 
-This directory summarizes QA tools, automation utilities, and human-reviewed AI-assisted workflows that I designed and built. Each entry gives a one-paragraph overview, the project status, the stack, and a link to the detailed README. Internal tools themselves are not public. Public code in this repository is independently recreated with synthetic data, and the table states what is public today.
+Independent public reference projects that demonstrate common logistics QA problems: stateful workflow automation, GPS and geofence testing, route-output validation, data validation and release evidence. Every project is written for this portfolio, runs on synthetic data, and has its own README with run commands and real sample output.
 
 | Project | Public implementation today | Next |
 |---|---|---|
 | Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests (+ auth setup), 116 unit tests, CI + nightly workflows | — |
-| GPS Simulator & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, map viewer, 32 tests | Road snapping |
+| GPS Simulation & Geofence Validation Suite | Runnable demo: TypeScript simulator, 5 scenarios, CLI, map viewer, 32 tests | Road snapping |
 | Route Optimizer Validation Workbench | Runnable demo: 6 validators, sample plans, CLI, 19 tests | Road-network distances |
 | Job Data Validation & Release Evidence Tool | Runnable demo: reconciliation checks, CLI, 21 tests | Time-based checks |
 | Bulk Upload Validator & Synthetic Test Data Generator | Runnable demo: CSV/XLSX validator, generator oracle, CLI, 36 tests | Multi-sheet workbooks |
@@ -16,59 +16,59 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 
 ## Smart QA Automation Framework
 
-A runnable Playwright + TypeScript framework with its own fictional logistics app, plus a modular AI-assisted QA operating model. Capability areas are separated by maturity (Actively Used, Implemented Prototype, In Development, Learning, Planned), and a human QA engineer remains responsible for requirement interpretation, test approval, defect decisions, release recommendations, and memory updates.
+A runnable Playwright + TypeScript framework with its own fictional logistics app: UI, API, UI + API hybrid and state-driven workflow tests, typed API clients with contract schemas, and failure classification. A human-governed AI QA operating model sits alongside it; a human QA engineer stays responsible for requirement interpretation, test approval, defect decisions and release recommendations.
 
 - **Status:** Runnable demo (framework) + prototype operating model
 - **Stack:** Playwright, TypeScript, Express demo app, Ajv, Vitest, Postman/Newman, k6, GitHub Actions
-- **QA value:** A structured, evidence-driven, reusable approach that keeps human QA judgement at the centre.
+- **QA value:** Readable specs over stateful workflows, UI results confirmed through the API, and failures that are classified instead of retried away.
 
 [Open project →](smart-qa-automation-framework/)
 
 ---
 
-## GPS Simulator & Geofence Validation Suite — Internal QA Tool
+## GPS Simulation & Geofence Validation Suite — Public QA Reference Project
 
-A web-based QA toolkit I built to simulate GPS activity, build movement paths, validate geofence events, and test multi-vehicle tracking scenarios. Uses fictional entities only (`Vehicle-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
+Independent portfolio implementation demonstrating GPS simulation, route playback, geofence boundary testing and multi-device validation on synthetic data (`TRUCK-001`, `Warehouse Alpha`, `Customer Site Beta`, `Zone Gamma`).
 
 - **Status:** Runnable demo
-- **Stack:** TypeScript, Vitest (public demo); the internal tool also uses web map rendering
-- **QA value:** Enables repeatable multi-device GPS scenarios without depending on physical hardware.
+- **Stack:** TypeScript, Vitest
+- **QA value:** Repeatable multi-vehicle GPS scenarios, including off-route and bad-data cases, without physical devices.
 
 [Open project →](gps-simulation-validation-suite/)
 
 ---
 
-## Route Optimizer Validation Workbench — Internal QA Tool
+## Route Optimizer Validation Workbench — Public QA Reference Project
 
-An independent QA comparison tool I built to validate route-optimizer output across distance, vehicle suitability, capacity, cost, allocation, and operational feasibility. It does not replace a product optimizer; it provides an independent QA comparison layer. Key QA insight: lower total distance does not always mean lower operating cost.
+Independent portfolio implementation of a QA validation layer for route-optimizer **output**: order allocation, duplicates, missing orders, capacity, vehicle suitability and route sanity. It is not an optimizer. Key QA insight: a plan with a short total distance can still drop orders, overload a vehicle or report distances that cannot be true.
 
 - **Status:** Runnable demo
 - **Stack:** TypeScript, Vitest
-- **QA value:** Creates a repeatable, explainable comparison process and catches silent failures (dropped orders, overloads, infeasible routes).
+- **QA value:** Catches silent failures (dropped orders, overloads, unsuitable vehicles, impossible distances) with an explainable report.
 
 [Open project →](route-optimizer-validation-workbench/)
 
 ---
 
-## Job Data Validation & Release Evidence Tool — Internal QA Tool
+## Job Data Validation & Release Evidence Tool — Public QA Reference Project
 
-A data-validation tool I built to process job and work-order exports, run completeness/consistency/reconciliation checks, and produce an actionable exception summary for release evidence. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
+Independent portfolio implementation of job / load / activity reconciliation: completeness, consistency and orphan-record checks that produce an exception summary for release evidence. Uses fictional records (`DEMO-JOB-1001`, `DEMO-LOAD-2001`).
 
 - **Status:** Runnable demo
 - **Stack:** Python standard library, pytest, ruff
-- **QA value:** Automates repeated checks across large exports and surfaces exceptions manual review would miss.
+- **QA value:** Automates repeated checks across large exports and surfaces exceptions a manual review would miss.
 
 [Open project →](job-data-validation-tool/)
 
 ---
 
-## Bulk Upload Validator & Synthetic Test Data Generator — Internal QA Tool
+## Bulk Upload Validator & Synthetic Test Data Generator — Public QA Reference Project
 
-A QA utility I built to validate bulk-upload files, classify data-quality issues (auto-correctable vs needs review), and generate safe synthetic test datasets for regression, negative, workflow, and performance testing.
+Independent portfolio implementation of bulk-upload validation: checks CSV / XLSX files against a declared schema, reports each issue by severity with its row, column and value, and generates synthetic files with recorded faults that act as the test oracle.
 
 - **Status:** Runnable demo
 - **Stack:** Python, openpyxl, pytest, ruff
-- **QA value:** Removes a common class of false defects and reduces dependence on production data through synthetic test data.
+- **QA value:** Separates data problems from product defects and removes the need for production data in testing.
 
 [Open project →](bulk-upload-validator/)
 
@@ -76,7 +76,7 @@ A QA utility I built to validate bulk-upload files, classify data-quality issues
 
 ## AI-Assisted Test Design Pipeline — Human-Reviewed QA Workflow
 
-A pipeline I built and use to draft structured test cases with AI, then review, refine, and approve them before they enter the test suite: AI Draft → QA Review and Refinement → QA Approval → Test Management Import. QA approval is mandatory.
+A workflow for drafting structured test cases with AI, then reviewing, refining and approving them before they enter the test suite: AI Draft → QA Review and Refinement → QA Approval → Test Management Import. QA approval is mandatory, and the validator rejects drafts that invent criteria or approve themselves.
 
 - **Status:** Prototype workflow with runnable templates, schema and governance validator
 - **Stack:** Prompt templates, JSON Schema, Python (jsonschema), pytest
@@ -86,13 +86,13 @@ A pipeline I built and use to draft structured test cases with AI, then review, 
 
 ---
 
-## Jira QA Evidence & Release Readiness Tools — Public-Safe Utility
+## Jira QA Evidence & Release Readiness Tools — Public QA Reference Project
 
-Python tools I use in my work to collect Jira ticket data into sanitized local structures, build release-readiness views, track status history, and generate QA evidence reports. No real ticket data, project keys, or credentials are included.
+Independent portfolio implementation of release-readiness reporting over ticket data: release readiness, regression mapping and status history, run offline against fictional tickets (`DEMO-101`…`DEMO-112`). No ticketing-system connection, real ticket data, project keys or credentials.
 
 - **Status:** Runnable demo (offline, fictional tickets)
 - **Stack:** Python standard library, pytest, ruff
-- **QA value:** Repeatable, evidence-friendly views of release readiness with a defensible audit trail.
+- **QA value:** Repeatable, evidence-based views of release readiness that recommend, never approve.
 
 [Open project →](jira-tools/) · [Detailed case study →](case-studies/jira-qa-workflow-automation.md)
 

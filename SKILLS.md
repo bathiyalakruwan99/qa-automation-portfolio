@@ -18,12 +18,12 @@ Applied daily in my QA work and demonstrated across this portfolio.
 
 ### QA Tool Development Experience
 
-QA tools and utilities I designed and built in my professional work. The internal tools are not public; independently written public reference versions are being added to this portfolio.
+Building QA tools and utilities is part of my work. The tools in this portfolio are independently written public reference projects on synthetic data.
 
 - **Python** — QA utilities, data validation, Excel/CSV processing, report generation, and desktop QA tools
 - **JavaScript** — browser-based QA utilities, map/GPS simulation workflows, API integrations, and test-support tooling
 - **TypeScript** — Playwright automation, API/UI test flows, Page Object Model design, and QA tool prototypes
-- Building QA dashboards, validation utilities, and internal testing tools
+- Building QA dashboards, validation utilities and test-support tools
 
 ### Working Knowledge / Currently Developing
 
@@ -72,7 +72,7 @@ Genuine learning and development focus.
 - GPS simulation for high-load, multi-device scenarios
 - Live map, route-path, vehicle-movement, and geofence validation
 - Route optimization validation using public routing and map APIs
-- TMS workflows: Job Master, Optimizer, Control Tower, Work Orders, Contracts, Invoicing
+- TMS / logistics workflows: job and load planning, route planning, live tracking, contracts and billing
 
 ## CI & Tooling
 
@@ -109,15 +109,8 @@ Genuine learning and development focus.
 - Effective collaboration with developers and product owners
 - Risk communication for go / hold / block release decisions
 
-## Metrics from Professional Work
-
-*From employment; not reproducible from this public repository.*
-
-- 1,000+ test cases prepared and executed
-- 1,000+ defects identified and reported
-- Built a route-optimizer validation workbench providing a repeatable, explainable comparison process
-- Built a bulk-upload validator designed to reduce upload-related support effort by catching data-quality issues early
-- GPS simulation tested at up to 1,000 simulated device streams in controlled QA scenarios
+Professional metrics are listed once, under [Professional Experience](README.md#professional-experience) in the
+README.
 
 ---
 

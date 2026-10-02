@@ -8,7 +8,7 @@ Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Valida
 [![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
 [![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
 [![Postman](https://img.shields.io/badge/Postman-Newman-FF6C37.svg)](https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/)
 [![k6](https://img.shields.io/badge/k6-learning-7D64FF.svg)](https://k6.io/)
@@ -17,7 +17,15 @@ QA Engineer focused on product quality, test automation, data validation and com
 
 Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [Portfolio site](https://bathiya-qa.vercel.app/) · [LinkedIn](https://www.linkedin.com/in/bathiyalakruwan99/) · [GitHub](https://github.com/bathiyalakruwan99)
 
-> **Portfolio status (October 2026):** every featured project is now a **runnable, independently built public demo** with automated tests. CI for the framework is verified on GitHub Actions; the workflows for the newer tools are rehearsed locally and get their first GitHub run when merged. The [maturity matrix](#project-maturity) shows exactly what is public code and how mature each part is.
+### At a glance
+
+- **Approach:** Playwright + TypeScript → API → UI → UI + API hybrid → state-driven workflows → CI
+- **Runnable locally:** `npm test` in [`smart-qa-automation-framework/`](smart-qa-automation-framework/) starts a fictional logistics app and runs the suite. No accounts, VPN or private configuration.
+- **Evidence:** 30 Playwright tests (+ auth setup), 116 unit tests, a Newman collection and GitHub Actions CI.
+- **Domain:** logistics / TMS, GPS tracking, route validation and data quality.
+- **Also:** QA tools in TypeScript and Python, k6 performance smoke, AI-assisted test design under human review.
+
+Every featured project is an independent, runnable public demo on synthetic data. The [maturity matrix](#project-maturity) shows how mature each part is.
 
 ---
 
@@ -147,11 +155,11 @@ Details: [`docs/confidentiality.md`](docs/confidentiality.md) · [`docs/qa-appro
 
 ### Haulmatic Technologies — Software Quality Assurance Engineer (Jul 2024 – Present)
 
-- End-to-end QA for web and Android-assistance applications across TMS modules (job management, GPS live map, control tower, work orders, optimizer, contracts, invoicing).
+- End-to-end QA for web and Android-assistance applications in transport management (TMS / logistics): job planning, GPS tracking, route planning, and contract and billing workflows.
 - Test plans, scenarios, test cases and RTMs; regression, exploratory and UAT cycles for production releases; full Jira defect lifecycle through release sign-off.
 - REST API validation (Postman, Playwright, Cypress) including negative and authentication scenarios.
 - Automated key UI and API workflows with Playwright (POM) and Selenium.
-- Built internal QA tooling for GPS simulation, route-optimizer output comparison, and upload-data validation.
+- Built QA tooling for GPS simulation, route-output comparison and upload-data validation.
 
 ### IFS R&D International — Software Engineering QA Trainee (Mar 2023 – Feb 2024)
 
@@ -182,7 +190,7 @@ Details: [`docs/confidentiality.md`](docs/confidentiality.md) · [`docs/qa-appro
 - [`SKILLS.md`](SKILLS.md) — skills grouped by evidence level
 - [`docs/confidentiality.md`](docs/confidentiality.md) — public/private boundary and sanitization rules
 - [`docs/demo-app-design-rationale.md`](docs/demo-app-design-rationale.md) — why the demos run against a local, repository-owned app
-- [`NOTICE.md`](NOTICE.md) — portfolio-use notice
+- [`NOTICE.md`](NOTICE.md) — portfolio-use notice (all rights reserved; portfolio demonstration only)
 
 ---
 

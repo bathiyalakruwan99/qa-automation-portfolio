@@ -1,17 +1,17 @@
 # Portfolio Overview
 
-A guided tour of this repository. Each project documents a QA tool, utility, or workflow from my professional work. Projects are being upgraded into runnable public demos that are independently written with synthetic data; each README's **Project Status** block says what is public code today. No employer source code, production data, or confidential implementation details are included.
+A guided tour of this repository. Each project is an independent public reference implementation of a common logistics QA problem, written for this portfolio and run on synthetic data. Each README's **Project Status** block says how mature it is.
 
 ## Start here
 
 1. **Smart QA Automation Framework** ([`smart-qa-automation-framework/`](../smart-qa-automation-framework/)): a runnable Playwright + TypeScript framework (API, UI, hybrid, state engine) against its own fictional logistics app, with a human-governed AI QA operating model in [`ai-agent-os/`](../smart-qa-automation-framework/ai-agent-os/).
-2. **GPS Simulator & Geofence Validation Suite** ([`gps-simulation-validation-suite/`](../gps-simulation-validation-suite/)) — internal QA tool: GPS stream simulation, vehicle movement patterns, route/path testing, geofence entry/exit validation, multi-vehicle scenarios, and live-map QA evidence.
-3. **Route Optimizer Validation Workbench** ([`route-optimizer-validation-workbench/`](../route-optimizer-validation-workbench/)) — internal QA tool: independent comparison across distance, vehicle suitability, capacity, cost-per-kilometre, feasibility, and allocation.
+2. **GPS Simulation & Geofence Validation Suite** ([`gps-simulation-validation-suite/`](../gps-simulation-validation-suite/)): deterministic GPS simulation, off-route and rejoin detection, geofence enter/exit validation, multi-vehicle runs and an offline map viewer.
+3. **Route Optimizer Validation Workbench** ([`route-optimizer-validation-workbench/`](../route-optimizer-validation-workbench/)): validators for route-optimizer output: allocation, duplicates, missing orders, capacity, vehicle suitability and route sanity.
 
 ## Then explore
 
-4. **Job Data Validation & Release Evidence Tool** ([`job-data-validation-tool/`](../job-data-validation-tool/)) — internal QA tool: job/work-order data validation, status consistency, missing-data detection, and release evidence.
-5. **Bulk Upload Validator & Synthetic Test Data Generator** ([`bulk-upload-validator/`](../bulk-upload-validator/)) — internal QA tool: bulk upload data-quality validation and synthetic test-data generation.
+4. **Job Data Validation & Release Evidence Tool** ([`job-data-validation-tool/`](../job-data-validation-tool/)): job / load / activity reconciliation, status consistency, missing-data detection and an exception report for release evidence.
+5. **Bulk Upload Validator & Synthetic Test Data Generator** ([`bulk-upload-validator/`](../bulk-upload-validator/)): CSV / XLSX upload validation and a fault-injecting synthetic data generator.
 6. **AI-Assisted Test Design Pipeline** ([`ai-assisted-test-design/`](../ai-assisted-test-design/)) — human-reviewed workflow: AI drafts, QA reviews and approves. See also the [detailed case study](../case-studies/ai-assisted-test-design.md).
 7. **Jira QA Evidence & Release Readiness Tools** ([`jira-tools/`](../jira-tools/)) — offline release-readiness, regression-mapping and status-history tools over fictional tickets. See also the [detailed case study](../case-studies/jira-qa-workflow-automation.md).
 8. **AI and MCP QA Workflows** ([`case-studies/ai-mcp-qa-workflows.md`](../case-studies/ai-mcp-qa-workflows.md)) — AI-assisted data analysis, validation, and reconciliation concepts.
@@ -34,10 +34,10 @@ the module template. Real outputs come from running the projects; each README sh
 
 ## Coverage at a glance
 
-| Case study | QA focus | Key skill demonstrated |
+| Project | QA focus | Key skill demonstrated |
 | --- | --- | --- |
 | Smart QA Automation Framework | Runnable UI, API, hybrid and state-driven automation | Automation architecture, evidence-first triage |
-| GPS Simulator & Geofence Validation Suite | Location and time-based testing | Deterministic test data for hard scenarios |
+| GPS Simulation & Geofence Validation Suite | Location and time-based testing | Deterministic test data for hard scenarios |
 | Route Optimizer Validation Workbench | Algorithmic output validation | Independent oracle, risk-based comparison |
 | Job Data Validation & Release Evidence Tool | Data validation and reconciliation | Turning large exports into actionable exceptions |
 | Bulk Upload Validator | Shift-left data validation | Separating data issues from product defects |
