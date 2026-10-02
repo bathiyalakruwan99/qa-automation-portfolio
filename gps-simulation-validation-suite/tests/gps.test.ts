@@ -76,6 +76,9 @@ describe('GPS simulation and validation', () => {
     const fence = { id: 'EDGE', center, radiusM: 100 };
     expect(isInside(destination(center, 45, 99.9), fence)).toBe(true);
     expect(isInside(destination(center, 45, 100.1), fence)).toBe(false);
+    // Exactly on the edge: the radius equals the computed distance, so the inclusive rule must apply.
+    const onEdge = destination(center, 45, 100);
+    expect(isInside(onEdge, { ...fence, radiusM: distanceM(center, onEdge) })).toBe(true);
     const edge = load('geofence-edge');
     const events = detectGeofenceEvents(generateStream(edge), edge.geofences).map(
       (e) => `${e.type}:${e.geofenceId}`,
