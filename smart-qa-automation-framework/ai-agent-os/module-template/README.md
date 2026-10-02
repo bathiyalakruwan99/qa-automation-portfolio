@@ -1,30 +1,23 @@
 # Module Template
 
-A reusable scaffold for adding a new business workflow ("module") to Smart QA Agent OS. Each module gets two parallel trees:
+A blank scaffold for adding a new business workflow ("module"). Each module gets two parallel trees:
 
-- A `tests/<module-name>/` tree for automation assets (Playwright POM, API clients, fixtures, BDD features, test data).
-- A `qa-output/<module-name>/` tree for human-readable QA outputs (analysis, plans, exploratory notes, final reports) plus structured evidence folders.
+- `tests/<module-name>/` for automation: page objects, components, flows, API clients, fixtures, data, specs.
+- `qa-output/<module-name>/` for the human-readable QA record (readiness, blockers, story analysis, test plan,
+  exploratory results, final report) plus evidence folders.
 
-> Synthetic example for portfolio demonstration. Replace `<module-name>` with a real module slug when used in private work.
+> This is a **blank template**, not an example run. It contains no results. The running, evidence-producing example
+> of every automation layer is the framework itself (`../../src/`, `../../tests/`).
 
-## Folder Layout
+## Layout
 
-```
+```text
 module-template/
 ├── tests/
-│   └── <module-name>/
-│       ├── api/
-│       ├── components/
-│       ├── data/
-│       ├── features/        # BDD feature files
-│       ├── fixtures/
-│       ├── pages/           # Page Object Models
-│       ├── specs/           # Playwright spec files
-│       ├── steps/           # BDD step definitions
-│       ├── test-cases/      # Markdown test case docs
-│       └── utils/
+│   └── module-name/
+│       └── README.md        # which folders to create, with links to the running examples
 └── qa-output/
-    └── <module-name>/
+    └── module-name/
         ├── 00_setup-and-readiness-check.md
         ├── 00_blockers-and-missing-details.md
         ├── 01_user-story-analysis.md
@@ -38,13 +31,14 @@ module-template/
         └── videos/
 ```
 
-## How to Use
+## How to use
 
-1. Copy `module-template/tests/<module-name>` to `tests/<your-module>`.
-2. Copy `module-template/qa-output/<module-name>` to `qa-output/<your-module>`.
-3. Fill the templates in order: `00_setup` -> `01_user-story-analysis` -> `02_test-plan` -> `03_exploratory-testing-results` -> automation under `tests/` -> `08_final-test-execution-report`.
-4. Store evidence under `defects/`, `network/`, `screenshots/`, `traces/`, `videos/`.
+1. Copy `tests/module-name` to `tests/<your-module>` and `qa-output/module-name` to `qa-output/<your-module>`.
+2. Fill the reports in order: `00_setup` → `00_blockers` → `01_user-story-analysis` → `02_test-plan` →
+   `03_exploratory-testing-results` → automation under `tests/` → `08_final-test-execution-report`.
+3. Replace every `{{placeholder}}`. Store evidence under `defects/`, `network/`, `screenshots/`, `traces/` and `videos/`;
+   the final report may only reference evidence that exists.
 
 ## Confidentiality
 
-All template content is synthetic. The structure is what is being demonstrated, not any real module.
+The template holds structure only. A filled-in copy for real work stays in that work's own (private) repository.

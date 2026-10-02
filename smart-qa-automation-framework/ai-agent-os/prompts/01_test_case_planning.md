@@ -38,7 +38,7 @@ Mark each test case with:
 
 ## Example Output (Synthetic)
 
-See `module-template/tests/example-module/test-cases/TC-01.md` for a sample test case document.
+Use the test-plan table in `module-template/qa-output/module-name/02_test-plan.md`; every case traces to an acceptance criterion.
 
 ## Confidentiality
 
