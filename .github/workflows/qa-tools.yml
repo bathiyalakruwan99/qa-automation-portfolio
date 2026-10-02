@@ -26,6 +26,7 @@ jobs:
   typescript:
     name: ${{ matrix.project }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -53,6 +54,7 @@ jobs:
   python:
     name: ${{ matrix.project }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
