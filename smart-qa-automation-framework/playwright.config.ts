@@ -20,6 +20,7 @@ export default defineConfig({
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
     ['json', { outputFile: 'test-results/results.json' }],
+    ['./src/reporting/failure-classification-reporter.ts'],
   ],
   globalSetup: './tests/global-setup.ts',
   use: {
