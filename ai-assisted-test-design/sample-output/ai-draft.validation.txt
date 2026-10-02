@@ -1,0 +1,10 @@
+ai-draft.json: 4 case(s), status APPROVED
+  [ERROR] APPROVED_WITHOUT_HUMAN_REVIEW /reviewStatus: APPROVED but not approved by a human reviewer: TC-001, TC-002, TC-003, TC-004
+  [ERROR] APPROVED_WITH_OPEN_UNCERTAINTY /reviewStatus: APPROVED while uncertainty is unresolved: TC-003, TC-004
+  [ERROR] COVERAGE_GAP AC-4: no test case covers this acceptance criterion
+  [ERROR] INVENTED_ACCEPTANCE_CRITERION TC-003: AC-9 is not in REQ-UPLOAD-REEFER; cases may only trace to stated criteria
+  [WARNING] POSITIVE_ONLY AC-2: only positive/workflow cases; add a negative or boundary case
+  [WARNING] POSITIVE_ONLY AC-3: only positive/workflow cases; add a negative or boundary case
+  [WARNING] UNCERTAINTY_NOT_RESOLVED TC-003: low confidence or open questions need reviewer notes before approval
+  [WARNING] UNCERTAINTY_NOT_RESOLVED TC-004: low confidence or open questions need reviewer notes before approval
+Result: FAIL (4 error(s), 4 warning(s))

@@ -1,0 +1,10 @@
+{
+  "id": "REQ-UPLOAD-REEFER",
+  "title": "Temperature for chilled shipments in bulk upload",
+  "acceptanceCriteria": [
+    { "id": "AC-1", "text": "A REEFER row with an empty temperature_c is rejected." },
+    { "id": "AC-2", "text": "temperature_c must be a number from -25 to 8 inclusive." },
+    { "id": "AC-3", "text": "A TRUCK or VAN row with temperature_c is accepted with a warning that the value is ignored." },
+    { "id": "AC-4", "text": "Every rejection names the row number and the column." }
+  ]
+}

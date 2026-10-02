@@ -1,88 +1,141 @@
 # AI-Assisted Test Design Pipeline
 
-> **Prototype workflow — case study; public templates in progress**
-> A QA pipeline I built and use to draft structured test cases with AI, then review, refine, and approve them before they enter the test suite. QA approval is mandatory.
+**AI drafts test cases; a human QA engineer reviews, corrects and approves them; a validator makes sure that order
+can't be skipped.** This folder holds generic prompt templates, a test-case schema, a governance validator, and a
+worked example that goes from requirement to AI draft to human-reviewed set.
 
 ## Project Status
 
-**Public implementation:** Prototype / case study. Generic prompt templates, a test-case JSON schema with a validator, and human-review governance rules are in progress. Private prompts are never published.
+**Public implementation:** Prototype workflow with runnable tooling. Four prompt templates, a JSON schema, a Python
+validator for the schema and the governance rules, a worked example, 17 pytest tests, ruff lint.
 
-**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+**Professional relevance:** Based on the AI-assisted test design workflow I use in my QA work. The prompts here are
+generic templates written for this portfolio; private prompts are not published.
 
-**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+**Confidentiality:** No private prompts, real requirements, ticket content, designs or customer data. The example
+requirement is fictional and matches this portfolio's own demo [bulk upload validator](../bulk-upload-validator/). See
+[`../docs/confidentiality.md`](../docs/confidentiality.md). Background:
+[`../case-studies/ai-assisted-test-design.md`](../case-studies/ai-assisted-test-design.md).
 
-## Business Problem
+---
 
-Writing comprehensive test cases for new features is slow and repetitive: read the requirement, walk the acceptance criteria, capture happy paths and edge cases, and produce a structured set of test cases per module. This work is high-volume but low-novelty per item, and inconsistent coverage between authors creates gaps.
+## 1. The QA problem
 
-## QA Challenge
+Drafting test cases for every acceptance criterion is slow and repetitive, and AI can produce a useful first draft in
+seconds. AI drafts also fail in predictable ways:
 
-- Consistently cover acceptance criteria, edge cases, and negative paths
-- Keep AI drafts from leaking into the test suite unreviewed
-- Maintain a defensible audit trail of how each test case was authored
-- Keep coverage consistent regardless of who drafts the tests
+- they invent requirements ("convert Fahrenheit automatically");
+- they skip criteria, and miss exact boundaries;
+- they sound confident when they are guessing;
+- they can end up marked "approved" with no human having read them.
 
-## What the Pipeline Does
+## 2. Pipeline
 
-AI-assisted generation of structured test-case drafts, with mandatory QA review before approval or import. AI supports first-pass drafting; a QA engineer reviews, corrects, expands, prioritises, and approves every final test case.
-
-### Pipeline
-
+```mermaid
+flowchart LR
+    R[Requirement] --> P1[requirement-analysis prompt]
+    P1 --> Q[Open questions to product owner]
+    P1 --> P2[scenario-generation prompt]
+    P2 --> D[AI draft: reviewStatus DRAFT]
+    D --> P3[edge-case-review + test-case-review prompts]
+    P3 --> H[Human QA review: correct, add, reject, answer questions]
+    H --> V{validate_cases.py}
+    V -->|errors| H
+    V -->|pass| A[APPROVED by a named reviewer]
+    A --> TM[Test management import]
 ```
-AI Draft -> QA Review and Refinement -> QA Approval -> Test Management Import
-```
-
-It generates structured test-case drafts covering positive, negative, boundary, and workflow scenarios, then hands them to QA for review.
-
-### What AI supports vs what QA owns
 
 | Step | AI support | Human QA ownership |
-|---|---|---|
-| Risk analysis | Suggests risks and areas to cover | Confirms and prioritises risk |
-| Scenario draft | Drafts scenarios and edge cases | Reviews coverage and accuracy |
-| Test case wording | Drafts structured test cases | Corrects, expands, and approves |
-| Prioritisation | Suggests a first-pass priority | Sets the final priority |
-| Import | Prepares an import-ready draft | Approves what enters the suite |
-
-## Fictional Example
-
-For a fictional checkout feature, AI drafts scenarios for `Customer Alpha` placing `Order DEMO-1001`:
-
-| Scenario | Type | Expected result |
 | --- | --- | --- |
-| Apply a valid coupon | Positive | Discount applied, total reduced |
-| Apply an expired coupon | Negative | Coupon rejected, total unchanged |
-| Coupon below minimum order value | Boundary | Coupon rejected with clear message |
-| Apply two coupons | Negative | Only one coupon allowed |
+| Requirement analysis | Lists criteria, ambiguities, missing information | Confirms the criteria; asks the product owner |
+| Scenario draft | Drafts positive, negative, boundary and workflow cases | Reviews coverage and accuracy |
+| Edge-case and quality review | Suggests gaps and wording fixes | Decides which to add |
+| Prioritisation | Suggests a first-pass priority | Sets the final priority |
+| Approval | **None** | Approves what enters the suite |
 
-QA then reviews the drafts, removes anything unsupported by the requirement, adds missing edge cases (for example a coupon at exactly the minimum value), sets priorities, and approves the final set before it enters the test suite.
+## 3. What is in this folder
 
-For the detailed workflow case study, see [`../case-studies/ai-assisted-test-design.md`](../case-studies/ai-assisted-test-design.md).
+| Path | Contents |
+| --- | --- |
+| [`prompts/`](prompts/) | `requirement-analysis`, `scenario-generation`, `edge-case-review`, `test-case-review` (generic templates with `{{placeholders}}`) |
+| [`schemas/test-case.schema.json`](schemas/test-case.schema.json) | Test-case set: traceability to `AC-n`, steps with observable expected results, assumptions, open questions, confidence, review |
+| [`tools/validate_cases.py`](tools/validate_cases.py) | Schema validation **plus** governance rules |
+| [`governance/human-review.md`](governance/human-review.md) | The rules and the review checklist |
+| [`examples/`](examples/) | `requirement.md/.json` → `ai-draft.json` → `reviewed.json` |
 
-## QA Value
+## 4. Governance rules enforced in code
 
-- Faster first-pass drafting, more consistent structure, and more QA time available for risk analysis and exploratory testing
-- Designed to reduce the effort needed to prepare a structured first draft of test coverage while preserving mandatory QA review
-- Improves coverage consistency through reusable structure
-- Keeps a defensible authoring trail
+| Code | Severity | Rule |
+| --- | --- | --- |
+| `INVENTED_ACCEPTANCE_CRITERION` | ERROR | A case traces to a criterion the requirement doesn't contain |
+| `COVERAGE_GAP` | ERROR | A criterion has no case |
+| `APPROVED_WITHOUT_HUMAN_REVIEW` | ERROR | `APPROVED` without a named reviewer and an `approve` decision on every case |
+| `APPROVED_WITH_OPEN_UNCERTAINTY` | ERROR | `APPROVED` while a low-confidence case or an open question has no reviewer notes |
+| `DUPLICATE_ID`, `WRONG_REQUIREMENT`, `SCHEMA` | ERROR | Basic integrity |
+| `POSITIVE_ONLY` | WARNING | A criterion has no negative or boundary case |
+| `UNCERTAINTY_NOT_RESOLVED` | WARNING | Low confidence or open questions without notes (an error once APPROVED) |
 
-> Example outcome: AI-assisted first drafts can reduce drafting effort; actual time varies by requirement quality, complexity, and QA review depth.
+## 5. Setup and run
 
-## QA Skills Demonstrated
+```bash
+cd ai-assisted-test-design
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements-dev.txt
+pytest                                                   # 17 tests
+python tools/validate_cases.py examples/ai-draft.json --requirement examples/requirement.json   # exit 1
+python tools/validate_cases.py examples/reviewed.json --requirement examples/requirement.json   # exit 0
+```
 
-- Requirement analysis and risk-based test design
-- Positive, negative, and boundary coverage thinking
-- Using AI as a drafting aid without surrendering QA judgement
-- Maintaining traceability from requirement to approved test case
+## 6. Sample output: the AI draft is rejected
 
-## Human QA Ownership
+The draft marked itself `APPROVED` ([full output](sample-output/ai-draft.validation.txt)):
 
-No test case is published without QA review. Unreviewed AI output is never allowed in the test suite. Quality of output depends on the quality of the requirement and the review.
+```text
+ai-draft.json: 4 case(s), status APPROVED
+  [ERROR] APPROVED_WITHOUT_HUMAN_REVIEW /reviewStatus: APPROVED but not approved by a human reviewer: TC-001, TC-002, TC-003, TC-004
+  [ERROR] APPROVED_WITH_OPEN_UNCERTAINTY /reviewStatus: APPROVED while uncertainty is unresolved: TC-003, TC-004
+  [ERROR] COVERAGE_GAP AC-4: no test case covers this acceptance criterion
+  [ERROR] INVENTED_ACCEPTANCE_CRITERION TC-003: AC-9 is not in REQ-UPLOAD-REEFER; cases may only trace to stated criteria
+  [WARNING] POSITIVE_ONLY AC-2: only positive/workflow cases; add a negative or boundary case
+  [WARNING] POSITIVE_ONLY AC-3: only positive/workflow cases; add a negative or boundary case
+  [WARNING] UNCERTAINTY_NOT_RESOLVED TC-003: low confidence or open questions need reviewer notes before approval
+  [WARNING] UNCERTAINTY_NOT_RESOLVED TC-004: low confidence or open questions need reviewer notes before approval
+Result: FAIL (4 error(s), 4 warning(s))
+```
 
-## Public Portfolio Scope
+After human review ([`examples/reviewed.json`](examples/reviewed.json)):
+- the invented Fahrenheit case was rejected;
+- exact boundary cases (-25 / 8 / -25.1 / 8.1) and a row-and-column case for AC-4 were added;
+- the open question was answered and the answer recorded.
 
-The public repository documents the pipeline and QA approach at a high level with fictional examples only. Internal prompts, real requirements, and production test cases remain private.
+The result:
 
-## Confidentiality Note
+```text
+reviewed.json: 6 case(s), status APPROVED
+Result: PASS (0 error(s), 0 warning(s))
+```
 
-No real ticket data, designs, prompts referencing customer data, or screenshots are included. All examples are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+**The reviewed expected results were checked against real behaviour,** by running the cases' inputs through the demo
+bulk upload validator. That check caught one more problem: a reviewed case whose title said the opposite of its
+expected result. The title was corrected; the behaviour was not assumed.
+
+## 7. Test coverage
+
+AI-001 to AI-011:
+- the reviewed set passes, and the self-approved draft fails for each governance reason;
+- invented criteria are caught even in drafts;
+- coverage gaps;
+- approval needs `approve` (not `change`) on every case, while drafts may be unreviewed;
+- uncertainty needs reviewer notes;
+- positive-only coverage is a warning;
+- six malformed-document cases;
+- duplicate IDs and the wrong requirement, and CLI exit codes.
+
+One more test checks that the prompts forbid inventing criteria and self-approval.
+
+## 8. Known limitations
+
+- **no model calls:** the templates are for whatever approved AI tool a team uses; this folder contains no API client;
+- **the validator checks structure and governance, not truth:** whether an expected result is correct still needs a
+  human, or the real system;
+- **one requirement per file.**
