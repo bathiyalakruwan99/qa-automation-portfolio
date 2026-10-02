@@ -14,7 +14,7 @@ Each agent has a focused responsibility. Agents use shared skills and rules, cre
 
 - [Overview](#overview)
 - [Layered architecture](#layered-architecture)
-- [Specialised QA Agent Catalog](docs/agents-catalog.md)
+- [Advanced Agent Catalog](docs/advanced-agent-catalog.md)
 - [Agent Workflow Matrix](docs/agent-workflow-matrix.md)
 - [Shared QA Skills](docs/shared-skills.md)
 - [Quality Rules and Guardrails](docs/rules-guardrails.md)

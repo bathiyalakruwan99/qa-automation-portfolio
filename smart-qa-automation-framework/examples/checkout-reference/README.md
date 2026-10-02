@@ -1,4 +1,6 @@
-# Playwright Demo - Smart QA Agent OS
+# Checkout Layering Reference (not runnable)
+
+> **Project status: Reference only.** This earlier example shows how one business workflow can be split into pages, components, flows, fixtures, BDD steps and typed data. It has no target application (`DEMO_BASE_URL` defaults to `https://demo.invalid`), so its specs are not executed. The runnable suite, built on the same layering, is the [parent framework](../../).
 
 A clearly **demo-flavoured** Playwright + TypeScript layered-module reference for the Smart QA Agent OS portfolio. The demo centres on one professional, universally recognisable example - `modules/demo-checkout-flow/` - showing how a single business workflow is organised into discoverable, reusable, evidence-friendly layers.
 

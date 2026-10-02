@@ -1,4 +1,6 @@
-# Smart QA Agent OS — QA Automation & AI-Assisted Testing Prototype
+# AI QA Agent Operating Model
+
+> Part of the [Smart QA Automation Framework](../). The runnable automation (demo app, API, UI, hybrid, state engine, CI) lives in the parent folder; this folder documents the human-governed AI QA operating model around it.
 
 A public-safe reference architecture for my evolving QA-assistance system, designed to make exploratory testing, workflow understanding, test design, automation planning, locator investigation, and QA knowledge management more structured, reusable, and evidence-driven.
 
@@ -6,7 +8,7 @@ A public-safe reference architecture for my evolving QA-assistance system, desig
 
 The system currently focuses on exploratory testing support, browser and workflow discovery, requirement analysis, QA risk planning, knowledge capture, Playwright test-design assistance, BDD scenario drafting, Page Object Model planning, and locator-healing investigation.
 
-API testing, API + UI hybrid validation, Postman/Newman workflows, k6 performance testing, CI execution, automated release-gate decisions, and broader automation execution capabilities are active development and learning tracks. They are included in the architecture as future capability areas, not presented as fully completed production features.
+Runnable public examples of API testing, API + UI hybrid validation, Postman/Newman and a state-driven workflow engine now live in the [parent framework](../). k6 remains a learning track, and automated release-gate decisions are deliberately not automated: a human QA engineer makes them.
 
 ## Public Showcase Boundary
 
@@ -22,12 +24,12 @@ The public version uses fictional examples, synthetic artifacts, and high-level 
 | --- | --- |
 | [`ai-qa-operating-model.md`](ai-qa-operating-model.md) | Main AI QA Operating Model overview with layered architecture and orchestration flow |
 | [`architecture/`](architecture/) | Mermaid diagrams for framework, API+UI hybrid flow, and release gate |
-| [`docs/`](docs/) | Agents catalog, workflow matrix, shared skills, rules and guardrails, QA memory, example agent journey, demo script |
+| [`docs/`](docs/) | Agent role details, advanced agent catalog, workflow matrix, shared skills, rules and guardrails, QA memory, example agent journey, demo script |
 | [`manual-knowledge/`](manual-knowledge/) | Sanitized manual QA notes that seed agent memory (checkout flow, test plan, test data, locators, selectors, coupon rules) |
 | [`module-template/`](module-template/) | Reusable scaffold for adding a new business workflow with parallel `tests/` and `qa-output/` trees |
-| [`playwright-demo/`](../examples/checkout-reference/) | Playwright + TypeScript reference with POM, components, flows, BDD, fixtures, and typed test data. Not yet runnable (no target app); a local demo app plus API and hybrid suites are in progress |
-| [`postman-newman/`](../postman/) | Postman collection and environment against a public demo API, with Newman execution examples |
-| [`k6-performance/`](../k6/) | k6 smoke, load, stress, and soak test scripts |
+| [`examples/checkout-reference/`](../examples/checkout-reference/) | Earlier Playwright + TypeScript layering reference (POM, components, flows, BDD). Reference only, not runnable; the runnable suite is the [parent framework](../) |
+| [`postman/`](../postman/) | Postman collection for the local demo app, run with Newman |
+| [`k6/`](../k6/) | k6 smoke, load, stress and soak scripts against the local demo app (learning) |
 | [`prompts/`](prompts/) | Sanitized prompt templates for master orchestration, test planning, BDD/POM automation, execution/healing, memory update, and manual bug hunting |
 | [`qa-graph-tool/`](qa-graph-tool/) | Architecture overview of a local visualization tool that renders the operating model as an interactive graph |
 | [`qa-output/`](qa-output/) | Sample module-level QA outputs, run notes, skill-agent reports, DOM capture evidence, and sanitized Playwright results |
@@ -53,11 +55,11 @@ This repository contains a mix of actively used QA practices, implemented protot
 | QA Knowledge Capture | Implemented Prototype | Organises reusable QA knowledge such as flows, risks, validation rules, test-data dependencies, defects, and lessons learned. |
 | Playwright Test Design | Actively Used | Supports Playwright test planning, BDD scenario drafting, Page Object Model design, reusable test-flow ideas, and test-data planning. |
 | Locator Healing | Actively Used / Learning | Supports structured investigation of locator instability, DOM or workflow changes, timing issues, and safer locator-selection approaches. Suggested changes require human QA review before adoption. |
-| Playwright Test Execution | In Development | Expanding runnable tests, reporting, evidence capture, and execution practices. |
-| API and Hybrid Testing | In Development / Learning | Exploring API-only and API + UI validation patterns through controlled prototypes. |
-| Postman and Newman | In Development / Learning | Designing collection-based API regression and reporting workflows. |
-| k6 Performance Testing | Learning / Experimentation | Learning smoke, load, stress, and soak-test design using safe demo or controlled targets. |
-| CI and Release Gates | Planned / In Development | Preparing CI-ready workflow design and evidence-based release-quality summaries. |
+| Playwright Test Execution | Runnable Demo | 30 Playwright tests run against the local demo app, with traces, reports and failure classification ([framework](../)). |
+| API and Hybrid Testing | Runnable Demo | Typed API clients, contract schemas, API-001..011 and HYBRID-001..002 in the [framework](../). |
+| Postman and Newman | Runnable Demo | PM-001..009 collection against the local demo app. |
+| k6 Performance Testing | Learning | Smoke, load, stress and soak scripts against the local demo app; only smoke has been run. |
+| CI and Release Gates | CI: Working knowledge · Release gate: human decision | GitHub Actions workflows for checks, smoke and API regression; release decisions stay with human QA. |
 
 ---
 
@@ -112,7 +114,7 @@ Each agent has a focused responsibility. Agents use shared skills and rules, cre
 ## Explore the Operating Model
 
 - [Architecture Overview](#architecture-overview)
-- [Specialised QA Agent Catalog](#specialised-qa-agent-catalog)
+- [Core QA Roles](#core-qa-roles)
 - [Agent Workflow Matrix](#agent-workflow-matrix)
 - [Shared QA Skills](#shared-qa-skills)
 - [Quality Rules and Guardrails](#quality-rules-and-guardrails)
@@ -173,195 +175,26 @@ flowchart TB
 ---
 
 
-## Specialised QA Agent Catalog
+## Core QA Roles
 
-Public-safe, capability-level descriptions only. Private agent filenames, prompts, and implementation details are not exposed.
+The operating model is organised around ten core roles. Each role supports a human QA engineer;
+none of them approves tests, defects or releases on its own.
 
-### Discovery and Understanding Agents
+| Role | Responsibility | Human QA decides |
+| --- | --- | --- |
+| QA Orchestrator | Routes a request to the right workflow and keeps the run within scope | Scope and priority |
+| Requirement Analyst | Turns stories and notes into acceptance criteria, risks and open questions | What the requirement means |
+| Flow Mapper | Maps real user journeys, states and dependencies from exploration | Which flows matter |
+| Test Architect | Designs risk-based coverage across UI, API, hybrid, regression and smoke | Coverage and depth |
+| Automation Builder | Drafts Playwright specs, page objects and fixtures from verified behaviour | Whether code is merged |
+| API QA Agent | Designs API checks: status, schema, negative, auth and contract | Contract expectations |
+| Manual Bug Hunter | Explores like a senior manual tester to find real product issues | Whether it is a defect |
+| Failure Investigation Agent | Classifies failures from traces and evidence, never by guessing | Product vs test vs environment |
+| Evidence Reporter | Writes evidence-backed reports and release-readiness summaries | The release decision |
+| Memory Curator | Proposes verified, reusable QA knowledge for future runs | What is stored |
 
-#### Requirement Analyst
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Converts requirements, user stories, defects, and change requests into testable acceptance criteria, risks, assumptions, and open questions. |
-| Typical input | A feature request, user story, change request, defect, or release scope. |
-| Typical output | Acceptance criteria, risk list, exploratory ideas, missing-information questions, and candidate test scenarios. |
-| QA value | Helps QA start with clearer understanding and stronger coverage before execution begins. |
-| Human QA responsibility | A QA engineer reviews the identified risks, confirms requirements, and decides final test coverage. |
-| Memory interaction | Reads previous flow, risk, validation-rule, and known-issue knowledge where approved. |
-
----
-
-#### Browser and Flow Discovery Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Supports exploratory testing by helping document screens, workflows, dependencies, user actions, expected results, and automation candidates. |
-| Typical input | A new feature, changed workflow, release scope, or exploratory testing request. |
-| Typical output | Workflow map, page understanding, dependencies, risk notes, scenario ideas, and automation candidates. |
-| QA value | Reduces time needed to understand complex workflows and improves test coverage before automation begins. |
-| Human QA responsibility | A QA engineer validates findings before they are used in test cases, defects, or memory. |
-| Memory interaction | Can read approved flow knowledge and update verified workflow observations. |
-
----
-
-#### Test Data Curator
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Identifies required positive, negative, boundary, dependency-aware, and cleanup-aware test data conditions. |
-| Typical input | A requirement, workflow, test scenario, or automation candidate. |
-| Typical output | Test-data checklist, dependency notes, negative-data ideas, and precondition requirements. |
-| QA value | Reduces false failures caused by missing, invalid, or incomplete test data. |
-| Human QA responsibility | A QA engineer confirms that data conditions are valid for the test objective. |
-| Memory interaction | Reads and updates approved test-data dependency knowledge. |
-
-### Planning and Automation Design Agents
-
-#### Test Case Planning Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Creates structured test conditions, scenarios, expected results, edge cases, and regression coverage ideas. |
-| Typical input | A requirement, workflow map, product change, or risk list. |
-| Typical output | Test scenarios, priority recommendations, coverage matrix, and exploratory charters. |
-| QA value | Improves consistency between requirements, testing, regression coverage, and release confidence. |
-| Human QA responsibility | A QA engineer reviews and finalises cases before execution. |
-| Memory interaction | Uses approved flow, validation-rule, defect-pattern, and release-risk knowledge. |
-
----
-
-#### Playwright Test Design Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Supports planning of Playwright tests using business-readable scenarios, Page Object Model responsibilities, reusable flow ideas, fixtures, test-data needs, and tags. |
-| Typical input | Approved test scenarios, workflow knowledge, risk areas, and automation candidates. |
-| Typical output | BDD scenario drafts, Page Object Model plan, test-flow design, fixture suggestions, tag recommendations, and automation prerequisites. |
-| QA value | Helps convert manual QA understanding into structured, maintainable automation design. |
-| Human QA responsibility | A QA engineer reviews every automation design before implementation or execution. |
-| Memory interaction | Reads approved flow, component, test-data, and automation-stability knowledge. |
-
----
-
-#### API and Hybrid Test Design Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | In Development / Learning |
-| Purpose | Explores API-only and API + UI validation patterns for future automation coverage. |
-| Typical input | A workflow, API behavior expectation, integration point, or proposed hybrid test scenario. |
-| Typical output | High-level API test ideas, negative-test scenarios, hybrid-flow design suggestions, and validation checkpoints. |
-| QA value | Supports future coverage beyond browser-only testing. |
-| Human QA responsibility | A QA engineer validates API assumptions, test scope, security boundaries, and implementation choices. |
-| Memory interaction | Will use approved API and integration behavior knowledge as this capability matures. |
-
----
-
-#### Performance Test Design Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Learning / Experimentation |
-| Purpose | Explores smoke, load, stress, and soak-test patterns using k6 and controlled targets. |
-| Typical input | A performance-sensitive workflow, endpoint category, or performance-testing question. |
-| Typical output | High-level performance test plan, workload model, metric ideas, and baseline-learning notes. |
-| QA value | Builds structured performance-testing understanding for future QA coverage. |
-| Human QA responsibility | A QA engineer confirms safe test targets, load limits, performance expectations, and interpretation of results. |
-| Memory interaction | Can capture approved performance-learning notes and baseline concepts. |
-
-### Investigation and Healing Agents
-
-#### Manual Bug Hunter
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used |
-| Purpose | Supports exploratory and risk-based investigation to identify functional, workflow, usability, data, and edge-case issues. |
-| Typical input | A feature under test, failed workflow, user complaint, release candidate, or risk area. |
-| Typical output | Potential findings, reproduction ideas, impact notes, evidence checklist, and defect-report draft. |
-| QA value | Improves exploratory coverage and helps identify risks outside predefined scripts. |
-| Human QA responsibility | A QA engineer verifies every finding before it is reported as a defect. |
-| Memory interaction | Reads known-risk and defect-pattern knowledge and can update verified findings. |
-
----
-
-#### Locator Healing Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used / Learning |
-| Purpose | Supports investigation of failed browser automation by analysing locator stability, page or DOM changes, timing issues, visibility conditions, and workflow changes. |
-| Typical input | A failed Playwright test, an unstable locator, a changed UI element, a timeout, or a browser execution result. |
-| Typical output | A structured suggestion showing whether the issue may be related to a locator, timing, test data, environment, workflow change, or a possible product defect. |
-| Current use | Used to support locator investigation, automation maintenance, and safer locator-selection decisions while the healing approach continues to be refined through real QA work and learning. |
-| QA value | Reduces time spent manually investigating unstable automation and helps separate automation-maintenance issues from genuine product defects. |
-| Human QA responsibility | The agent does not silently change locators or approve a test result. Every suggested locator or automation change requires human QA review, validation, and evidence before it is applied. |
-| Memory interaction | Can update approved automation-stability knowledge with safe patterns such as recurring locator risks, stable element-identification approaches, timing dependencies, and known page-change areas. |
-| Public Showcase Boundary | This describes the architecture and workflow only. It does not expose real selectors, DOM structures, private application screens, test code, or internal locator-healing rules. |
-
----
-
-#### Failure Classification Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Implemented Prototype |
-| Purpose | Helps classify failed test outcomes into product defect, automation issue, locator issue, timing issue, environment issue, test-data issue, or requirement gap. |
-| Typical input | A failed execution, screenshot, report, trace summary, or manual QA observation. |
-| Typical output | A structured classification suggestion, evidence status, confidence level, and recommended next action. |
-| QA value | Speeds up triage and reduces confusion between product failures and automation-maintenance failures. |
-| Human QA responsibility | A QA engineer confirms the classification before creating a defect or changing automation. |
-| Memory interaction | Reads known defect patterns and approved automation-stability knowledge. |
-
-### Reporting, Learning, and Release Agents
-
-#### Report Writer
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Actively Used / Implemented Prototype |
-| Purpose | Creates structured QA summaries, exploratory reports, evidence summaries, execution notes, and stakeholder-friendly quality updates. |
-| Typical input | Test results, exploratory notes, evidence, risks, findings, and release scope. |
-| Typical output | QA summary, evidence report, risk summary, and recommended next actions. |
-| QA value | Improves transparency and makes QA outcomes easier for teams and stakeholders to understand. |
-| Human QA responsibility | A QA engineer validates report content and final conclusions. |
-| Memory interaction | Can create approved run summaries and release-learning records. |
-
----
-
-#### Release Gate Agent
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Planned / In Development |
-| Purpose | Supports future evidence-based release assessment using test status, risks, blockers, known issues, and coverage information. |
-| Typical input | Test results, defect status, regression notes, evidence summaries, and release scope. |
-| Typical output | A draft recommendation such as proceed, proceed with known risks, monitor, hold, or block. |
-| QA value | Creates a more consistent release-quality decision process. |
-| Human QA responsibility | Final release decisions remain with QA leads, product owners, engineering leaders, and relevant stakeholders. |
-| Memory interaction | Will use approved release history, known risks, and regression-learning data as the capability matures. |
-
----
-
-#### Memory Curator
-
-| Field | Detail |
-| --- | --- |
-| Maturity | Implemented Prototype |
-| Purpose | Reviews verified QA findings and converts useful, reusable knowledge into structured QA memory. |
-| Typical input | Approved workflow findings, test results, defect patterns, validation rules, automation lessons, and release learnings. |
-| Typical output | A proposed memory update with evidence reference, confidence level, source context, and ownership. |
-| QA value | Allows future QA planning and exploration to start with better context and fewer repeated investigations. |
-| Human QA responsibility | Only a QA-approved and evidence-backed finding can be added to long-term memory. |
-| Memory interaction | Creates or updates approved flow, rule, risk, defect, test-data, and automation-stability knowledge. |
-
----
+Role details: [`docs/agent-role-details.md`](docs/agent-role-details.md). The full capability catalog (30+
+specialised variants) is kept for reference in [`docs/advanced-agent-catalog.md`](docs/advanced-agent-catalog.md).
 
 ## Agent Workflow Matrix
 

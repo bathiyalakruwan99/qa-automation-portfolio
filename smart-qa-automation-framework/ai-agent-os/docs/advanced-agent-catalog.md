@@ -288,7 +288,7 @@ Where multiple specialised implementations of the same capability exist privatel
 **Governed by:** Memory Quality Rules.
 **Memory interaction:** Writes Release memory.
 
-### Classic Workflow Test Builder
+### Multi-Step Workflow Test Builder
 
 **Purpose:** Supports reusable automation design for complex multi-step operational workflows.
 **Typical input:** A multi-stage business flow.
