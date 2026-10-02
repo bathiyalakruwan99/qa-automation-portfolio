@@ -15,11 +15,31 @@ private/
 internal/
 source/
 working-code/
+PRIVATE_*
+*.private.md
+
+# Environment and credentials (only templates are allowed)
+.env
+.env.*
 *.env
+!.env.example
+!**/.env.example
 *.key
 *.pem
 *.pfx
 *.p12
+storageState*.json
+**/.auth/
+
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
 
 # Generated reports and raw test artifacts
 reports/
@@ -28,12 +48,14 @@ traces/
 videos/
 downloads/
 playwright-report/
+blob-report/
 allure-results/
 allure-report/
 k6-results/
 newman/
+output/
 
-# Raw client data and internal exports
+# Raw data files are ignored by default ...
 *.xlsx
 *.xls
 *.csv
@@ -41,3 +63,15 @@ newman/
 *.sqlite3
 *.db
 *.har
+*.rar
+*.zip
+
+# ... except synthetic, reviewed sample data and sample reports
+!**/sample-data/
+!**/sample-data/**
+!**/test-data/
+!**/test-data/**
+!assets/sample-reports/
+!assets/sample-reports/**
+!**/sample-output/
+!**/sample-output/**
