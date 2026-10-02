@@ -1,10 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 import { loadEnv } from './src/config/env';
+import { AUTH_FILE } from './src/config/paths';
 
 // Fails fast (before any test runs) if DEMO_BASE_URL points at a non-local host without opt-in.
 const env = loadEnv();
 const port = new URL(env.baseUrl).port || '3000';
-export const AUTH_FILE = '.auth/demo-user.json';
 
 export default defineConfig({
   testDir: './tests',
