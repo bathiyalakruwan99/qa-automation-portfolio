@@ -1,0 +1,68 @@
+name: API Regression
+
+on:
+  pull_request:
+    paths:
+      - 'smart-qa-automation-framework/**'
+      - '.github/workflows/api-regression.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'smart-qa-automation-framework/**'
+      - '.github/workflows/api-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API regression (Playwright API project + Newman)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: smart-qa-automation-framework
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: smart-qa-automation-framework/package-lock.json
+
+      - run: npm ci
+
+      # The API project needs no browser. Playwright starts and stops the demo app itself.
+      - name: Playwright API suite
+        run: npm run test:api
+
+      # Newman needs the app running, so start it only after Playwright has released the port.
+      - name: Start demo app for Newman
+        run: |
+          DEMO_TEST_MODE=1 npm run demo:start > demo-app.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fs http://127.0.0.1:3000/health && exit 0
+            sleep 1
+          done
+          echo "demo app did not become healthy"; cat demo-app.log; exit 1
+
+      - name: Postman collection via Newman
+        run: npm run test:postman -- --reporters cli,junit --reporter-junit-export test-results/newman-junit.xml
+
+      - name: Upload API reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-regression-report
+          path: |
+            smart-qa-automation-framework/playwright-report/
+            smart-qa-automation-framework/test-results/
+            smart-qa-automation-framework/demo-app.log
+          retention-days: 14
