@@ -4,6 +4,9 @@
 
 Playwright · TypeScript · API Testing · TMS / Logistics · GPS · Data Validation · AI-Assisted QA
 
+[![CI](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/ci.yml)
+[![Playwright Smoke](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/playwright-smoke.yml)
+[![API Regression](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml/badge.svg?branch=main)](https://github.com/bathiyalakruwan99/qa-automation-portfolio/actions/workflows/api-regression.yml)
 [![Playwright](https://img.shields.io/badge/Playwright-TypeScript-2EAD33.svg)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
@@ -39,7 +42,7 @@ Contact: [bathiyalakruwan99@gmail.com](mailto:bathiyalakruwan99@gmail.com) · [P
 Runnable Playwright + TypeScript framework with its own fictional logistics app: Page Object Model, components, fixtures, seeded typed data, business flows, typed API clients with contract schemas, UI + API hybrid tests, a state-driven workflow engine with guardrails, and failure classification. A human-governed AI QA operating model sits alongside it.
 
 - **Public today:** `npm test` runs 30 Playwright tests (API, UI, negative, hybrid, state engine) against the local demo app, plus 116 unit tests, a Newman collection, k6 scripts and GitHub Actions workflows.
-- **Verified:** locally and in a fresh-clone CI rehearsal; mutation checks show the suites catch deliberate defects. The first GitHub Actions run is pending.
+- **Verified:** locally and on GitHub Actions (CI, smoke and API regression passed on the first run, PR #3); mutation checks show the suites catch deliberate defects.
 
 [View project →](smart-qa-automation-framework/)
 
@@ -97,7 +100,7 @@ What is publicly verifiable in this repository **today**. Labels are updated as 
 | AI-assisted QA workflow | Documentation and templates | High | Prototype (human-reviewed) |
 | State-driven workflow engine | Yes | High | Runnable demo (unit + diagnostic tests) |
 | k6 performance testing | Scripts against the local demo app; smoke run only | Developing | Learning |
-| CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (first GitHub run pending) |
+| CI/CD | Workflows for checks, smoke, API regression, secret scan | Developing | Working knowledge (verified on GitHub Actions) |
 
 Labels used across the repo: **Runnable Demo**, **Reference Implementation**, **Prototype**, **Learning**, **Case Study / Documentation**.
 

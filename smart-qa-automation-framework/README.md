@@ -186,8 +186,8 @@ references:
 - **Mutation checks:** each suite was shown to fail when the app is broken on purpose. A 409 changed to 400 is
   caught by API-005b; enabling "Plan route" too early is caught by UI-005; accepting duplicate references is
   caught by API-009 and classified `PRODUCT_DEFECT`.
-- **CI:** the workflows were rehearsed in a fresh clone with `npm ci` and `CI=1`. The run on GitHub Actions
-  is pending; a badge is added only after a green run.
+- **CI:** rehearsed in a fresh clone with `npm ci` and `CI=1`, then verified on GitHub Actions. On the first run
+  (PR #3, 2026-10-02) the CI, Playwright Smoke and API Regression workflows all passed in about 2 minutes.
 
 ## 9. Engineering rules
 

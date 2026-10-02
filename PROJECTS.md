@@ -4,7 +4,7 @@ This directory summarizes QA tools, automation utilities, and human-reviewed AI-
 
 | Project | Public implementation today | Next |
 |---|---|---|
-| Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests, 116 unit tests, CI workflows | First GitHub Actions run, nightly regression |
+| Smart QA Automation Framework (+ AI QA operating model) | Runnable demo: local app, 30 Playwright tests, 116 unit tests, CI workflows | Nightly regression |
 | GPS Simulator & Geofence Validation Suite | Case study | Public simulator library + CLI + tests |
 | Route Optimizer Validation Workbench | Case study | Public output validators + CLI + tests |
 | Job Master Data Validation & Release Evidence Tool | Case study | Public reconciliation validator + pytest |
