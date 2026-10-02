@@ -1,0 +1,33 @@
+Route Validation Report
+Run: DEMO-RUN-FLAWED
+
+Orders in scope: 20
+Orders routed: 17
+Orders unassigned: 2
+Missing orders: 1
+Duplicate assignments: 1
+
+Vehicles: 4 (routes: 4)
+
+Capacity violations: 2
+Vehicle compatibility issues: 2
+Sequence issues: 3
+Distance issues: 1
+
+Findings:
+  [CRITICAL FAIL] DISTANCE_BELOW_STRAIGHT_LINE: TRUCK-002: reported 6.6 km vs straight-line 9.4 km - physically impossible
+  [CRITICAL FAIL] ORDER_ASSIGNED_TWICE: DEMO-ORD-3011 appears 2 times (TRUCK-001, TRUCK-002)
+  [CRITICAL FAIL] ORDER_MISSING: DEMO-ORD-3019 is neither routed nor unassigned
+  [CRITICAL FAIL] UNKNOWN_ORDER: DEMO-ORD-3999 is in the output but not in the input
+  [CRITICAL FAIL] VEHICLE_TYPE_MISMATCH: DEMO-ORD-3016 needs a REEFER; TRUCK-002 is a TRUCK
+  [CRITICAL FAIL] VOLUME_OVER_CAPACITY: VAN-001 capacity 10 m3, assigned 11 m3, overload 1 m3
+  [CRITICAL FAIL] WEIGHT_OVER_CAPACITY: VAN-001 capacity 1500 kg, assigned 2100 kg, overload 600 kg
+  [MAJOR FAIL] LOCATION_DISALLOWS_VEHICLE: SITE-EPSILON only accepts VAN; TRUCK-001 is a TRUCK
+  [MAJOR FAIL] STOP_LOCATION_MISMATCH: DEMO-ORD-3005 belongs at SITE-THETA but is scheduled at SITE-GAMMA
+  [MAJOR FAIL] UNASSIGNED_WITHOUT_REASON: DEMO-ORD-3020 is unassigned with no reason; expected one of CAPACITY, NO_COMPATIBLE_VEHICLE, LOCATION_RESTRICTION, INVALID_LOCATION
+  [MINOR WARNING] LOCATION_REVISITED: TRUCK-001 returns to SITE-GAMMA after leaving it (stop 6)
+  [MINOR WARNING] LOCATION_REVISITED: TRUCK-002 returns to SITE-DELTA after leaving it (stop 6)
+
+Blocking findings: 10   Warnings: 2
+Final Result: REVIEW REQUIRED
+The release decision belongs to human QA; this report is evidence, not an approval.

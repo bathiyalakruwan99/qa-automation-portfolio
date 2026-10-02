@@ -1,0 +1,57 @@
+[
+  {
+    "id": "CENTRAL-HUB",
+    "name": "Central Distribution Hub",
+    "lat": 37.768,
+    "lng": -122.392
+  },
+  {
+    "id": "WAREHOUSE-ALPHA",
+    "name": "Warehouse Alpha",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "id": "CUSTOMER-SITE-BETA",
+    "name": "Customer Site Beta",
+    "lat": 37.789,
+    "lng": -122.399
+  },
+  {
+    "id": "SITE-GAMMA",
+    "name": "Site Gamma",
+    "lat": 37.781,
+    "lng": -122.411
+  },
+  {
+    "id": "SITE-DELTA",
+    "name": "Site Delta",
+    "lat": 37.76,
+    "lng": -122.414
+  },
+  {
+    "id": "SITE-EPSILON",
+    "name": "Site Epsilon (narrow street, vans only)",
+    "lat": 37.795,
+    "lng": -122.406,
+    "allowedVehicleTypes": ["VAN"]
+  },
+  {
+    "id": "SITE-ZETA",
+    "name": "Site Zeta",
+    "lat": 37.771,
+    "lng": -122.403
+  },
+  {
+    "id": "COLD-STORE-ETA",
+    "name": "Cold Store Eta",
+    "lat": 37.754,
+    "lng": -122.401
+  },
+  {
+    "id": "SITE-THETA",
+    "name": "Site Theta",
+    "lat": 37.784,
+    "lng": -122.388
+  }
+]

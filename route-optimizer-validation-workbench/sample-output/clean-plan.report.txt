@@ -1,0 +1,19 @@
+Route Validation Report
+Run: DEMO-RUN-CLEAN
+
+Orders in scope: 20
+Orders routed: 19
+Orders unassigned: 1
+Missing orders: 0
+Duplicate assignments: 0
+
+Vehicles: 4 (routes: 4)
+
+Capacity violations: 0
+Vehicle compatibility issues: 0
+Sequence issues: 0
+Distance issues: 0
+
+Blocking findings: 0   Warnings: 0
+Final Result: NO ISSUES FOUND - HUMAN REVIEW STILL REQUIRED
+The release decision belongs to human QA; this report is evidence, not an approval.

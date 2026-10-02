@@ -1,96 +1,168 @@
 # Route Optimizer Validation Workbench
 
-> **Case Study — public reference implementation in progress**
-> An independent QA comparison tool I built to validate route-optimizer output against transparent, independently calculated checks.
+**An independent QA validation layer for route-optimizer output.** It is **not** an optimizer. It takes the
+same orders, vehicles and locations the optimizer received, plus the plan it produced, and checks the plan
+against transparent rules. Every finding has a code, a severity and the evidence behind it.
 
 ## Project Status
 
-**Public implementation:** Case study / documentation only. Runnable TypeScript validators for fictional optimizer output (allocation, duplicates, capacity, compatibility, sequence, distance sanity) with a CLI report and unit tests are in progress. The public tool validates output only; it is not an optimizer.
+**Public implementation:** Runnable demo. TypeScript validators, fictional sample data (a clean plan and a plan
+with planted defects), CLI, 19 automated tests.
 
-**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing. The public version is an independently implemented reference, inspired by general QA challenges; it does not reproduce employer source code, customer data, proprietary algorithms or confidential business rules.
+**Professional relevance:** Based on QA problems handled in professional TMS / logistics testing (optimizer
+output that looks plausible but drops orders, overloads vehicles or picks unsuitable ones). This public version
+is independently written for this portfolio.
 
-**Confidentiality:** Any public implementation is independently recreated and contains no employer-owned code or data. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+**Confidentiality:** No optimization algorithm, scoring formula, cost model, vehicle catalog, customer
+constraint or real data. Orders, vehicles and locations are fictional. See
+[`../docs/confidentiality.md`](../docs/confidentiality.md).
 
-## Business Problem
+---
 
-A transport-management platform required independent validation of complex route-planning scenarios. When a route optimizer produces a plan, QA needs to answer a hard question: is this output operationally sensible and internally consistent, or just plausible-looking? Without an independent reference, optimizer bugs (capacity overflows, lost orders, vehicle mismatches) can reach production unnoticed.
+## 1. The QA problem
 
-This workbench does not replace a product optimizer. It provides an independent QA comparison layer for verifying that optimizer output is operationally sensible and internally consistent.
+An optimizer's plan is easy to ship and hard to check. A plan with a short total distance can still:
 
-## QA Challenge
+- drop an order, or deliver one twice;
+- overload a vehicle by weight or by volume;
+- put chilled goods on a truck without refrigeration, or a truck on a vans-only street;
+- report distances that cannot be true.
 
-- Validate optimizer output without re-implementing the product's proprietary algorithm
-- Compare product output against transparent, independently calculated alternatives
-- Check distance, vehicle suitability, capacity, cost, allocation, and operational feasibility
-- Catch silent failures (dropped orders, overloaded vehicles, infeasible routes)
-- Make every pass/fail explainable with a transparent reason
+Re-implementing the optimizer to compare results would just copy its assumptions. This workbench instead
+checks **invariants that every valid plan must satisfy**, whatever algorithm produced it.
 
-## What the Tool Does
+## 2. Validators
 
-An independent QA comparison tool used to validate route-optimizer output against distance, vehicle suitability, capacity, cost, allocation, and operational feasibility checks. It compares product optimizer output against transparent QA validation rules and independently calculated route alternatives.
-
-### Validation dimensions
-
-| Dimension | What QA checks | Example failure caught |
+| Validator | Finding codes | Severity |
 | --- | --- | --- |
-| Distance | Total and per-leg distance is reasonable | A leg that doubles back unnecessarily |
-| Vehicle suitability | Vehicle type fits the assigned work | A small vehicle on an oversized load |
-| Capacity | No vehicle exceeds its capacity | A route overloaded beyond limit |
-| Cost | Cost is consistent with distance and resources | Lowest distance but higher cost than an alternative |
-| Allocation | Every order is assigned exactly once | An order dropped or assigned twice |
-| Operational feasibility | The plan is workable in practice | A route ignoring a hard constraint |
+| Allocation | `ORDER_MISSING`, `ORDER_ROUTED_AND_UNASSIGNED`, `UNKNOWN_ORDER` | Critical |
+| | `UNASSIGNED_WITHOUT_REASON` (unassigned needs a known reason code) | Major |
+| Duplicate | `ORDER_ASSIGNED_TWICE` (same or different vehicle) | Critical |
+| Capacity | `WEIGHT_OVER_CAPACITY`, `VOLUME_OVER_CAPACITY`, with the overload amount; exactly at capacity passes | Critical |
+| Vehicle | `UNKNOWN_VEHICLE`, `VEHICLE_TYPE_MISMATCH` (e.g. chilled goods need a REEFER) | Critical |
+| | `LOCATION_DISALLOWS_VEHICLE`, `VEHICLE_USED_TWICE` | Major |
+| Sequence | `UNKNOWN_LOCATION` | Critical |
+| | `STOP_LOCATION_MISMATCH`, `TOO_MANY_STOPS` | Major |
+| | `LOCATION_REVISITED`, `EMPTY_ROUTE` (warnings) | Minor |
+| Distance | `DISTANCE_BELOW_STRAIGHT_LINE`: a road route can never be shorter than the straight line | Critical |
+| | `DISTANCE_SUSPICIOUSLY_HIGH` (> 2× straight line), `DISTANCE_NOT_REPORTED` (warnings) | Minor |
 
-### Comparison flow
+**FAIL** findings block acceptance. **WARNING** findings need a human look but are not wrong by themselves; a
+detour may be legitimate.
 
+**The verdict is never "approved".** It is `REVIEW REQUIRED` when there are findings, and
+`NO ISSUES FOUND - HUMAN REVIEW STILL REQUIRED` when there are none. The release decision belongs to human QA.
+
+## 3. Architecture
+
+```mermaid
+flowchart LR
+    I[orders, vehicles, locations] --> L[loadInput + checkStructure]
+    O[optimizer output] --> L
+    L --> V{validators}
+    V --> A[allocation]
+    V --> D[duplicate]
+    V --> C[capacity]
+    V --> VE[vehicle]
+    V --> S[sequence]
+    V --> DI[distance]
+    A & D & C & VE & S & DI --> R[sorted findings + stats]
+    R --> T[text report]
+    R --> J[JSON report]
 ```
-Optimizer output + scenario inputs
-  -> Independent QA recalculation of route alternatives
-  -> Compare across distance, capacity, cost, allocation, suitability, feasibility
-  -> Flag mismatches with a transparent reason
-  -> Human QA reviews and decides
+
+The structure check runs first. A malformed file (wrong types, duplicate IDs, missing arrays) stops with an
+input error (exit code 2) instead of producing misleading findings.
+
+## 4. Setup and run
+
+```bash
+cd route-optimizer-validation-workbench
+npm ci
+npm test                    # 19 tests
+npm run validate            # flawed sample plan  -> exit 1
+npm run validate:clean      # clean sample plan   -> exit 0
+npm run validate -- --data path/to/dir --output plan.json --json report.json
 ```
 
-## Fictional Example
+Exit codes: `0` no blocking findings, `1` blocking findings, `2` unusable input.
 
-Scenario: `Customer Alpha` has orders `DEMO-1001`..`DEMO-1004` across `Warehouse Alpha`, `Customer Site Beta`, and `Zone Gamma`.
+## 5. Sample data
 
-| Check | Product output | QA finding |
-| --- | --- | --- |
-| Allocation | 3 of 4 orders routed | DEMO-1004 dropped — flagged |
-| Capacity | Vehicle-001 at 110% | Over capacity — flagged |
-| Cost vs distance | Shortest distance chosen | Higher cost than alternative — review |
-| Vehicle suitability | Vehicle-002 assigned | Suitable — pass |
+[`sample-data/`](sample-data/) holds a depot, 8 sites (one restricted to vans), 4 vehicles (two trucks, a van and
+a reefer), 20 orders (two need a reefer, one is too heavy for any vehicle), and two plans:
 
+- `optimizer-output-clean.json`: valid; the oversized order is unassigned with reason `CAPACITY`;
+- `optimizer-output.json`: one planted defect per validator.
+
+## 6. Sample output
+
+From `npm run validate` ([full text](sample-output/flawed-plan.report.txt) · [JSON](sample-output/flawed-plan.report.json)):
+
+```text
+Route Validation Report
+Run: DEMO-RUN-FLAWED
+
+Orders in scope: 20
+Orders routed: 17
+Orders unassigned: 2
+Missing orders: 1
+Duplicate assignments: 1
+
+Vehicles: 4 (routes: 4)
+
+Capacity violations: 2
+Vehicle compatibility issues: 2
+Sequence issues: 3
+Distance issues: 1
+
+Findings:
+  [CRITICAL FAIL] DISTANCE_BELOW_STRAIGHT_LINE: TRUCK-002: reported 6.6 km vs straight-line 9.4 km - physically impossible
+  [CRITICAL FAIL] ORDER_ASSIGNED_TWICE: DEMO-ORD-3011 appears 2 times (TRUCK-001, TRUCK-002)
+  [CRITICAL FAIL] ORDER_MISSING: DEMO-ORD-3019 is neither routed nor unassigned
+  [CRITICAL FAIL] UNKNOWN_ORDER: DEMO-ORD-3999 is in the output but not in the input
+  [CRITICAL FAIL] VEHICLE_TYPE_MISMATCH: DEMO-ORD-3016 needs a REEFER; TRUCK-002 is a TRUCK
+  [CRITICAL FAIL] VOLUME_OVER_CAPACITY: VAN-001 capacity 10 m3, assigned 11 m3, overload 1 m3
+  [CRITICAL FAIL] WEIGHT_OVER_CAPACITY: VAN-001 capacity 1500 kg, assigned 2100 kg, overload 600 kg
+  [MAJOR FAIL] LOCATION_DISALLOWS_VEHICLE: SITE-EPSILON only accepts VAN; TRUCK-001 is a TRUCK
+  [MAJOR FAIL] STOP_LOCATION_MISMATCH: DEMO-ORD-3005 belongs at SITE-THETA but is scheduled at SITE-GAMMA
+  [MAJOR FAIL] UNASSIGNED_WITHOUT_REASON: DEMO-ORD-3020 is unassigned with no reason; expected one of ...
+  [MINOR WARNING] LOCATION_REVISITED: TRUCK-001 returns to SITE-GAMMA after leaving it (stop 6)
+  [MINOR WARNING] LOCATION_REVISITED: TRUCK-002 returns to SITE-DELTA after leaving it (stop 6)
+
+Blocking findings: 10   Warnings: 2
+Final Result: REVIEW REQUIRED
+The release decision belongs to human QA; this report is evidence, not an approval.
 ```
-Orders in scope: 4
-Allocation issue: 1 (DEMO-1004 dropped)
-Capacity issue: 1 (Vehicle-001 over capacity)
-Cost review: 1 (cheaper alternative available)
-Recommendation: HOLD — fix allocation and capacity before release
-```
 
-## Performance
+Note the first `LOCATION_REVISITED` warning: it is a knock-on effect of the misplaced stop above it. Findings are
+evidence to read together, not a list to fix line by line.
 
-Performance characteristics depend on input size, routing data availability, and the test environment; internal benchmark details are not public.
+## 7. Test coverage
 
-## QA Value
+ROUTE-001 to ROUTE-017. Each test starts from the clean plan and injects **one** defect, then asserts that
+exactly the expected finding appears. Cases covered:
 
-- Creates a repeatable and explainable comparison process for route-optimizer validation
-- Catches silent failures (dropped orders, overloads, infeasible routes) before release
-- Provides a transparent, independent oracle rather than trusting the optimizer blindly
-- Makes optimizer validation defensible with written reasons
+- missing, duplicated, contradictory and unknown orders, and unknown reason codes;
+- capacity exactly at the limit (passes) and 1 kg over (fails, reports `overload 1 kg`), and volume checked on
+  its own;
+- reefer-only goods, a vans-only site, unknown and reused vehicles;
+- a stop at the wrong site, the stop limit, a revisited location (warning only, still `REVIEW REQUIRED`);
+- impossible and suspicious distances, and configurable distance rules;
+- the shipped flawed plan producing one finding per planted defect;
+- malformed input rejected before any rule runs.
 
-## QA Skills Demonstrated
+During development, one test first failed because of a wrong assumption *in the test*: moving a stop made the
+route longer, and the validator correctly reported the unchanged distance as impossible. The test was fixed
+from that evidence, not the validator.
 
-- Validating algorithmic output with an independent oracle
-- Risk-based comparison across multiple operational dimensions
-- Designing transparent, explainable pass/fail criteria
-- Catching silent data-integrity failures
+## 8. Known limitations
 
-## Public Portfolio Scope
+This public implementation intentionally simplifies:
 
-The production/internal implementation is not included. This page documents the QA validation approach, test dimensions, and fictional examples only.
+- **straight-line reference:** distances are compared with straight lines, not a road network;
+- **no time windows, driver hours or multi-day plans;**
+- **no cost or optimality check:** it finds invalid plans, it does not say whether a valid plan is the best one;
+- **single depot per vehicle,** with routes that start and end there.
 
-## Confidentiality Note
-
-The original tool is real. The underlying implementation is not public because it contains internal validation logic, benchmark rules, and non-public operational assumptions. No real source code, algorithms, scoring formulas, customer data, or production routes are included. All examples are fictional. See [`../docs/confidentiality.md`](../docs/confidentiality.md).
+It exists to demonstrate how to validate algorithmic output, not to reproduce a production optimizer.
