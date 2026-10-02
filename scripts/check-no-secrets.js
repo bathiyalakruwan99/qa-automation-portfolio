@@ -28,7 +28,14 @@ const RULES = [
 ];
 
 // Values that are intentionally fake and documented as such.
-const ALLOWED_VALUES = [/REPLACE_ME/i, /demo[-_]?pass/i, /example\.(?:test|com)/i, /['"]role=/, /<[^>]+>/];
+const ALLOWED_VALUES = [
+  /REPLACE_ME/i,
+  /\[REDACTED\]/,
+  /demo[-_]?pass/i,
+  /example\.(?:test|com)/i,
+  /['"]role=/,
+  /<[^>]+>/,
+];
 
 const SKIPPED_FILES = [
   /(^|\/)\.env\.example$/,
